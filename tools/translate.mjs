@@ -1,5 +1,10 @@
-const fs = require("fs");
-const { traverseDirectory, translate, mkdir } = require("./utils");
+import fs from "fs";
+import {
+	traverseDirectory,
+	translate,
+	mkdir,
+	renderDocHTML,
+} from "./utils.mjs";
 
 const targetDirectory = "./site/en";
 const sourceLang = "en";
@@ -11,7 +16,7 @@ async function bootstrap() {
 		? JSON.parse(fs.readFileSync(cacheFile, "utf8") || "{}")
 		: {};
 
-  // get all md files in the site/en/ directory
+	// get all md files in the site/en/ directory
 	const mdFiles = traverseDirectory(targetDirectory);
 
 	console.log(`--> Found ${mdFiles.length} files...`);
@@ -25,10 +30,11 @@ async function bootstrap() {
 
 	for (let path of updatedFiles) {
 		const content = fs.readFileSync(path, "utf8");
+		const htmlContent = renderDocHTML(content);
 
 		for (let targetLang of targetLangs) {
 			const translateContent = await translate({
-				text: content,
+				text: htmlContent,
 				targetLang,
 			});
 			const targetFilePath = path.replace(sourceLang, targetLang);

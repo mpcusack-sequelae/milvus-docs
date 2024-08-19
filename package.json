@@ -3,12 +3,16 @@
 	"version": "1.0.0",
 	"description": "Welcome to Milvus documentation!",
 	"scripts": {
-		"translate": "node scripts/translate.js",
+		"translate": "node tools/translate.mjs",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "",
 	"devDependencies": {
-		"remarkable": "^2.0.1"
+		"@zilliz/toolkit": "^0.0.9",
+		"highlight.js": "^11.10.0",
+		"katex": "^0.16.11",
+		"remarkable": "^2.0.1",
+		"remarkable-katex": "^1.2.1"
 	},
 	"license": "Apache-2.0"
 }

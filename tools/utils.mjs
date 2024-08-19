@@ -1,7 +1,14 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { Milvus } from "@zilliz/toolkit";
 
-function traverseDirectory(dirPath, fileList = []) {
+/**
+ * Each branch needs to be updated.
+ */
+const VERSION = "v2.4.x";
+const PATH = "/docs/";
+
+export function traverseDirectory(dirPath, fileList = []) {
 	const files = fs.readdirSync(dirPath);
 
 	files.forEach((file) => {
@@ -19,7 +26,7 @@ function traverseDirectory(dirPath, fileList = []) {
 }
 
 const dirCache = {};
-function mkdir(filePath) {
+export function mkdir(filePath) {
 	const pathArr = filePath.split("/");
 	let dir = pathArr[0];
 	for (let i = 1; i < pathArr.length; i++) {
@@ -31,10 +38,17 @@ function mkdir(filePath) {
 	}
 }
 
-async function translate(params) {
+export function renderDocHTML(content) {
+	const { tree } = Milvus.md2html(content, {
+		showAnchor: true,
+		version: VERSION,
+		path: PATH,
+	});
+	return tree;
+}
+
+export async function translate(params) {
 	const { text, sourceLang = "EN", targetLang } = params;
 	// Translation logic
 	return text;
 }
-
-module.exports = { traverseDirectory, translate, mkdir };
