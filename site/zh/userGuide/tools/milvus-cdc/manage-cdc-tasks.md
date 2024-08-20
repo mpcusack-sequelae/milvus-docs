@@ -5,240 +5,287 @@ summary: A Capture Data Change (CDC) task enables the synchronization of data fr
 title: Manage CDC Tasks
 ---
 
-# Manage CDC Tasks
-
-A Capture Data Change (CDC) task enables the synchronization of data from a source Milvus instance to a target Milvus instance. It monitors operation logs from the source and replicates data changes such as insertions, deletions, and index operations to the target in real-time. This facilitates real-time disaster recovery or active-active load balancing between Milvus deployments.
-
-This guide covers how to manage CDC tasks, including creation, pausing, resuming, retrieving details, listing, and deletion through HTTP requests.
-
-## Create a task
-
-Creating a CDC task allows data change operations in the source Milvus to be synced to the target Milvus.
-
-To create a CDC task:
-
-```bash
-curl -X POST http:_//localhost:8444/cdc \
--H "Content-Type: application/json" \
--d '{
-  "request_type": "create",
-  "request_data": {
-    "milvus_connect_param": {
-      "host": "localhost",
-      "port": 19530,
-      "username": "root",
-      "password": "Milvus",
-      "enable_tls": false,
-      "connect_timeout": 10
+<h1 id="Manage-CDC-Tasks" class="common-anchor-header">Manage CDC Tasks
+    <button data-href="#Manage-CDC-Tasks" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>A Capture Data Change (CDC) task enables the synchronization of data from a source Milvus instance to a target Milvus instance. It monitors operation logs from the source and replicates data changes such as insertions, deletions, and index operations to the target in real-time. This facilitates real-time disaster recovery or active-active load balancing between Milvus deployments.</p>
+<p>This guide covers how to manage CDC tasks, including creation, pausing, resuming, retrieving details, listing, and deletion through HTTP requests.</p>
+<h2 id="Create-a-task" class="common-anchor-header">Create a task
+    <button data-href="#Create-a-task" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Creating a CDC task allows data change operations in the source Milvus to be synced to the target Milvus.</p>
+<p>To create a CDC task:</p>
+<pre><code class="language-bash">curl -X POST http:_//localhost:8444/cdc \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+  &quot;request_type&quot;: &quot;create&quot;,
+  &quot;request_data&quot;: {
+    &quot;milvus_connect_param&quot;: {
+      &quot;host&quot;: &quot;localhost&quot;,
+      &quot;port&quot;: 19530,
+      &quot;username&quot;: &quot;root&quot;,
+      &quot;password&quot;: &quot;Milvus&quot;,
+      &quot;enable_tls&quot;: false,
+      &quot;connect_timeout&quot;: 10
     },
-    "collection_infos": [
+    &quot;collection_infos&quot;: [
       {
-        "name": "*"
+        &quot;name&quot;: &quot;*&quot;
       }
     ],
-    "rpc_channel_info": {
-      "name": "by-dev-replicate-msg"
+    &quot;rpc_channel_info&quot;: {
+      &quot;name&quot;: &quot;by-dev-replicate-msg&quot;
     }
   }
-}'
-```
-
-Replace __localhost__ with the IP address of the target Milvus server.
-
-__Parameters__:
-
-- __milvus_connect_param__: Connection parameters of the target Milvus.
-
-    - __host__: Hostname or IP address of the Milvus server.
-
-    - __port__: Port number the Milvus server listens on.
-
-    - __username__: Username for authenticating with the Milvus server.
-
-    - __password__: Password for authenticating with the Milvus server.
-
-    - __enable_tls__: Whether to use TLS/SSL encryption for the connection.
-
-    - __connect_timeout__: Timeout period in seconds for establishing the connection.
-
-- __collection_infos__: Collections to synchronize. Currently, only an asterisk (__*__) is supported, as Milvus-CDC synchronizes at the cluster level, not individual collections.
-
-- __rpc_channel_info__: RPC channel name for synchronization, constructed by concatenating the values of __common.chanNamePrefix.cluster__ and __common.chanNamePrefix.replicateMsg__ from the source Milvus configuration, separated by a hyphen (__-__).
-
-Expected response:
-
-```json
-{
-  "code": 200,
-  "data": {
-    "task_id":"xxxx"
+}&#x27;</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>Replace <strong>localhost</strong> with the IP address of the target Milvus server.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><p><strong>milvus_connect_param</strong>: Connection parameters of the target Milvus.</p>
+<ul>
+<li><p><strong>host</strong>: Hostname or IP address of the Milvus server.</p></li>
+<li><p><strong>port</strong>: Port number the Milvus server listens on.</p></li>
+<li><p><strong>username</strong>: Username for authenticating with the Milvus server.</p></li>
+<li><p><strong>password</strong>: Password for authenticating with the Milvus server.</p></li>
+<li><p><strong>enable_tls</strong>: Whether to use TLS/SSL encryption for the connection.</p></li>
+<li><p><strong>connect_timeout</strong>: Timeout period in seconds for establishing the connection.</p></li>
+</ul></li>
+<li><p><strong>collection_infos</strong>: Collections to synchronize. Currently, only an asterisk (<strong>*</strong>) is supported, as Milvus-CDC synchronizes at the cluster level, not individual collections.</p></li>
+<li><p><strong>rpc_channel_info</strong>: RPC channel name for synchronization, constructed by concatenating the values of <strong>common.chanNamePrefix.cluster</strong> and <strong>common.chanNamePrefix.replicateMsg</strong> from the source Milvus configuration, separated by a hyphen (<strong>-</strong>).</p></li>
+</ul>
+<p>Expected response:</p>
+<pre><code class="language-json">{
+  <span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-string">&quot;data&quot;</span>: {
+    <span class="hljs-string">&quot;task_id&quot;</span>:<span class="hljs-string">&quot;xxxx&quot;</span>
   }
 }
-```
-
-## List tasks
-
-To list all created CDC tasks:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{
-  "request_type": "list"
-}' http://localhost:8444/cdc
-```
-
-Replace __localhost__ with the IP address of the target Milvus server.
-
-Expected response:
-
-```json
-{
-  "code": 200,
-  "data": {
-    "tasks": [
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="List-tasks" class="common-anchor-header">List tasks
+    <button data-href="#List-tasks" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To list all created CDC tasks:</p>
+<pre><code class="language-bash">curl -X POST -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> -d <span class="hljs-string">&#x27;{
+  &quot;request_type&quot;: &quot;list&quot;
+}&#x27;</span> http://localhost:8444/cdc
+<button class="copy-code-btn"></button></code></pre>
+<p>Replace <strong>localhost</strong> with the IP address of the target Milvus server.</p>
+<p>Expected response:</p>
+<pre><code class="language-json">{
+  <span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-string">&quot;data&quot;</span>: {
+    <span class="hljs-string">&quot;tasks&quot;</span>: [
       {
-        "task_id": "xxxxx",
-        "milvus_connect_param": {
-          "host": "localhost",
-          "port": 19530,
-          "connect_timeout": 10
+        <span class="hljs-string">&quot;task_id&quot;</span>: <span class="hljs-string">&quot;xxxxx&quot;</span>,
+        <span class="hljs-string">&quot;milvus_connect_param&quot;</span>: {
+          <span class="hljs-string">&quot;host&quot;</span>: <span class="hljs-string">&quot;localhost&quot;</span>,
+          <span class="hljs-string">&quot;port&quot;</span>: <span class="hljs-number">19530</span>,
+          <span class="hljs-string">&quot;connect_timeout&quot;</span>: <span class="hljs-number">10</span>
         },
-        "collection_infos": [
+        <span class="hljs-string">&quot;collection_infos&quot;</span>: [
           {
-            "name": "*"
+            <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;*&quot;</span>
           }
         ],
-        "state": "Running"
+        <span class="hljs-string">&quot;state&quot;</span>: <span class="hljs-string">&quot;Running&quot;</span>
       }
     ]
   }
 }
-```
-
-## Pause a task
-
-To pause a CDC task:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{
-  "request_type":"pause",
-  "request_data": {
-    "task_id": "xxxx"
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Pause-a-task" class="common-anchor-header">Pause a task
+    <button data-href="#Pause-a-task" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To pause a CDC task:</p>
+<pre><code class="language-bash">curl -X POST -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> -d <span class="hljs-string">&#x27;{
+  &quot;request_type&quot;:&quot;pause&quot;,
+  &quot;request_data&quot;: {
+    &quot;task_id&quot;: &quot;xxxx&quot;
   }
-}' http://localhost:8444/cdc
-```
-
-Replace __localhost__ with the IP address of the target Milvus server.
-
-__Parameters__:
-
-- __task_id__: ID of the CDC task to pause.
-
-Expected response:
-
-```bash
-{
-  "code": 200,
-  "data": {}
+}&#x27;</span> http://localhost:8444/cdc
+<button class="copy-code-btn"></button></code></pre>
+<p>Replace <strong>localhost</strong> with the IP address of the target Milvus server.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><strong>task_id</strong>: ID of the CDC task to pause.</li>
+</ul>
+<p>Expected response:</p>
+<pre><code class="language-bash">{
+  <span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-string">&quot;data&quot;</span>: {}
 }
-```
-
-## Resume a task
-
-To resume a paused CDC task:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{
-  "request_type":"resume",
-  "request_data": {
-    "task_id": "xxxx"
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Resume-a-task" class="common-anchor-header">Resume a task
+    <button data-href="#Resume-a-task" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To resume a paused CDC task:</p>
+<pre><code class="language-bash">curl -X POST -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> -d <span class="hljs-string">&#x27;{
+  &quot;request_type&quot;:&quot;resume&quot;,
+  &quot;request_data&quot;: {
+    &quot;task_id&quot;: &quot;xxxx&quot;
   }
-}' http://localhost:8444/cdc
-```
-
-Replace __localhost__ with the IP address of the target Milvus server.
-
-__Parameters__:
-
-- __task_id__: ID of the CDC task to resume.
-
-Expected response:
-
-```bash
-{
-  "code": 200,
-  "data": {}
+}&#x27;</span> http://localhost:8444/cdc
+<button class="copy-code-btn"></button></code></pre>
+<p>Replace <strong>localhost</strong> with the IP address of the target Milvus server.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><strong>task_id</strong>: ID of the CDC task to resume.</li>
+</ul>
+<p>Expected response:</p>
+<pre><code class="language-bash">{
+  <span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-string">&quot;data&quot;</span>: {}
 }
-```
-
-## Retrieve task details
-
-To retrieve the details of a specific CDC task:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{
-  "request_type":"get",
-  "request_data": {
-    "task_id": "xxxx"
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Retrieve-task-details" class="common-anchor-header">Retrieve task details
+    <button data-href="#Retrieve-task-details" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To retrieve the details of a specific CDC task:</p>
+<pre><code class="language-bash">curl -X POST -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> -d <span class="hljs-string">&#x27;{
+  &quot;request_type&quot;:&quot;get&quot;,
+  &quot;request_data&quot;: {
+    &quot;task_id&quot;: &quot;xxxx&quot;
   }
-}' http://localhost:8444/cdc
-```
-
-Replace __localhost__ with the IP address of the target Milvus server.
-
-__Parameters__:
-
-- __task_id__: ID of the CDC task to query.
-
-Expected response:
-
-```bash
-{
-  "code": 200,
-  "data": {
-    "Task": {
-      "collection_infos": [
+}&#x27;</span> http://localhost:8444/cdc
+<button class="copy-code-btn"></button></code></pre>
+<p>Replace <strong>localhost</strong> with the IP address of the target Milvus server.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><strong>task_id</strong>: ID of the CDC task to query.</li>
+</ul>
+<p>Expected response:</p>
+<pre><code class="language-bash">{
+  <span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-string">&quot;data&quot;</span>: {
+    <span class="hljs-string">&quot;Task&quot;</span>: {
+      <span class="hljs-string">&quot;collection_infos&quot;</span>: [
         {
-          "name": "*"
+          <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;*&quot;</span>
         }
       ],
-      "milvus_connect_param": {
-        "connect_timeout": 10,
-        "enable_tls": true,
-        "host": "localhost",
-        "port": 19530
+      <span class="hljs-string">&quot;milvus_connect_param&quot;</span>: {
+        <span class="hljs-string">&quot;connect_timeout&quot;</span>: <span class="hljs-number">10</span>,
+        <span class="hljs-string">&quot;enable_tls&quot;</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-string">&quot;host&quot;</span>: <span class="hljs-string">&quot;localhost&quot;</span>,
+        <span class="hljs-string">&quot;port&quot;</span>: <span class="hljs-number">19530</span>
       },
-      "state": "Running",
-      "task_id": "xxxx"
+      <span class="hljs-string">&quot;state&quot;</span>: <span class="hljs-string">&quot;Running&quot;</span>,
+      <span class="hljs-string">&quot;task_id&quot;</span>: <span class="hljs-string">&quot;xxxx&quot;</span>
     }
   }
 }
-```
-
-## Delete a task
-
-To delete a CDC task:
-
-```bash
-curl -X POST -H "Content-Type: application/json" -d '{
-  "request_type":"delete",
-  "request_data": {
-    "task_id": "30d1e325df604ebb99e14c2a335a1421"
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Delete-a-task" class="common-anchor-header">Delete a task
+    <button data-href="#Delete-a-task" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To delete a CDC task:</p>
+<pre><code class="language-bash">curl -X POST -H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> -d <span class="hljs-string">&#x27;{
+  &quot;request_type&quot;:&quot;delete&quot;,
+  &quot;request_data&quot;: {
+    &quot;task_id&quot;: &quot;30d1e325df604ebb99e14c2a335a1421&quot;
   }
-}' http://localhost:8444/cdc
-```
-
-Replace __localhost__ with the IP address of the target Milvus server.
-
-__Parameters__:
-
-- __task_id__: ID of the CDC task to delete.
-
-Expected response:
-
-```json
-{
-  "code": 200,
-  "data": {}
+}&#x27;</span> http://localhost:8444/cdc
+<button class="copy-code-btn"></button></code></pre>
+<p>Replace <strong>localhost</strong> with the IP address of the target Milvus server.</p>
+<p><strong>Parameters</strong>:</p>
+<ul>
+<li><strong>task_id</strong>: ID of the CDC task to delete.</li>
+</ul>
+<p>Expected response:</p>
+<pre><code class="language-json">{
+  <span class="hljs-string">&quot;code&quot;</span>: <span class="hljs-number">200</span>,
+  <span class="hljs-string">&quot;data&quot;</span>: {}
 }
-```
-
+<button class="copy-code-btn"></button></code></pre>

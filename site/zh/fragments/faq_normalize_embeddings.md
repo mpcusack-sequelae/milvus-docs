@@ -1,3 +1,7 @@
+---
+
+---
+
 <p>Normalization refers to the process of converting an embedding (vector) so that its norm equals 1. If you use Inner Product to calculate embeddings similarities, you must normalize your embeddings. After normalization, inner product equals cosine similarity.
 </p>
 <p>

@@ -6,81 +6,124 @@ summary: Learn how to install Milvus cluster on Kubernetes.
 title: Install Milvus Cluster with Helm
 ---
 
-# Run Milvus in Kubernetes with Helm
+<h1 id="Run-Milvus-in-Kubernetes-with-Helm" class="common-anchor-header">Run Milvus in Kubernetes with Helm
+    <button data-href="#Run-Milvus-in-Kubernetes-with-Helm" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This page illustrates how to start a Milvus instance in Kubernetes using <a href="https://github.com/zilliztech/milvus-helm">Milvus Helm charts</a>.</p>
+<h2 id="Overview" class="common-anchor-header">Overview
+    <button data-href="#Overview" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Helm uses a packaging format called charts. A chart is a collection of files that describe a related set of Kubernetes resources. Milvus provides a set of charts to help you deploy Milvus dependencies and components.</p>
+<h2 id="Prerequisites" class="common-anchor-header">Prerequisites
+    <button data-href="#Prerequisites" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li><p><a href="https://helm.sh/docs/intro/install/">Install Helm CLI</a>.</p></li>
+<li><p><a href="/docs/prerequisite-helm.md#How-can-I-start-a-K8s-cluster-locally-for-test-purposes">Create a K8s cluster</a>.</p></li>
+<li><p>Install a <a href="https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/">StorageClass</a>. You can check the installed StorageClass as follows.</p>
+<pre><code class="language-bash">$ kubectl get sc
 
-This page illustrates how to start a Milvus instance in Kubernetes using [Milvus Helm charts](https://github.com/zilliztech/milvus-helm).
-
-## Overview
-
-Helm uses a packaging format called charts. A chart is a collection of files that describe a related set of Kubernetes resources. Milvus provides a set of charts to help you deploy Milvus dependencies and components.
-
-## Prerequisites
-
-- [Install Helm CLI](https://helm.sh/docs/intro/install/).
-- [Create a K8s cluster](prerequisite-helm.md#How-can-I-start-a-K8s-cluster-locally-for-test-purposes).
-- Install a [StorageClass](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/). You can check the installed StorageClass as follows.
-
-    ```bash
-    $ kubectl get sc
-
-    NAME                  PROVISIONER                  RECLAIMPOLICY    VOLUMEBIINDINGMODE    ALLOWVOLUMEEXPANSION     AGE
-    standard (default)    k8s.io/minikube-hostpath     Delete           Immediate             false 
-    ```
-
-- Check [the hardware and software requirements](prerequisite-helm.md) before installation.
-- Before installing Milvus, it is recommended to use the [Milvus Sizing Tool](https://milvus.io/tools/sizing) to estimate the hardware requirements based on your data size. This helps ensure optimal performance and resource allocation for your Milvus installation.
-
+NAME                  PROVISIONER                  RECLAIMPOLICY    VOLUMEBIINDINGMODE    ALLOWVOLUMEEXPANSION     AGE
+<span class="hljs-title function_">standard</span> <span class="hljs-params">(<span class="hljs-keyword">default</span>)</span>    k8s.io/minikube-hostpath     Delete           Immediate             <span class="hljs-literal">false</span> 
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Check <a href="/docs/prerequisite-helm.md">the hardware and software requirements</a> before installation.</p></li>
+<li><p>Before installing Milvus, it is recommended to use the <a href="https://milvus.io/tools/sizing">Milvus Sizing Tool</a> to estimate the hardware requirements based on your data size. This helps ensure optimal performance and resource allocation for your Milvus installation.</p></li>
+</ul>
 <div class="alert note">
-
-If you encounter any issues pulling the image, contact us at <a href="mailto:community@zilliz.com">community@zilliz.com</a> with details about the problem, and we'll provide you with the necessary support.
-
+<p>If you encounter any issues pulling the image, contact us at <a href="mailto:community@zilliz.com">community@zilliz.com</a> with details about the problem, and we’ll provide you with the necessary support.</p>
 </div>
-
-## Install Milvus Helm Chart
-
-Before installing Milvus Helm Charts, you need to add Milvus Helm repository.
-
-```
-$ helm repo add milvus https://zilliztech.github.io/milvus-helm/
-```
-
+<h2 id="Install-Milvus-Helm-Chart" class="common-anchor-header">Install Milvus Helm Chart
+    <button data-href="#Install-Milvus-Helm-Chart" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Before installing Milvus Helm Charts, you need to add Milvus Helm repository.</p>
+<pre><code>$ helm repo <span class="hljs-keyword">add</span> milvus https:<span class="hljs-comment">//zilliztech.github.io/milvus-helm/</span>
+<button class="copy-code-btn"></button></code></pre>
 <div class="alert note">
-
-The Milvus Helm Charts repo at `https://milvus-io.github.io/milvus-helm/` has been archived and you can get further updates from `https://zilliztech.github.io/milvus-helm/` as follows:
-
-```shell
-helm repo add zilliztech https://zilliztech.github.io/milvus-helm
+<p>The Milvus Helm Charts repo at <code>https://milvus-io.github.io/milvus-helm/</code> has been archived and you can get further updates from <code>https://zilliztech.github.io/milvus-helm/</code> as follows:</p>
+<pre><code class="language-shell">helm repo add zilliztech https://zilliztech.github.io/milvus-helm
 helm repo update
-# upgrade existing helm release
+<span class="hljs-comment"># upgrade existing helm release</span>
 helm upgrade my-release zilliztech/milvus
-```
-
-The archived repo is still available for the charts up to 4.0.31. For later releases, use the new repo instead.
-
+<button class="copy-code-btn"></button></code></pre>
+<p>The archived repo is still available for the charts up to 4.0.31. For later releases, use the new repo instead.</p>
 </div>
-
-Then fetch Milvus charts from the repository as follows:
-
-```
-$ helm repo update
-```
-
-You can always run this command to fetch the latest Milvus Helm charts.
-
-## Online install
-
-### 1. Deploy a Milvus cluster
-
-Once you have installed the Helm chart, you can start Milvus on Kubernetes. This section will guide you through the steps to starting Milvus.
-
-```shell
-$ helm install my-release milvus/milvus
-```
-
-In the above command, `my-release` is the release name, and `milvus/milvus` is the locally installed chart repository. To use a different name, replace `my-release` with the one you see fit.
-
-The command above deploys a Milvus cluster with its components and dependencies using default configurations. To customize these settings, we recommend you use the [Milvus Sizing Tool](https://milvus.io/tools/sizing) to adjust the configurations based on your actual data size and then download the corresponding YAML file. To learn more about configuration parameters, refer to [Milvus System Configurations Checklist](https://milvus.io/docs/system_configuration.md).
-
+<p>Then fetch Milvus charts from the repository as follows:</p>
+<pre><code>$ helm repo update
+<button class="copy-code-btn"></button></code></pre>
+<p>You can always run this command to fetch the latest Milvus Helm charts.</p>
+<h2 id="Online-install" class="common-anchor-header">Online install
+    <button data-href="#Online-install" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><h3 id="1-Deploy-a-Milvus-cluster" class="common-anchor-header">1. Deploy a Milvus cluster</h3><p>Once you have installed the Helm chart, you can start Milvus on Kubernetes. This section will guide you through the steps to starting Milvus.</p>
+<pre><code class="language-shell">$ helm install my-release milvus/milvus
+<button class="copy-code-btn"></button></code></pre>
+<p>In the above command, <code>my-release</code> is the release name, and <code>milvus/milvus</code> is the locally installed chart repository. To use a different name, replace <code>my-release</code> with the one you see fit.</p>
+<p>The command above deploys a Milvus cluster with its components and dependencies using default configurations. To customize these settings, we recommend you use the <a href="https://milvus.io/tools/sizing">Milvus Sizing Tool</a> to adjust the configurations based on your actual data size and then download the corresponding YAML file. To learn more about configuration parameters, refer to <a href="https://milvus.io/docs/system_configuration.md">Milvus System Configurations Checklist</a>.</p>
 <div class="alert note">
   <ul>
     <li>The release name should only contain letters, numbers and dashes. Dots are not allowed in the release name.</li>
@@ -90,19 +133,11 @@ The command above deploys a Milvus cluster with its components and dependencies 
     <li>See <a href="https://artifacthub.io/packages/helm/milvus/milvus">Milvus Helm Chart</a> and <a href="https://helm.sh/docs/">Helm</a> for more information.</li>
   </ul>
 </div>
-
-### 2. Check Milvus cluster status
-
-Run the following command to check the status of all pods in your Milvus cluster.
-
-```
-$ kubectl get pods
-```
-
-Once all pods are running, the output of the above command should be similar to the following:
-
-```
-NAME                                             READY  STATUS   RESTARTS  AGE
+<h3 id="2-Check-Milvus-cluster-status" class="common-anchor-header">2. Check Milvus cluster status</h3><p>Run the following command to check the status of all pods in your Milvus cluster.</p>
+<pre><code>$ kubectl <span class="hljs-keyword">get</span> pods
+<button class="copy-code-btn"></button></code></pre>
+<p>Once all pods are running, the output of the above command should be similar to the following:</p>
+<pre><code>NAME                                             READY  STATUS   RESTARTS  AGE
 my-release-etcd-0                                1/1    Running   0        3m23s
 my-release-etcd-1                                1/1    Running   0        3m23s
 my-release-etcd-2                                1/1    Running   0        3m23s
@@ -122,137 +157,144 @@ my-release-pulsar-broker-556ff89d4c-2m29m        1/1    Running   0        3m23s
 my-release-pulsar-proxy-6fbd75db75-nhg4v         1/1    Running   0        3m23s
 my-release-pulsar-zookeeper-0                    1/1    Running   0        3m23s
 my-release-pulsar-zookeeper-metadata-98zbr       0/1   Completed  0        3m24s
-```
-
-### 3. Forward a local port to Milvus
-
-Run the following command to get the port at which your Milvus cluster serves.
-
-```bash
-$ kubectl get pod my-release-milvus-proxy-6bd7f5587-ds2xv --template
-='{{(index (index .spec.containers 0).ports 0).containerPort}}{{"\n"}}'
-19530
-```
-
-The output shows that the Milvus instance serves at the default port **19530**.
-
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="3-Forward-a-local-port-to-Milvus" class="common-anchor-header">3. Forward a local port to Milvus</h3><p>Run the following command to get the port at which your Milvus cluster serves.</p>
+<pre><code class="language-bash">$ kubectl <span class="hljs-keyword">get</span> pod my-release-milvus-proxy<span class="hljs-number">-6b</span>d7f5587-ds2xv --template
+=<span class="hljs-string">&#x27;{{(index (index .spec.containers 0).ports 0).containerPort}}{{&quot;\n&quot;}}&#x27;</span>
+<span class="hljs-number">19530</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>The output shows that the Milvus instance serves at the default port <strong>19530</strong>.</p>
 <div class="alert note">
-
-If you have deployed Milvus in standalone mode, change the pod name from `my-release-milvus-proxy-xxxxxxxxxx-xxxxx` to `my-release-milvus-xxxxxxxxxx-xxxxx`.
-
+<p>If you have deployed Milvus in standalone mode, change the pod name from <code>my-release-milvus-proxy-xxxxxxxxxx-xxxxx</code> to <code>my-release-milvus-xxxxxxxxxx-xxxxx</code>.</p>
 </div>
-
-Then, run the following command to forward a local port to the port at which Milvus serves.
-
-```bash
-$ kubectl port-forward service/my-release-milvus 27017:19530
-Forwarding from 127.0.0.1:27017 -> 19530
-```
-
-Optionally, you can use `:19530` instead of `27017:19530` in the above command to let `kubectl` allocate a local port for you so that you don't have to manage port conflicts.
-
-By default, kubectl's port-forwarding only listens on `localhost`. Use the `address` flag if you want Milvus to listen on the selected or all IP addresses. The following command makes port-forward listen on all IP addresses on the host machine.
-
-```bash
-$ kubectl port-forward --address 0.0.0.0 service/my-release-milvus 27017:19530
-Forwarding from 0.0.0.0:27017 -> 19530
-```
-
-## Offline install
-
-If you are in a network-restricted environment, follow the procedure in this section to start a Milvus cluster.
-
-### 1. Get Milvus manifest
-
-Run the following command to get the Milvus manifest.
-
-```shell
-$ helm template my-release milvus/milvus > milvus_manifest.yaml
-```
-
-The above command renders chart templates for a Milvus cluster and saves the output to a manifest file named `milvus_manifest.yaml`. Using this manifest, you can install a Milvus cluster with its components and dependencies in separate pods.
-
+<p>Then, run the following command to forward a local port to the port at which Milvus serves.</p>
+<pre><code class="language-bash">$ kubectl port-forward service/my-release-milvus <span class="hljs-number">27017</span>:<span class="hljs-number">19530</span>
+<span class="hljs-title class_">Forwarding</span> <span class="hljs-keyword">from</span> <span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>:<span class="hljs-number">27017</span> -&gt; <span class="hljs-number">19530</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>Optionally, you can use <code>:19530</code> instead of <code>27017:19530</code> in the above command to let <code>kubectl</code> allocate a local port for you so that you don’t have to manage port conflicts.</p>
+<p>By default, kubectl’s port-forwarding only listens on <code>localhost</code>. Use the <code>address</code> flag if you want Milvus to listen on the selected or all IP addresses. The following command makes port-forward listen on all IP addresses on the host machine.</p>
+<pre><code class="language-bash">$ kubectl port-forward --address <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span> service/my-release-milvus <span class="hljs-number">27017</span>:<span class="hljs-number">19530</span>
+<span class="hljs-title class_">Forwarding</span> <span class="hljs-keyword">from</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span>:<span class="hljs-number">27017</span> -&gt; <span class="hljs-number">19530</span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Offline-install" class="common-anchor-header">Offline install
+    <button data-href="#Offline-install" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>If you are in a network-restricted environment, follow the procedure in this section to start a Milvus cluster.</p>
+<h3 id="1-Get-Milvus-manifest" class="common-anchor-header">1. Get Milvus manifest</h3><p>Run the following command to get the Milvus manifest.</p>
+<pre><code class="language-shell">$ helm template my-release milvus/milvus &gt; milvus_manifest.yaml
+<button class="copy-code-btn"></button></code></pre>
+<p>The above command renders chart templates for a Milvus cluster and saves the output to a manifest file named <code>milvus_manifest.yaml</code>. Using this manifest, you can install a Milvus cluster with its components and dependencies in separate pods.</p>
 <div class="alert note">
-
-- To install a Milvus instance in the standalone mode where all Milvus components are contained within a single pod, you should run `helm template my-release --set cluster.enabled=false --set etcd.replicaCount=1 --set minio.mode=standalone --set pulsar.enabled=false milvus/milvus > milvus_manifest.yaml` instead to render chart templates for a Milvus instance in a standalone mode.
-- To change Milvus configurations, download the [`value.yaml`](https://raw.githubusercontent.com/milvus-io/milvus-helm/master/charts/milvus/values.yaml) template, place your desired settings in it, and use `helm template -f values.yaml my-release milvus/milvus > milvus_manifest.yaml` to render the manifest accordingly.
-
+<ul>
+<li>To install a Milvus instance in the standalone mode where all Milvus components are contained within a single pod, you should run <code>helm template my-release --set cluster.enabled=false --set etcd.replicaCount=1 --set minio.mode=standalone --set pulsar.enabled=false milvus/milvus &gt; milvus_manifest.yaml</code> instead to render chart templates for a Milvus instance in a standalone mode.</li>
+<li>To change Milvus configurations, download the <a href="https://raw.githubusercontent.com/milvus-io/milvus-helm/master/charts/milvus/values.yaml"><code>value.yaml</code></a> template, place your desired settings in it, and use <code>helm template -f values.yaml my-release milvus/milvus &gt; milvus_manifest.yaml</code> to render the manifest accordingly.</li>
+</ul>
 </div>
-
-### 2. Download image-pulling script
-
-The image-pulling script is developed in Python. You should download the script along with its dependencies in the `requirement.txt` file.
-
-```shell
-$ wget https://raw.githubusercontent.com/milvus-io/milvus/master/deployments/offline/requirements.txt
-$ wget https://raw.githubusercontent.com/milvus-io/milvus/master/deployments/offline/save_image.py
-```
-
-### 3. Pull and save images
-
-Run the following command to pull and save the required images.
-
-```shell
-$ pip3 install -r requirements.txt
+<h3 id="2-Download-image-pulling-script" class="common-anchor-header">2. Download image-pulling script</h3><p>The image-pulling script is developed in Python. You should download the script along with its dependencies in the <code>requirement.txt</code> file.</p>
+<pre><code class="language-shell">$ wget <span class="hljs-attr">https</span>:<span class="hljs-comment">//raw.githubusercontent.com/milvus-io/milvus/master/deployments/offline/requirements.txt</span>
+$ wget <span class="hljs-attr">https</span>:<span class="hljs-comment">//raw.githubusercontent.com/milvus-io/milvus/master/deployments/offline/save_image.py</span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="3-Pull-and-save-images" class="common-anchor-header">3. Pull and save images</h3><p>Run the following command to pull and save the required images.</p>
+<pre><code class="language-shell">$ pip3 install -r requirements.txt
 $ python3 save_image.py --manifest milvus_manifest.yaml
-```
-
-The images are pulled into a sub-folder named `images` in the current directory.
-
-### 4. Load images
-
-You can now load the images to the hosts in the network-restricted environment as follows:
-
-```shell
-$ for image in $(find . -type f -name "*.tar.gz") ; do gunzip -c $image | docker load; done
-```
-
-### 5. Deploy Milvus
-
-```shell
-$ kubectl apply -f milvus_manifest.yaml
-```
-
-Till now, you can follow steps [2](#2-Check-Milvus-cluster-status) and [3](#3-Forward-a-local-port-to-Milvus) of the online install to check the cluster status and forward a local port to Milvus.
-
-## Upgrade running Milvus cluster
-
-Run the following command to upgrade your running Milvus cluster to the latest version:
-
-```shell
-$ helm repo update
+<button class="copy-code-btn"></button></code></pre>
+<p>The images are pulled into a sub-folder named <code>images</code> in the current directory.</p>
+<h3 id="4-Load-images" class="common-anchor-header">4. Load images</h3><p>You can now load the images to the hosts in the network-restricted environment as follows:</p>
+<pre><code class="language-shell">$ <span class="hljs-keyword">for</span> image <span class="hljs-keyword">in</span> $(find . -<span class="hljs-built_in">type</span> f -name <span class="hljs-string">&quot;*.tar.gz&quot;</span>) ; <span class="hljs-keyword">do</span> gunzip -c <span class="hljs-variable">$image</span> | docker load; <span class="hljs-keyword">done</span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="5-Deploy-Milvus" class="common-anchor-header">5. Deploy Milvus</h3><pre><code class="language-shell">$ kubectl apply -f milvus_manifest.yaml
+<button class="copy-code-btn"></button></code></pre>
+<p>Till now, you can follow steps <a href="#2-Check-Milvus-cluster-status">2</a> and <a href="#3-Forward-a-local-port-to-Milvus">3</a> of the online install to check the cluster status and forward a local port to Milvus.</p>
+<h2 id="Upgrade-running-Milvus-cluster" class="common-anchor-header">Upgrade running Milvus cluster
+    <button data-href="#Upgrade-running-Milvus-cluster" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Run the following command to upgrade your running Milvus cluster to the latest version:</p>
+<pre><code class="language-shell">$ helm repo update
 $ helm upgrade my-release zilliztech/milvus
-```
-
-## Uninstall Milvus
-
-Run the following command to uninstall Milvus.
-
-```bash
-$ helm uninstall my-release
-```
-
-## What's next
-
-Having installed Milvus in Docker, you can:
-
-- Check [Hello Milvus](quickstart.md) to see what Milvus can do.
-
-- Learn the basic operations of Milvus:
-  - [Manage Databases](manage_databases.md)
-  - [Manage Collections](manage-collections.md)
-  - [Manage Partitions](manage-partitions.md)
-  - [Insert, Upsert & Delete](insert-update-delete.md)
-  - [Single-Vector Search](single-vector-search.md)
-  - [Hybrid Search](multi-vector-search.md)
-
-- [Upgrade Milvus Using Helm Chart](upgrade_milvus_cluster-helm.md).
-- [Scale your Milvus cluster](scaleout.md).
-- Deploy your Milvu cluster on clouds:
-  - [Amazon EKS](eks.md)
-  - [Google Cloud](gcp.md)
-  - [Microsoft Azure](azure.md)
-- Explore [Milvus Backup](milvus_backup_overview.md), an open-source tool for Milvus data backups.
-- Explore [Birdwatcher](birdwatcher_overview.md), an open-source tool for debugging Milvus and dynamic configuration updates.
-- Explore [Attu](https://milvus.io/docs/attu.md), an open-source GUI tool for intuitive Milvus management.
-- [Monitor Milvus with Prometheus](monitor.md).
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Uninstall-Milvus" class="common-anchor-header">Uninstall Milvus
+    <button data-href="#Uninstall-Milvus" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Run the following command to uninstall Milvus.</p>
+<pre><code class="language-bash">$ helm uninstall my-release
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Whats-next" class="common-anchor-header">What’s next
+    <button data-href="#Whats-next" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Having installed Milvus in Docker, you can:</p>
+<ul>
+<li><p>Check <a href="/docs/quickstart.md">Hello Milvus</a> to see what Milvus can do.</p></li>
+<li><p>Learn the basic operations of Milvus:</p>
+<ul>
+<li><a href="/docs/manage_databases.md">Manage Databases</a></li>
+<li><a href="/docs/manage-collections.md">Manage Collections</a></li>
+<li><a href="/docs/manage-partitions.md">Manage Partitions</a></li>
+<li><a href="/docs/insert-update-delete.md">Insert, Upsert &amp; Delete</a></li>
+<li><a href="/docs/single-vector-search.md">Single-Vector Search</a></li>
+<li><a href="/docs/multi-vector-search.md">Hybrid Search</a></li>
+</ul></li>
+<li><p><a href="/docs/upgrade_milvus_cluster-helm.md">Upgrade Milvus Using Helm Chart</a>.</p></li>
+<li><p><a href="/docs/scaleout.md">Scale your Milvus cluster</a>.</p></li>
+<li><p>Deploy your Milvu cluster on clouds:</p>
+<ul>
+<li><a href="/docs/eks.md">Amazon EKS</a></li>
+<li><a href="/docs/gcp.md">Google Cloud</a></li>
+<li><a href="/docs/azure.md">Microsoft Azure</a></li>
+</ul></li>
+<li><p>Explore <a href="/docs/milvus_backup_overview.md">Milvus Backup</a>, an open-source tool for Milvus data backups.</p></li>
+<li><p>Explore <a href="/docs/birdwatcher_overview.md">Birdwatcher</a>, an open-source tool for debugging Milvus and dynamic configuration updates.</p></li>
+<li><p>Explore <a href="https://milvus.io/docs/attu.md">Attu</a>, an open-source GUI tool for intuitive Milvus management.</p></li>
+<li><p><a href="/docs/monitor.md">Monitor Milvus with Prometheus</a>.</p></li>
+</ul>

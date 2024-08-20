@@ -2,6 +2,9 @@
 id: home.md
 ---
 
+<div style={{backgroundColor: 'violet', padding: '1rem'}}>
+  Try and change the background color to `tomato`.
+</div>
 <div class="doc-h1-wrapper">
 
   <h1 class="title">

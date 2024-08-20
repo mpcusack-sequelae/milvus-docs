@@ -3,12 +3,13 @@
 	"version": "1.0.0",
 	"description": "Welcome to Milvus documentation!",
 	"scripts": {
-		"translate": "node tools/translate.mjs",
+		"translate": "node tools/translate.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
+	"type": "module",
 	"author": "",
 	"devDependencies": {
-		"@zilliz/toolkit": "^0.0.9",
+		"@zilliz/toolkit": "^0.0.14",
 		"highlight.js": "^11.10.0",
 		"katex": "^0.16.11",
 		"remarkable": "^2.0.1",

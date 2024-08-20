@@ -6,18 +6,42 @@ summary: Learn how to configure query node of Milvus.
 title: Query Node-related Configurations
 ---
 
-# Query Node-related Configurations
-
-This topic introduces the query node-related configurations of Milvus.
-
-Query node performs hybrid search of vector and scalar data on both incremental and historical data.
-
-Under this section, you can configure query node port, graceful time, etc.
-
-
-## `queryNode.gracefulTime`
-
-<table id="queryNode.gracefulTime">
+<h1 id="Query-Node-related-Configurations" class="common-anchor-header">Query Node-related Configurations
+    <button data-href="#Query-Node-related-Configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic introduces the query node-related configurations of Milvus.</p>
+<p>Query node performs hybrid search of vector and scalar data on both incremental and historical data.</p>
+<p>Under this section, you can configure query node port, graceful time, etc.</p>
+<h2 id="queryNodegracefulTime" class="common-anchor-header"><code>queryNode.gracefulTime</code>
+    <button data-href="#queryNodegracefulTime" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.gracefulTime">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -36,11 +60,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-
-## `queryNode.port`
-
-<table id="queryNode.port">
+<h2 id="queryNodeport" class="common-anchor-header"><code>queryNode.port</code>
+    <button data-href="#queryNodeport" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.port">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -54,11 +90,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-
-## `queryNode.grpc.serverMaxRecvSize`
-
-<table id="queryNode.grpc.serverMaxRecvSize">
+<h2 id="queryNodegrpcserverMaxRecvSize" class="common-anchor-header"><code>queryNode.grpc.serverMaxRecvSize</code>
+    <button data-href="#queryNodegrpcserverMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.grpc.serverMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -75,10 +123,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.grpc.serverMaxSendSize`
-
-<table id="queryNode.grpc.serverMaxSendSize">
+<h2 id="queryNodegrpcserverMaxSendSize" class="common-anchor-header"><code>queryNode.grpc.serverMaxSendSize</code>
+    <button data-href="#queryNodegrpcserverMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.grpc.serverMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -95,10 +156,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.grpc.clientMaxRecvSize`
-
-<table id="queryNode.grpc.clientMaxRecvSize">
+<h2 id="queryNodegrpcclientMaxRecvSize" class="common-anchor-header"><code>queryNode.grpc.clientMaxRecvSize</code>
+    <button data-href="#queryNodegrpcclientMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.grpc.clientMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -115,10 +189,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.grpc.clientMaxSendSize`
-
-<table id="queryNode.grpc.clientMaxSendSize">
+<h2 id="queryNodegrpcclientMaxSendSize" class="common-anchor-header"><code>queryNode.grpc.clientMaxSendSize</code>
+    <button data-href="#queryNodegrpcclientMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.grpc.clientMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -135,10 +222,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.replicas`
-
-<table id="queryNode.replicas">
+<h2 id="queryNodereplicas" class="common-anchor-header"><code>queryNode.replicas</code>
+    <button data-href="#queryNodereplicas" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.replicas">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -154,10 +254,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.stats.publishInterval`
-
-<table id="queryNode.stats.publishInterval">
+<h2 id="queryNodestatspublishInterval" class="common-anchor-header"><code>queryNode.stats.publishInterval</code>
+    <button data-href="#queryNodestatspublishInterval" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.stats.publishInterval">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -174,10 +287,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.dataSync.flowGraph.maxQueueLength`
-
-<table id="queryNode.dataSync.flowGraph.maxQueueLength">
+<h2 id="queryNodedataSyncflowGraphmaxQueueLength" class="common-anchor-header"><code>queryNode.dataSync.flowGraph.maxQueueLength</code>
+    <button data-href="#queryNodedataSyncflowGraphmaxQueueLength" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.dataSync.flowGraph.maxQueueLength">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -195,10 +321,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.segcore.chunkRows`
-
-<table id="queryNode.segcore.chunkRows">
+<h2 id="queryNodesegcorechunkRows" class="common-anchor-header"><code>queryNode.segcore.chunkRows</code>
+    <button data-href="#queryNodesegcorechunkRows" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.segcore.chunkRows">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -214,10 +353,23 @@ Under this section, you can configure query node port, graceful time, etc.
     </tr>
   </tbody>
 </table>
-
-## `queryNode.segcore.InterimIndex`
-
-<table id="queryNode.segcore.chunkRows">
+<h2 id="queryNodesegcoreInterimIndex" class="common-anchor-header"><code>queryNode.segcore.InterimIndex</code>
+    <button data-href="#queryNodesegcoreInterimIndex" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="queryNode.segcore.chunkRows">
   <thead>
     <tr>
       <th class="width80">Description</th>

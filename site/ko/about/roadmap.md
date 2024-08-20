@@ -5,13 +5,40 @@ related_key: Milvus roadmap
 summary: Milvus is an open-source vector database built to power AI applications. Here is our roadmap to guide our development.
 ---
 
-# Milvus Roadmap
-
-Welcome to the Milvus Roadmap! Join us on our continuous journey to enhance and evolve Milvus. We are thrilled to share our accomplishments, future plans, and our vision for what lies ahead. Our roadmap is more than a list of upcoming features—it reflects our commitment to innovation and our dedication to working with the community. We invite you to delve into our roadmap, provide your feedback, and help shape the future of Milvus!
-
-## Roadmap
-
-<table>
+<h1 id="Milvus-Roadmap" class="common-anchor-header">Milvus Roadmap
+    <button data-href="#Milvus-Roadmap" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>Welcome to the Milvus Roadmap! Join us on our continuous journey to enhance and evolve Milvus. We are thrilled to share our accomplishments, future plans, and our vision for what lies ahead. Our roadmap is more than a list of upcoming features—it reflects our commitment to innovation and our dedication to working with the community. We invite you to delve into our roadmap, provide your feedback, and help shape the future of Milvus!</p>
+<h2 id="Roadmap" class="common-anchor-header">Roadmap
+    <button data-href="#Roadmap" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table>
     <thead>
         <tr>
             <th>Category</th>
@@ -47,30 +74,38 @@ Welcome to the Milvus Roadmap! Join us on our continuous journey to enhance and 
         </tr>
     </tbody>
 </table>
-
-- Our roadmap is typically structured into three parts: the most recent release, the next upcoming release, and a mid-to-long term vision within the next year.
-- As we progress, we continually learn and occasionally adjust our focus, adding or removing items as needed.
-- These plans are indicative and subject to change, and may vary based on subscription services.
-- We steadfastly adhere to our roadmap, with our [release notes](release_notes.md) serving as a reference.
-
-## How to contribute
-
-As an open-source project, Milvus thrives on community contributions. Here's how you can be a part of our journey.
-
-### Share feedback
-
-- Issue reporting: Encounter a bug or have a suggestion? Open an issue on our [GitHub page](https://github.com/milvus-io/milvus/issues).
-
-- Feature suggestions: Have ideas for new features or improvements? [We'd love to hear them!](https://github.com/milvus-io/milvus/discussions)
-
-### Code contributions
-
-- Pull requests: Contribute directly to our [codebase](https://github.com/milvus-io/milvus/pulls). Whether it's fixing bugs, adding features, or improving documentation, your contributions are welcome.
-
-- Development guide: Check our [Contributor's Guide](https://github.com/milvus-io/milvus/blob/82915a9630ab0ff40d7891b97c367ede5726ff7c/CONTRIBUTING.md) for guidelines on code contributions.
-
-### Spread the word
-
-- Social sharing: Love Milvus? Share your use cases and experiences on social media and tech blogs.
-
-- Star us on GitHub: Show your support by starring our [GitHub repository](https://github.com/milvus-io/milvus).
+<ul>
+<li>Our roadmap is typically structured into three parts: the most recent release, the next upcoming release, and a mid-to-long term vision within the next year.</li>
+<li>As we progress, we continually learn and occasionally adjust our focus, adding or removing items as needed.</li>
+<li>These plans are indicative and subject to change, and may vary based on subscription services.</li>
+<li>We steadfastly adhere to our roadmap, with our <a href="/docs/release_notes.md">release notes</a> serving as a reference.</li>
+</ul>
+<h2 id="How-to-contribute" class="common-anchor-header">How to contribute
+    <button data-href="#How-to-contribute" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>As an open-source project, Milvus thrives on community contributions. Here’s how you can be a part of our journey.</p>
+<h3 id="Share-feedback" class="common-anchor-header">Share feedback</h3><ul>
+<li><p>Issue reporting: Encounter a bug or have a suggestion? Open an issue on our <a href="https://github.com/milvus-io/milvus/issues">GitHub page</a>.</p></li>
+<li><p>Feature suggestions: Have ideas for new features or improvements? <a href="https://github.com/milvus-io/milvus/discussions">We’d love to hear them!</a></p></li>
+</ul>
+<h3 id="Code-contributions" class="common-anchor-header">Code contributions</h3><ul>
+<li><p>Pull requests: Contribute directly to our <a href="https://github.com/milvus-io/milvus/pulls">codebase</a>. Whether it’s fixing bugs, adding features, or improving documentation, your contributions are welcome.</p></li>
+<li><p>Development guide: Check our <a href="https://github.com/milvus-io/milvus/blob/82915a9630ab0ff40d7891b97c367ede5726ff7c/CONTRIBUTING.md">Contributor’s Guide</a> for guidelines on code contributions.</p></li>
+</ul>
+<h3 id="Spread-the-word" class="common-anchor-header">Spread the word</h3><ul>
+<li><p>Social sharing: Love Milvus? Share your use cases and experiences on social media and tech blogs.</p></li>
+<li><p>Star us on GitHub: Show your support by starring our <a href="https://github.com/milvus-io/milvus">GitHub repository</a>.</p></li>
+</ul>

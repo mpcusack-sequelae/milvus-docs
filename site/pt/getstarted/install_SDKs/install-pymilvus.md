@@ -6,50 +6,111 @@ summary: Learn how to install the Python SDK of Milvus.
 title: Install Milvus Python SDK
 ---
 
-# Install Milvus Python SDK
-
-This topic describes how to install Milvus python SDK pymilvus for Milvus.
-
-Current version of Milvus supports SDKs in Python, Node.js, GO, and Java.
-
-## Requirements
-
-- Python 3.7 or later is required.
-- Google protobuf is installed. You can install it with the command `pip3 install protobuf==3.20.0`.
-- grpcio-tools is installed. You can install it with the command `pip3 install grpcio-tools`.
-
-## Install PyMilvus via pip
-
-PyMilvus is available in [Python Package Index](https://pypi.org/project/pymilvus/).
-
+<h1 id="Install-Milvus-Python-SDK" class="common-anchor-header">Install Milvus Python SDK
+    <button data-href="#Install-Milvus-Python-SDK" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic describes how to install Milvus python SDK pymilvus for Milvus.</p>
+<p>Current version of Milvus supports SDKs in Python, Node.js, GO, and Java.</p>
+<h2 id="Requirements" class="common-anchor-header">Requirements
+    <button data-href="#Requirements" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li>Python 3.7 or later is required.</li>
+<li>Google protobuf is installed. You can install it with the command <code>pip3 install protobuf==3.20.0</code>.</li>
+<li>grpcio-tools is installed. You can install it with the command <code>pip3 install grpcio-tools</code>.</li>
+</ul>
+<h2 id="Install-PyMilvus-via-pip" class="common-anchor-header">Install PyMilvus via pip
+    <button data-href="#Install-PyMilvus-via-pip" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>PyMilvus is available in <a href="https://pypi.org/project/pymilvus/">Python Package Index</a>.</p>
 <div class="alert note">
-It is recommended to install a PyMilvus version that matches the version of the Milvus server you installed. For more information, see <a href="release_notes.md">Release Notes</a>.
+It is recommended to install a PyMilvus version that matches the version of the Milvus server you installed. For more information, see <a href="/docs/release_notes.md">Release Notes</a>.
 </div>
-
-```
-$ python3 -m pip install pymilvus=={{var.milvus_python_sdk_real_version}}
-```
-
-## Verify installation
-
-If PyMilvus is correctly installed, no exception will be raised when you run the following command.
-
-```
-$ python3 -c "from pymilvus import Collection"
-```
-
-
-
-## What's next
-
-Having installed PyMilvus, you can:
-
-- Learn the basic operations of Milvus:
-  - [Manage Collections](manage-collections.md)
-  - [Manage Partitions](manage-partitions.md)
-  - [Insert, Upsert & Delete](insert-update-delete.md)
-  - [Single-Vector Search](single-vector-search.md)
-  - [Hybrid Search](multi-vector-search.md)
-
-- Explore [PyMilvus API reference](/api-reference/pymilvus/v{{var.milvus_python_sdk_version}}/About.md)
-
+<pre><code>$ python3 -m pip install pymilvus=={{<span class="hljs-keyword">var</span>.<span class="hljs-property">milvus_python_sdk_real_version</span>}}
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Verify-installation" class="common-anchor-header">Verify installation
+    <button data-href="#Verify-installation" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>If PyMilvus is correctly installed, no exception will be raised when you run the following command.</p>
+<pre><code>$ python3 -c <span class="hljs-string">&quot;from pymilvus import Collection&quot;</span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Whats-next" class="common-anchor-header">What’s next
+    <button data-href="#Whats-next" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Having installed PyMilvus, you can:</p>
+<ul>
+<li><p>Learn the basic operations of Milvus:</p>
+<ul>
+<li><a href="/docs/manage-collections.md">Manage Collections</a></li>
+<li><a href="/docs/manage-partitions.md">Manage Partitions</a></li>
+<li><a href="/docs/insert-update-delete.md">Insert, Upsert &amp; Delete</a></li>
+<li><a href="/docs/single-vector-search.md">Single-Vector Search</a></li>
+<li><a href="/docs/multi-vector-search.md">Hybrid Search</a></li>
+</ul></li>
+<li><p>Explore <a href="/api-reference/pymilvus/v{{var.milvus_python_sdk_version}}/About.md">PyMilvus API reference</a></p></li>
+</ul>

@@ -6,21 +6,46 @@ summary: Learn how to configure message channels of Milvus.
 title: Message Channel-related Configurations
 ---
 
-# Message Channel-related Configurations
-
-This topic introduces the message channel-related configurations of Milvus.
-
-Under this section, you can configure the message channel name prefixes and component subscription name prefixes.
-
+<h1 id="Message-Channel-related-Configurations" class="common-anchor-header">Message Channel-related Configurations
+    <button data-href="#Message-Channel-related-Configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic introduces the message channel-related configurations of Milvus.</p>
+<p>Under this section, you can configure the message channel name prefixes and component subscription name prefixes.</p>
 <div class="alert note">
 <li>To share a Pulsar instance with multi-tenancy enabled among multiple Milvus instances, you need to change <code>pulsar.tenant</code> or <code>pulsar.namespace</code> to a unique value for each of the Milvus instances. </li>
 <li>To share a Pulsar instance with multi-tenancy disabled among multiple Milvus instances, you need to change <code>msgChannel.chanNamePrefix.cluster</code> to a unique value for each of the Milvus instances.</li>
-For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-among-multiple-Milvus-instances">Operation FAQs</a>.
+For details, refer to <a href="/docs/operational_faq.md#Can-I-share-a-Pulsar-instance-among-multiple-Milvus-instances">Operation FAQs</a>.
 </div>
-
-## `msgChannel.chanNamePrefix.cluster`
-
-<table id="msgChannel.chanNamePrefix.cluster">
+<h2 id="msgChannelchanNamePrefixcluster" class="common-anchor-header"><code>msgChannel.chanNamePrefix.cluster</code>
+    <button data-href="#msgChannelchanNamePrefixcluster" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.cluster">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -32,16 +57,29 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
       <td>
         <li>Root name prefix of the channel when a message channel is created.</li>
         <li>It is recommended to change this parameter before starting Milvus for the first time.</li>
-        <li>To share a Pulsar instance among multiple Milvus instances, consider changing this to a name rather than the default one for each Milvus instance before you start them. For details, see <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-among-multiple-Milvus-instances">Operational FAQs</a>.</li>
+        <li>To share a Pulsar instance among multiple Milvus instances, consider changing this to a name rather than the default one for each Milvus instance before you start them. For details, see <a href="/docs/operational_faq.md#Can-I-share-a-Pulsar-instance-among-multiple-Milvus-instances">Operational FAQs</a>.</li>
       </td>
       <td>"by-dev"</td>
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.rootCoordTimeTick`
-
-<table id="msgChannel.chanNamePrefix.rootCoordTimeTick">
+<h2 id="msgChannelchanNamePrefixrootCoordTimeTick" class="common-anchor-header"><code>msgChannel.chanNamePrefix.rootCoordTimeTick</code>
+    <button data-href="#msgChannelchanNamePrefixrootCoordTimeTick" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.rootCoordTimeTick">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -60,10 +98,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.rootCoordStatistics`
-
-<table id="msgChannel.chanNamePrefix.rootCoordStatistics">
+<h2 id="msgChannelchanNamePrefixrootCoordStatistics" class="common-anchor-header"><code>msgChannel.chanNamePrefix.rootCoordStatistics</code>
+    <button data-href="#msgChannelchanNamePrefixrootCoordStatistics" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.rootCoordStatistics">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -82,10 +133,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.rootCoordDml`
-
-<table id="msgChannel.chanNamePrefix.rootCoordDml">
+<h2 id="msgChannelchanNamePrefixrootCoordDml" class="common-anchor-header"><code>msgChannel.chanNamePrefix.rootCoordDml</code>
+    <button data-href="#msgChannelchanNamePrefixrootCoordDml" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.rootCoordDml">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -104,10 +168,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.rootCoordDelta`
-
-<table id="msgChannel.chanNamePrefix.rootCoordDelta">
+<h2 id="msgChannelchanNamePrefixrootCoordDelta" class="common-anchor-header"><code>msgChannel.chanNamePrefix.rootCoordDelta</code>
+    <button data-href="#msgChannelchanNamePrefixrootCoordDelta" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.rootCoordDelta">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -126,10 +203,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.search`
-
-<table id="msgChannel.chanNamePrefix.search">
+<h2 id="msgChannelchanNamePrefixsearch" class="common-anchor-header"><code>msgChannel.chanNamePrefix.search</code>
+    <button data-href="#msgChannelchanNamePrefixsearch" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.search">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -148,10 +238,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.searchResult`
-
-<table id="msgChannel.chanNamePrefix.searchResult">
+<h2 id="msgChannelchanNamePrefixsearchResult" class="common-anchor-header"><code>msgChannel.chanNamePrefix.searchResult</code>
+    <button data-href="#msgChannelchanNamePrefixsearchResult" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.searchResult">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -170,10 +273,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.proxyTimeTick`
-
-<table id="msgChannel.chanNamePrefix.proxyTimeTick">
+<h2 id="msgChannelchanNamePrefixproxyTimeTick" class="common-anchor-header"><code>msgChannel.chanNamePrefix.proxyTimeTick</code>
+    <button data-href="#msgChannelchanNamePrefixproxyTimeTick" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.proxyTimeTick">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -192,10 +308,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.queryTimeTick`
-
-<table id="msgChannel.chanNamePrefix.queryTimeTick">
+<h2 id="msgChannelchanNamePrefixqueryTimeTick" class="common-anchor-header"><code>msgChannel.chanNamePrefix.queryTimeTick</code>
+    <button data-href="#msgChannelchanNamePrefixqueryTimeTick" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.queryTimeTick">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -214,10 +343,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.queryNodeStats`
-
-<table id="msgChannel.chanNamePrefix.queryNodeStats">
+<h2 id="msgChannelchanNamePrefixqueryNodeStats" class="common-anchor-header"><code>msgChannel.chanNamePrefix.queryNodeStats</code>
+    <button data-href="#msgChannelchanNamePrefixqueryNodeStats" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.queryNodeStats">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -236,10 +378,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.dataCoordInsertChannel`
-
-<table id="msgChannel.chanNamePrefix.dataCoordInsertChannel">
+<h2 id="msgChannelchanNamePrefixdataCoordInsertChannel" class="common-anchor-header"><code>msgChannel.chanNamePrefix.dataCoordInsertChannel</code>
+    <button data-href="#msgChannelchanNamePrefixdataCoordInsertChannel" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.dataCoordInsertChannel">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -258,10 +413,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.dataCoordStatistic`
-
-<table id="msgChannel.chanNamePrefix.dataCoordStatistic">
+<h2 id="msgChannelchanNamePrefixdataCoordStatistic" class="common-anchor-header"><code>msgChannel.chanNamePrefix.dataCoordStatistic</code>
+    <button data-href="#msgChannelchanNamePrefixdataCoordStatistic" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.dataCoordStatistic">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -280,10 +448,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.dataCoordTimeTick`
-
-<table id="msgChannel.chanNamePrefix.dataCoordTimeTick">
+<h2 id="msgChannelchanNamePrefixdataCoordTimeTick" class="common-anchor-header"><code>msgChannel.chanNamePrefix.dataCoordTimeTick</code>
+    <button data-href="#msgChannelchanNamePrefixdataCoordTimeTick" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.dataCoordTimeTick">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -302,10 +483,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.chanNamePrefix.dataCoordSegmentInfo`
-
-<table id="msgChannel.chanNamePrefix.dataCoordSegmentInfo">
+<h2 id="msgChannelchanNamePrefixdataCoordSegmentInfo" class="common-anchor-header"><code>msgChannel.chanNamePrefix.dataCoordSegmentInfo</code>
+    <button data-href="#msgChannelchanNamePrefixdataCoordSegmentInfo" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.chanNamePrefix.dataCoordSegmentInfo">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -324,11 +518,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-
-## `msgChannel.subNamePrefix.rootCoordSubNamePrefix`
-
-<table id="msgChannel.subNamePrefix.rootCoordSubNamePrefix">
+<h2 id="msgChannelsubNamePrefixrootCoordSubNamePrefix" class="common-anchor-header"><code>msgChannel.subNamePrefix.rootCoordSubNamePrefix</code>
+    <button data-href="#msgChannelsubNamePrefixrootCoordSubNamePrefix" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.subNamePrefix.rootCoordSubNamePrefix">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -346,10 +552,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.subNamePrefix.proxySubNamePrefix`
-
-<table id="msgChannel.subNamePrefix.proxySubNamePrefix">
+<h2 id="msgChannelsubNamePrefixproxySubNamePrefix" class="common-anchor-header"><code>msgChannel.subNamePrefix.proxySubNamePrefix</code>
+    <button data-href="#msgChannelsubNamePrefixproxySubNamePrefix" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.subNamePrefix.proxySubNamePrefix">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -367,10 +586,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.subNamePrefix.queryNodeSubNamePrefix`
-
-<table id="msgChannel.subNamePrefix.queryNodeSubNamePrefix">
+<h2 id="msgChannelsubNamePrefixqueryNodeSubNamePrefix" class="common-anchor-header"><code>msgChannel.subNamePrefix.queryNodeSubNamePrefix</code>
+    <button data-href="#msgChannelsubNamePrefixqueryNodeSubNamePrefix" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.subNamePrefix.queryNodeSubNamePrefix">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -388,10 +620,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.subNamePrefix.dataNodeSubNamePrefix`
-
-<table id="msgChannel.subNamePrefix.dataNodeSubNamePrefix">
+<h2 id="msgChannelsubNamePrefixdataNodeSubNamePrefix" class="common-anchor-header"><code>msgChannel.subNamePrefix.dataNodeSubNamePrefix</code>
+    <button data-href="#msgChannelsubNamePrefixdataNodeSubNamePrefix" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.subNamePrefix.dataNodeSubNamePrefix">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -409,10 +654,23 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-
-## `msgChannel.subNamePrefix.dataCoordSubNamePrefix`
-
-<table id="msgChannel.subNamePrefix.dataCoordSubNamePrefix">
+<h2 id="msgChannelsubNamePrefixdataCoordSubNamePrefix" class="common-anchor-header"><code>msgChannel.subNamePrefix.dataCoordSubNamePrefix</code>
+    <button data-href="#msgChannelsubNamePrefixdataCoordSubNamePrefix" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="msgChannel.subNamePrefix.dataCoordSubNamePrefix">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -430,4 +688,3 @@ For details, refer to <a href="operational_faq.md#Can-I-share-a-Pulsar-instance-
     </tr>
   </tbody>
 </table>
-

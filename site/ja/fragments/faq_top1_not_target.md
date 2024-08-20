@@ -1,1 +1,5 @@
-This occurs if you have not normalized the vectors when using inner product as the distance metric.
+---
+
+---
+
+<p>This occurs if you have not normalized the vectors when using inner product as the distance metric.</p>

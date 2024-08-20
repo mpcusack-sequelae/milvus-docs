@@ -6,18 +6,42 @@ summary: Learn how to configure data coordinator of Milvus.
 title: Data Coordinator-related Configurations
 ---
 
-# Data Coordinator-related Configurations
-
-This topic introduces the data coordinator-related configurations of Milvus.
-
-Data coordinator (data coord) manages the topology of data nodes, maintains metadata, and triggers flush, compact, and other background data operations.
-
-Under this section, you can configure data coord address, segment settings, compaction, garbage collection, etc.
-
-
-## `dataCoord.address`
-
-<table id="dataCoord.address">
+<h1 id="Data-Coordinator-related-Configurations" class="common-anchor-header">Data Coordinator-related Configurations
+    <button data-href="#Data-Coordinator-related-Configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic introduces the data coordinator-related configurations of Milvus.</p>
+<p>Data coordinator (data coord) manages the topology of data nodes, maintains metadata, and triggers flush, compact, and other background data operations.</p>
+<p>Under this section, you can configure data coord address, segment settings, compaction, garbage collection, etc.</p>
+<h2 id="dataCoordaddress" class="common-anchor-header"><code>dataCoord.address</code>
+    <button data-href="#dataCoordaddress" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.address">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -34,10 +58,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.port`
-
-<table id="dataCoord.port">
+<h2 id="dataCoordport" class="common-anchor-header"><code>dataCoord.port</code>
+    <button data-href="#dataCoordport" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.port">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -51,10 +88,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.grpc.serverMaxRecvSize`
-
-<table id="dataCoord.grpc.serverMaxRecvSize">
+<h2 id="dataCoordgrpcserverMaxRecvSize" class="common-anchor-header"><code>dataCoord.grpc.serverMaxRecvSize</code>
+    <button data-href="#dataCoordgrpcserverMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.grpc.serverMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -71,10 +121,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.grpc.serverMaxSendSize`
-
-<table id="dataCoord.grpc.serverMaxSendSize">
+<h2 id="dataCoordgrpcserverMaxSendSize" class="common-anchor-header"><code>dataCoord.grpc.serverMaxSendSize</code>
+    <button data-href="#dataCoordgrpcserverMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.grpc.serverMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -91,11 +154,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-
-## `dataCoord.grpc.clientMaxRecvSize`
-
-<table id="dataCoord.grpc.clientMaxRecvSize">
+<h2 id="dataCoordgrpcclientMaxRecvSize" class="common-anchor-header"><code>dataCoord.grpc.clientMaxRecvSize</code>
+    <button data-href="#dataCoordgrpcclientMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.grpc.clientMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -112,11 +187,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-
-## `dataCoord.grpc.clientMaxSendSize`
-
-<table id="dataCoord.grpc.clientMaxSendSize">
+<h2 id="dataCoordgrpcclientMaxSendSize" class="common-anchor-header"><code>dataCoord.grpc.clientMaxSendSize</code>
+    <button data-href="#dataCoordgrpcclientMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.grpc.clientMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -133,10 +220,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.activeStandby.enabled`
-
-<table id="rootCoord.dmlChannelNum">
+<h2 id="dataCoordactiveStandbyenabled" class="common-anchor-header"><code>dataCoord.activeStandby.enabled</code>
+    <button data-href="#dataCoordactiveStandbyenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.dmlChannelNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -152,10 +252,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.replicas`
-
-<table id="rootCoord.dmlChannelNum">
+<h2 id="dataCoordreplicas" class="common-anchor-header"><code>dataCoord.replicas</code>
+    <button data-href="#dataCoordreplicas" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.dmlChannelNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -171,10 +284,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.enableCompaction`
-
-<table id="dataCoord.enableCompaction">
+<h2 id="dataCoordenableCompaction" class="common-anchor-header"><code>dataCoord.enableCompaction</code>
+    <button data-href="#dataCoordenableCompaction" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.enableCompaction">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -191,11 +317,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-
-## `dataCoord.enableGarbageCollection`
-
-<table id="dataCoord.enableGarbageCollection">
+<h2 id="dataCoordenableGarbageCollection" class="common-anchor-header"><code>dataCoord.enableGarbageCollection</code>
+    <button data-href="#dataCoordenableGarbageCollection" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.enableGarbageCollection">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -211,10 +349,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.segment.maxSize`
-
-<table id="dataCoord.segment.maxSize">
+<h2 id="dataCoordsegmentmaxSize" class="common-anchor-header"><code>dataCoord.segment.maxSize</code>
+    <button data-href="#dataCoordsegmentmaxSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.segment.maxSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -232,10 +383,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.segment.sealProportion`
-
-<table id="dataCoord.segment.sealProportion">
+<h2 id="dataCoordsegmentsealProportion" class="common-anchor-header"><code>dataCoord.segment.sealProportion</code>
+    <button data-href="#dataCoordsegmentsealProportion" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.segment.sealProportion">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -252,11 +416,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-
-## `dataCoord.segment.assignmentExpiration`
-
-<table id="dataCoord.segment.maxSize">
+<h2 id="dataCoordsegmentassignmentExpiration" class="common-anchor-header"><code>dataCoord.segment.assignmentExpiration</code>
+    <button data-href="#dataCoordsegmentassignmentExpiration" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.segment.maxSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -273,11 +449,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-
-## `dataCoord.compaction.enableAutoCompaction`
-
-<table id="dataCoord.compaction.enableAutoCompaction">
+<h2 id="dataCoordcompactionenableAutoCompaction" class="common-anchor-header"><code>dataCoord.compaction.enableAutoCompaction</code>
+    <button data-href="#dataCoordcompactionenableAutoCompaction" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.compaction.enableAutoCompaction">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -294,11 +482,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-
-## `dataCoord.gc.interval`
-
-<table id="dataCoord.gc.interval">
+<h2 id="dataCoordgcinterval" class="common-anchor-header"><code>dataCoord.gc.interval</code>
+    <button data-href="#dataCoordgcinterval" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.gc.interval">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -316,10 +516,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.gc.missingTolerance`
-
-<table id="dataCoord.gc.missingTolerance">
+<h2 id="dataCoordgcmissingTolerance" class="common-anchor-header"><code>dataCoord.gc.missingTolerance</code>
+    <button data-href="#dataCoordgcmissingTolerance" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.gc.missingTolerance">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -338,10 +551,23 @@ Under this section, you can configure data coord address, segment settings, comp
     </tr>
   </tbody>
 </table>
-
-## `dataCoord.gc.dropTolerance`
-
-<table id="dataCoord.gc.dropTolerance">
+<h2 id="dataCoordgcdropTolerance" class="common-anchor-header"><code>dataCoord.gc.dropTolerance</code>
+    <button data-href="#dataCoordgcdropTolerance" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="dataCoord.gc.dropTolerance">
   <thead>
     <tr>
       <th class="width80">Description</th>

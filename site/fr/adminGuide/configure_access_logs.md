@@ -3,135 +3,178 @@ id: configure_access_logs.md
 title: Configure Access Logs
 ---
 
-# Configure Access Logs
-
-The access log feature in Milvus allows server managers to record and analyze user access behavior, assisting in understanding aspects like query success rates and failure reasons.
-
-This guide provides detailed instructions on configuring access logs in Milvus.
-
-Configuration of access logs depends on the installation method of Milvus:
-
-- **Helm Installation**: Configure in `values.yaml`. For more information, see [Configure Milvus with Helm Charts](configure-helm.md).
-- **Docker Installation**: Configure in `milvus.yaml`. For more information, see [Configure Milvus with Docker Compose](configure-docker.md).
-- **Operator Installation**: Modify `spec.components` in the configuration file. For more information, see [Configure Milvus with Milvus Operator](configure_operator.md).
-
-## Configuration options
-
-Choose among three configuration options based on your needs:
-
-- **Base config**: For general purposes.
-- **Config for local access log files**: For storing logs locally.
-- **Config for uploading local access logs to MinIO**: For cloud storage and backup.
-
-### Base config
-
-Basic configuration involves enabling access logs and defining the log filename or using stdout.
-
-```yaml
-proxy:
+<h1 id="Configure-Access-Logs" class="common-anchor-header">Configure Access Logs
+    <button data-href="#Configure-Access-Logs" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>The access log feature in Milvus allows server managers to record and analyze user access behavior, assisting in understanding aspects like query success rates and failure reasons.</p>
+<p>This guide provides detailed instructions on configuring access logs in Milvus.</p>
+<p>Configuration of access logs depends on the installation method of Milvus:</p>
+<ul>
+<li><strong>Helm Installation</strong>: Configure in <code>values.yaml</code>. For more information, see <a href="/docs/configure-helm.md">Configure Milvus with Helm Charts</a>.</li>
+<li><strong>Docker Installation</strong>: Configure in <code>milvus.yaml</code>. For more information, see <a href="/docs/configure-docker.md">Configure Milvus with Docker Compose</a>.</li>
+<li><strong>Operator Installation</strong>: Modify <code>spec.components</code> in the configuration file. For more information, see <a href="/docs/configure_operator.md">Configure Milvus with Milvus Operator</a>.</li>
+</ul>
+<h2 id="Configuration-options" class="common-anchor-header">Configuration options
+    <button data-href="#Configuration-options" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Choose among three configuration options based on your needs:</p>
+<ul>
+<li><strong>Base config</strong>: For general purposes.</li>
+<li><strong>Config for local access log files</strong>: For storing logs locally.</li>
+<li><strong>Config for uploading local access logs to MinIO</strong>: For cloud storage and backup.</li>
+</ul>
+<h3 id="Base-config" class="common-anchor-header">Base config</h3><p>Basic configuration involves enabling access logs and defining the log filename or using stdout.</p>
+<pre><code class="language-yaml">proxy:
+  accessLog:
+    <span class="hljs-built_in">enable</span>: <span class="hljs-literal">true</span>
+    <span class="hljs-comment"># If `filename` is emtpy, logs will be printed to stdout.</span>
+    filename: <span class="hljs-string">&quot;&quot;</span>
+    <span class="hljs-comment"># Additional formatter configurations...</span>
+<button class="copy-code-btn"></button></code></pre>
+<ul>
+<li><code>proxy.accessLog.enable</code>: Whether to enable the access log feature. Defaults to <strong>false</strong>.</li>
+<li><code>proxy.accessLog.filename</code>: The name of the access log file. If you leave this parameter empty, access logs will be printed to stdout.</li>
+</ul>
+<h3 id="Config-for-local-access-log-files" class="common-anchor-header">Config for local access log files</h3><p>Configure local storage for access log files with parameters including the local file path, file size, and rotation interval:</p>
+<pre><code class="language-yaml">proxy:
   accessLog:
     enable: true
-    # If `filename` is emtpy, logs will be printed to stdout.
-    filename: ""
-    # Additional formatter configurations...
-```
-
-- `proxy.accessLog.enable`: Whether to enable the access log feature. Defaults to **false**.
-- `proxy.accessLog.filename`: The name of the access log file. If you leave this parameter empty, access logs will be printed to stdout.
-
-### Config for local access log files
-
-Configure local storage for access log files with parameters including the local file path, file size, and rotation interval:
-
-```yaml
-proxy:
+    filename: <span class="hljs-string">&quot;access_log.txt&quot;</span> <span class="hljs-comment"># Name of the access log file</span>
+    localPath: <span class="hljs-string">&quot;/var/logs/milvus&quot;</span> <span class="hljs-comment"># Local file path where the access log file is stored</span>
+    maxSize: <span class="hljs-number">500</span> <span class="hljs-comment"># Max size for each single access log file. Unit: MB</span>
+    rotatedTime: <span class="hljs-number">24</span> <span class="hljs-comment"># Time interval for log rotation. Unit: seconds</span>
+    maxBackups: <span class="hljs-number">7</span> <span class="hljs-comment"># Max number of sealed access log files that can be retained</span>
+    <span class="hljs-comment"># Additional formatter configurations...</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>These parameters are specified when <code>filename</code> is not empty.</p>
+<ul>
+<li><code>proxy.accessLog.localPath</code>: The local file path where the access log file is stored.</li>
+<li><code>proxy.accessLog.maxSize</code>: The maximum size in MB allowed for a single access log file. If the log file size reaches this limit, a rotation process will be triggered. This process seals the current access log file, creates a new log file, and clears the contents of the original log file.</li>
+<li><code>proxy.accessLog.rotatedTime</code>: The maximum time interval in seconds allowed for rotating a single access log file. Upon reaching the specified time interval, a rotation process is triggered, resulting in the creation of a new access log file and sealing of the previous one.</li>
+<li><code>proxy.accessLog.maxBackups</code>: The maximum number of sealed access log files that can be retained. If the number of sealed access log files exceeds this limit, the oldest one will be deleted.</li>
+</ul>
+<h3 id="Config-for-uploading-local-access-log-files-to-MinIO" class="common-anchor-header">Config for uploading local access log files to MinIO</h3><p>Enable and configure settings to upload local access log files to MinIO:</p>
+<pre><code class="language-yaml">proxy:
   accessLog:
-    enable: true
-    filename: "access_log.txt" # Name of the access log file
-    localPath: "/var/logs/milvus" # Local file path where the access log file is stored
-    maxSize: 500 # Max size for each single access log file. Unit: MB
-    rotatedTime: 24 # Time interval for log rotation. Unit: seconds
-    maxBackups: 7 # Max number of sealed access log files that can be retained
-    # Additional formatter configurations...
-```
-
-These parameters are specified when `filename` is not empty.
-
-- `proxy.accessLog.localPath`: The local file path where the access log file is stored.
-- `proxy.accessLog.maxSize`: The maximum size in MB allowed for a single access log file. If the log file size reaches this limit, a rotation process will be triggered. This process seals the current access log file, creates a new log file, and clears the contents of the original log file.
-- `proxy.accessLog.rotatedTime`: The maximum time interval in seconds allowed for rotating a single access log file. Upon reaching the specified time interval, a rotation process is triggered, resulting in the creation of a new access log file and sealing of the previous one.
-- `proxy.accessLog.maxBackups`: The maximum number of sealed access log files that can be retained. If the number of sealed access log files exceeds this limit, the oldest one will be deleted.
-
-### Config for uploading local access log files to MinIO
-
-Enable and configure settings to upload local access log files to MinIO:
-
-```yaml
-proxy:
-  accessLog:
-    enable: true
-    filename: "access_log.txt"
-    localPath: "/var/logs/milvus"
+    <span class="hljs-built_in">enable</span>: <span class="hljs-literal">true</span>
+    filename: <span class="hljs-string">&quot;access_log.txt&quot;</span>
+    localPath: <span class="hljs-string">&quot;/var/logs/milvus&quot;</span>
     maxSize: 500
     rotatedTime: 24 
     maxBackups: 7
-    minioEnable: true
-    remotePath: "/milvus/logs/access_logs"
+    minioEnable: <span class="hljs-literal">true</span>
+    remotePath: <span class="hljs-string">&quot;/milvus/logs/access_logs&quot;</span>
     remoteMaxTime: 0
-    # Additional formatter configurations...
-```
-
-When configuring MinIO parameters, ensure that you have set either `maxSize` or `rotatedTime`. Failure to do so may result in unsuccessful uploads of local access log files to MinIO.
-
-- `proxy.accessLog.minioEnable`: Whether to upload local access log files to MinIO. Defaults to **false**.
-- `proxy.accessLog.remotePath`: The path of the object storage for uploading access log files.
-- `proxy.accessLog.remoteMaxTime`: The time interval allowed for uploading access log files. If the upload time of a log file exceeds this interval, the file will be deleted. Setting the value to 0 disables this feature.
-
-## Formatter config
-
-The default log format used for all methods is the `base` format, which does not require specific method associations. However, if you wish to customize the log output for specific methods, you can define a custom log format and apply it to the associated methods.
-
-```yaml
-proxy:
+    <span class="hljs-comment"># Additional formatter configurations...</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>When configuring MinIO parameters, ensure that you have set either <code>maxSize</code> or <code>rotatedTime</code>. Failure to do so may result in unsuccessful uploads of local access log files to MinIO.</p>
+<ul>
+<li><code>proxy.accessLog.minioEnable</code>: Whether to upload local access log files to MinIO. Defaults to <strong>false</strong>.</li>
+<li><code>proxy.accessLog.remotePath</code>: The path of the object storage for uploading access log files.</li>
+<li><code>proxy.accessLog.remoteMaxTime</code>: The time interval allowed for uploading access log files. If the upload time of a log file exceeds this interval, the file will be deleted. Setting the value to 0 disables this feature.</li>
+</ul>
+<h2 id="Formatter-config" class="common-anchor-header">Formatter config
+    <button data-href="#Formatter-config" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>The default log format used for all methods is the <code>base</code> format, which does not require specific method associations. However, if you wish to customize the log output for specific methods, you can define a custom log format and apply it to the associated methods.</p>
+<pre><code class="language-yaml">proxy:
   accessLog:
-    enable: true
-    filename: "access_log.txt"
-    localPath: "/var/logs/milvus"
-    # Define custom formatters for access logs with format and applicable methods
+    <span class="hljs-built_in">enable</span>: <span class="hljs-literal">true</span>
+    filename: <span class="hljs-string">&quot;access_log.txt&quot;</span>
+    localPath: <span class="hljs-string">&quot;/var/logs/milvus&quot;</span>
+    <span class="hljs-comment"># Define custom formatters for access logs with format and applicable methods</span>
     formatters:
-      # The `base` formatter applies to all methods by default
-      # The `base` formatter does not require specific method association
+      <span class="hljs-comment"># The `base` formatter applies to all methods by default</span>
+      <span class="hljs-comment"># The `base` formatter does not require specific method association</span>
       base: 
-        # Format string; an empty string means no log output
-        format: "[$time_now] [ACCESS] <$user_name: $user_addr> $method_name-$method_status-$error_code [traceID: $trace_id] [timeCost: $time_cost]"
-      # Custom formatter for specific methods (e.g., Query, Search)
+        <span class="hljs-comment"># Format string; an empty string means no log output</span>
+        format: <span class="hljs-string">&quot;[<span class="hljs-variable">$time_now</span>] [ACCESS] &lt;<span class="hljs-variable">$user_name</span>: <span class="hljs-variable">$user_addr</span>&gt; <span class="hljs-variable">$method_name</span>-<span class="hljs-variable">$method_status</span>-<span class="hljs-variable">$error_code</span> [traceID: <span class="hljs-variable">$trace_id</span>] [timeCost: <span class="hljs-variable">$time_cost</span>]&quot;</span>
+      <span class="hljs-comment"># Custom formatter for specific methods (e.g., Query, Search)</span>
       query: 
-        format: "[$time_now] [ACCESS] <$user_name: $user_addr> $method_status-$method_name [traceID: $trace_id] [timeCost: $time_cost] [database: $database_name] [collection: $collection_name] [partitions: $partition_name] [expr: $method_expr]"
-        # Specify the methods to which this custom formatter applies
-        methods: ["Query", "Search"]
-```
-
-- `proxy.accessLog.<formatter_name>.format`: Defines the log format with dynamic metrics. For more information, see [Supported metrics](#reference-supported-metrics).
-- `proxy.accessLog.<formatter_name>.methods`: Lists Milvus operations using this formatter. To obtain method names, see **MilvusService** in [Milvus methods](https://github.com/milvus-io/milvus-proto/blob/master/proto/milvus.proto).
-
-## Reference: Supported metrics
-
-| Metric Name        | Description                                                                 |
-|--------------------|-----------------------------------------------------------------------------|
-| `$method_name`     | Name of the method                                                          |
-| `$method_status`   | Status of access: **OK** or **Fail**                                        |
-| `$method_expr`     | Expression used for query, search, or delete operations                     |
-| `$trace_id`        | TraceID associated with the access                                          |
-| `$user_addr`       | IP address of the user                                                      |
-| `$user_name`       | Name of the user                                                            |
-| `$response_size`   | Size of the response data                                                   |
-| `$error_code`      | Error code specific to Milvus                                               |
-| `$error_msg`       | Detailed error message                                                      |
-| `$database_name`   | Name of the target Milvus database                                          |
-| `$collection_name` | Name of the target Milvus collection                                        |
-| `$partition_name`  | Name or names of the target Milvus partition(s)                             |
-| `$time_cost`       | Time taken for completing the access                                        |
-| `$time_now`        | Time at which the access log is printed (usually equivalent to `$time_end`) |
-| `$time_start`      | Time at which the access starts                                             |
-| `$time_end`        | Time at which the access ends                                               |
-| `$sdk_version`     | Version of the Milvus SDK used by the user                                  |
+        format: <span class="hljs-string">&quot;[<span class="hljs-variable">$time_now</span>] [ACCESS] &lt;<span class="hljs-variable">$user_name</span>: <span class="hljs-variable">$user_addr</span>&gt; <span class="hljs-variable">$method_status</span>-<span class="hljs-variable">$method_name</span> [traceID: <span class="hljs-variable">$trace_id</span>] [timeCost: <span class="hljs-variable">$time_cost</span>] [database: <span class="hljs-variable">$database_name</span>] [collection: <span class="hljs-variable">$collection_name</span>] [partitions: <span class="hljs-variable">$partition_name</span>] [expr: <span class="hljs-variable">$method_expr</span>]&quot;</span>
+        <span class="hljs-comment"># Specify the methods to which this custom formatter applies</span>
+        methods: [<span class="hljs-string">&quot;Query&quot;</span>, <span class="hljs-string">&quot;Search&quot;</span>]
+<button class="copy-code-btn"></button></code></pre>
+<ul>
+<li><code>proxy.accessLog.&lt;formatter_name&gt;.format</code>: Defines the log format with dynamic metrics. For more information, see <a href="#reference-supported-metrics">Supported metrics</a>.</li>
+<li><code>proxy.accessLog.&lt;formatter_name&gt;.methods</code>: Lists Milvus operations using this formatter. To obtain method names, see <strong>MilvusService</strong> in <a href="https://github.com/milvus-io/milvus-proto/blob/master/proto/milvus.proto">Milvus methods</a>.</li>
+</ul>
+<h2 id="Reference-Supported-metrics" class="common-anchor-header">Reference: Supported metrics
+    <button data-href="#Reference-Supported-metrics" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table>
+<thead>
+<tr><th>Metric Name</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>$method_name</code></td><td>Name of the method</td></tr>
+<tr><td><code>$method_status</code></td><td>Status of access: <strong>OK</strong> or <strong>Fail</strong></td></tr>
+<tr><td><code>$method_expr</code></td><td>Expression used for query, search, or delete operations</td></tr>
+<tr><td><code>$trace_id</code></td><td>TraceID associated with the access</td></tr>
+<tr><td><code>$user_addr</code></td><td>IP address of the user</td></tr>
+<tr><td><code>$user_name</code></td><td>Name of the user</td></tr>
+<tr><td><code>$response_size</code></td><td>Size of the response data</td></tr>
+<tr><td><code>$error_code</code></td><td>Error code specific to Milvus</td></tr>
+<tr><td><code>$error_msg</code></td><td>Detailed error message</td></tr>
+<tr><td><code>$database_name</code></td><td>Name of the target Milvus database</td></tr>
+<tr><td><code>$collection_name</code></td><td>Name of the target Milvus collection</td></tr>
+<tr><td><code>$partition_name</code></td><td>Name or names of the target Milvus partition(s)</td></tr>
+<tr><td><code>$time_cost</code></td><td>Time taken for completing the access</td></tr>
+<tr><td><code>$time_now</code></td><td>Time at which the access log is printed (usually equivalent to <code>$time_end</code>)</td></tr>
+<tr><td><code>$time_start</code></td><td>Time at which the access starts</td></tr>
+<tr><td><code>$time_end</code></td><td>Time at which the access ends</td></tr>
+<tr><td><code>$sdk_version</code></td><td>Version of the Milvus SDK used by the user</td></tr>
+</tbody>
+</table>

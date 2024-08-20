@@ -6,18 +6,42 @@ summary: Learn how to configure RocksMQ for Milvus standalone.
 title: RocksMQ-related Configurations
 ---
 
-# RocksMQ-related Configurations
-
-This topic introduces the RocksMQ-related configurations of Milvus.
-
-RocksMQ is the underlying engine supporting Milvus standalone's reliable storage and publication/subscription of message streams. It is implemented on the basis of RocksDB.
-
-Under this section, you can configure message size, retention time and size, etc.
-
-
-## `rocksmq.path`
-
-<table id="rocksmq.path">
+<h1 id="RocksMQ-related-Configurations" class="common-anchor-header">RocksMQ-related Configurations
+    <button data-href="#RocksMQ-related-Configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic introduces the RocksMQ-related configurations of Milvus.</p>
+<p>RocksMQ is the underlying engine supporting Milvus standalone’s reliable storage and publication/subscription of message streams. It is implemented on the basis of RocksDB.</p>
+<p>Under this section, you can configure message size, retention time and size, etc.</p>
+<h2 id="rocksmqpath" class="common-anchor-header"><code>rocksmq.path</code>
+    <button data-href="#rocksmqpath" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rocksmq.path">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -36,11 +60,23 @@ Under this section, you can configure message size, retention time and size, etc
     </tr>
   </tbody>
 </table>
-
-
-## `rocksmq.rocksmqPageSize`
-
-<table id="rocksmq.rocksmqPageSize">
+<h2 id="rocksmqrocksmqPageSize" class="common-anchor-header"><code>rocksmq.rocksmqPageSize</code>
+    <button data-href="#rocksmqrocksmqPageSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rocksmq.rocksmqPageSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -57,11 +93,23 @@ Under this section, you can configure message size, retention time and size, etc
     </tr>
   </tbody>
 </table>
-
-
-## `rocksmq.retentionTimeInMinutes`
-
-<table id="rocksmq.retentionTimeInMinutes">
+<h2 id="rocksmqretentionTimeInMinutes" class="common-anchor-header"><code>rocksmq.retentionTimeInMinutes</code>
+    <button data-href="#rocksmqretentionTimeInMinutes" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rocksmq.retentionTimeInMinutes">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -78,11 +126,23 @@ Under this section, you can configure message size, retention time and size, etc
     </tr>
   </tbody>
 </table>
-
-
-## `rocksmq.retentionSizeInMB`
-
-<table id="rocksmq.retentionSizeInMB">
+<h2 id="rocksmqretentionSizeInMB" class="common-anchor-header"><code>rocksmq.retentionSizeInMB</code>
+    <button data-href="#rocksmqretentionSizeInMB" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rocksmq.retentionSizeInMB">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -99,10 +159,23 @@ Under this section, you can configure message size, retention time and size, etc
     </tr>
   </tbody>
 </table>
-
-## `rocksmq.compactionInterval`
-
-<table id="rocksmq.compactionInterval">
+<h2 id="rocksmqcompactionInterval" class="common-anchor-header"><code>rocksmq.compactionInterval</code>
+    <button data-href="#rocksmqcompactionInterval" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rocksmq.compactionInterval">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -119,10 +192,23 @@ Under this section, you can configure message size, retention time and size, etc
     </tr>
   </tbody>
 </table>
-
-## `rocksmq.lrucacheratio`
-
-<table id="rocksmq.lrucacheratio">
+<h2 id="rocksmqlrucacheratio" class="common-anchor-header"><code>rocksmq.lrucacheratio</code>
+    <button data-href="#rocksmqlrucacheratio" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rocksmq.lrucacheratio">
   <thead>
     <tr>
       <th class="width80">Description</th>

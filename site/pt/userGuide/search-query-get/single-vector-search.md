@@ -5,465 +5,494 @@ summary: This article describes how to search for vectors in a Milvus collection
 title: Single-Vector Search
 ---
 
-# Single-Vector Search
-
-Once you have inserted your data, the next step is to perform similarity searches on your collection in Milvus.
-
-Milvus allows you to conduct two types of searches, depending on the number of vector fields in your collection:
-
-- **Single-vector search**: If your collection has only one vector field, use the [`search()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/search.md) method to find the most similar entities. This method compares your query vector with the existing vectors in your collection and returns the IDs of the closest matches along with the distances between them. Optionally, it can also return the vector values and metadata of the results.
-- **Hybrid search**: For collections with two or more vector fields, use the [`hybrid_search()`](https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Collection/hybrid_search.md) method. This method performs multiple Approximate Nearest Neighbor (ANN) search requests and combines the results to return the most relevant matches after reranking.
-
-This guide focuses on how to perform a single-vector search in Milvus. For details on hybrid search, refer to [Hybrid search](https://milvus.io/docs/multi-vector-search.md).
-
-## Overview
-
-There are a variety of search types to meet different requirements:
-
-- [Basic search](https://milvus.io/docs/single-vector-search.md#Basic-search): Includes single-vector search, bulk-vector search, partition search, and search with specified output fields.
-
-- [Filtered search](https://milvus.io/docs/single-vector-search.md#Filtered-search): Applies filtering criteria based on scalar fields to refine search results.
-
-- [Range search](https://milvus.io/docs/single-vector-search.md#Range-search): Finds vectors within a specific distance range from the query vector.
-
-- [Grouping search](https://milvus.io/docs/single-vector-search.md#Grouping-search): Groups search results based on a specific field to ensure diversity in the results.
-
-## Preparations
-
-The code snippet below repurposes the existing code to establish a connection to Milvus and quickly set up a collection.
-
+<h1 id="Single-Vector-Search" class="common-anchor-header">Single-Vector Search
+    <button data-href="#Single-Vector-Search" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>Once you have inserted your data, the next step is to perform similarity searches on your collection in Milvus.</p>
+<p>Milvus allows you to conduct two types of searches, depending on the number of vector fields in your collection:</p>
+<ul>
+<li><strong>Single-vector search</strong>: If your collection has only one vector field, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/search.md"><code>search()</code></a> method to find the most similar entities. This method compares your query vector with the existing vectors in your collection and returns the IDs of the closest matches along with the distances between them. Optionally, it can also return the vector values and metadata of the results.</li>
+<li><strong>Hybrid search</strong>: For collections with two or more vector fields, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Collection/hybrid_search.md"><code>hybrid_search()</code></a> method. This method performs multiple Approximate Nearest Neighbor (ANN) search requests and combines the results to return the most relevant matches after reranking.</li>
+</ul>
+<p>This guide focuses on how to perform a single-vector search in Milvus. For details on hybrid search, refer to <a href="https://milvus.io/docs/multi-vector-search.md">Hybrid search</a>.</p>
+<h2 id="Overview" class="common-anchor-header">Overview
+    <button data-href="#Overview" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>There are a variety of search types to meet different requirements:</p>
+<ul>
+<li><p><a href="https://milvus.io/docs/single-vector-search.md#Basic-search">Basic search</a>: Includes single-vector search, bulk-vector search, partition search, and search with specified output fields.</p></li>
+<li><p><a href="https://milvus.io/docs/single-vector-search.md#Filtered-search">Filtered search</a>: Applies filtering criteria based on scalar fields to refine search results.</p></li>
+<li><p><a href="https://milvus.io/docs/single-vector-search.md#Range-search">Range search</a>: Finds vectors within a specific distance range from the query vector.</p></li>
+<li><p><a href="https://milvus.io/docs/single-vector-search.md#Grouping-search">Grouping search</a>: Groups search results based on a specific field to ensure diversity in the results.</p></li>
+</ul>
+<h2 id="Preparations" class="common-anchor-header">Preparations
+    <button data-href="#Preparations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>The code snippet below repurposes the existing code to establish a connection to Milvus and quickly set up a collection.</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 1. Set up a Milvus client
+<pre><code class="language-python"><span class="hljs-comment"># 1. Set up a Milvus client</span>
 client = MilvusClient(
     uri=CLUSTER_ENDPOINT,
     token=TOKEN 
 )
 
-# 2. Create a collection
+<span class="hljs-comment"># 2. Create a collection</span>
 client.create_collection(
-    collection_name="quick_setup",
-    dimension=5,
-    metric_type="IP"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    dimension=<span class="hljs-number">5</span>,
+    metric_type=<span class="hljs-string">&quot;IP&quot;</span>
 )
 
-# 3. Insert randomly generated vectors 
-colors = ["green", "blue", "yellow", "red", "black", "white", "purple", "pink", "orange", "brown", "grey"]
+<span class="hljs-comment"># 3. Insert randomly generated vectors </span>
+colors = [<span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;yellow&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;black&quot;</span>, <span class="hljs-string">&quot;white&quot;</span>, <span class="hljs-string">&quot;purple&quot;</span>, <span class="hljs-string">&quot;pink&quot;</span>, <span class="hljs-string">&quot;orange&quot;</span>, <span class="hljs-string">&quot;brown&quot;</span>, <span class="hljs-string">&quot;grey&quot;</span>]
 data = []
 
-for i in range(1000):
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):
     current_color = random.choice(colors)
     data.append({
-        "id": i,
-        "vector": [ random.uniform(-1, 1) for _ in range(5) ],
-        "color": current_color,
-        "color_tag": f"{current_color}_{str(random.randint(1000, 9999))}"
+        <span class="hljs-string">&quot;id&quot;</span>: i,
+        <span class="hljs-string">&quot;vector&quot;</span>: [ random.uniform(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ],
+        <span class="hljs-string">&quot;color&quot;</span>: current_color,
+        <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">f&quot;<span class="hljs-subst">{current_color}</span>_<span class="hljs-subst">{<span class="hljs-built_in">str</span>(random.randint(<span class="hljs-number">1000</span>, <span class="hljs-number">9999</span>))}</span>&quot;</span>
     })
 
 res = client.insert(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=data
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "insert_count": 1000,
-#     "ids": [
-#         0,
-#         1,
-#         2,
-#         3,
-#         4,
-#         5,
-#         6,
-#         7,
-#         8,
-#         9,
-#         "(990 more items hidden)"
-#     ]
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;insert_count&quot;: 1000,</span>
+<span class="hljs-comment">#     &quot;ids&quot;: [</span>
+<span class="hljs-comment">#         0,</span>
+<span class="hljs-comment">#         1,</span>
+<span class="hljs-comment">#         2,</span>
+<span class="hljs-comment">#         3,</span>
+<span class="hljs-comment">#         4,</span>
+<span class="hljs-comment">#         5,</span>
+<span class="hljs-comment">#         6,</span>
+<span class="hljs-comment">#         7,</span>
+<span class="hljs-comment">#         8,</span>
+<span class="hljs-comment">#         9,</span>
+<span class="hljs-comment">#         &quot;(990 more items hidden)&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
 
-# 6.1 Create partitions 
+<span class="hljs-comment"># 6.1 Create partitions </span>
 client.create_partition(
-    collection_name="quick_setup",
-    partition_name="red"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;red&quot;</span>
 )
 
 client.create_partition(
-    collection_name="quick_setup",
-    partition_name="blue"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;blue&quot;</span>
 )
 
-# 6.1 Insert data into partitions
-red_data = [ {"id": i, "vector": [ random.uniform(-1, 1) for _ in range(5) ], "color": "red", "color_tag": f"red_{str(random.randint(1000, 9999))}" } for i in range(500) ]
-blue_data = [ {"id": i, "vector": [ random.uniform(-1, 1) for _ in range(5) ], "color": "blue", "color_tag": f"blue_{str(random.randint(1000, 9999))}" } for i in range(500) ]
+<span class="hljs-comment"># 6.1 Insert data into partitions</span>
+red_data = [ {<span class="hljs-string">&quot;id&quot;</span>: i, <span class="hljs-string">&quot;vector&quot;</span>: [ random.uniform(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ], <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">f&quot;red_<span class="hljs-subst">{<span class="hljs-built_in">str</span>(random.randint(<span class="hljs-number">1000</span>, <span class="hljs-number">9999</span>))}</span>&quot;</span> } <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">500</span>) ]
+blue_data = [ {<span class="hljs-string">&quot;id&quot;</span>: i, <span class="hljs-string">&quot;vector&quot;</span>: [ random.uniform(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ], <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">f&quot;blue_<span class="hljs-subst">{<span class="hljs-built_in">str</span>(random.randint(<span class="hljs-number">1000</span>, <span class="hljs-number">9999</span>))}</span>&quot;</span> } <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">500</span>) ]
 
 res = client.insert(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=red_data,
-    partition_name="red"
+    partition_name=<span class="hljs-string">&quot;red&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "insert_count": 500,
-#     "ids": [
-#         0,
-#         1,
-#         2,
-#         3,
-#         4,
-#         5,
-#         6,
-#         7,
-#         8,
-#         9,
-#         "(490 more items hidden)"
-#     ]
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;insert_count&quot;: 500,</span>
+<span class="hljs-comment">#     &quot;ids&quot;: [</span>
+<span class="hljs-comment">#         0,</span>
+<span class="hljs-comment">#         1,</span>
+<span class="hljs-comment">#         2,</span>
+<span class="hljs-comment">#         3,</span>
+<span class="hljs-comment">#         4,</span>
+<span class="hljs-comment">#         5,</span>
+<span class="hljs-comment">#         6,</span>
+<span class="hljs-comment">#         7,</span>
+<span class="hljs-comment">#         8,</span>
+<span class="hljs-comment">#         9,</span>
+<span class="hljs-comment">#         &quot;(490 more items hidden)&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
 
 res = client.insert(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=blue_data,
-    partition_name="blue"
+    partition_name=<span class="hljs-string">&quot;blue&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "insert_count": 500,
-#     "ids": [
-#         0,
-#         1,
-#         2,
-#         3,
-#         4,
-#         5,
-#         6,
-#         7,
-#         8,
-#         9,
-#         "(490 more items hidden)"
-#     ]
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;insert_count&quot;: 500,</span>
+<span class="hljs-comment">#     &quot;ids&quot;: [</span>
+<span class="hljs-comment">#         0,</span>
+<span class="hljs-comment">#         1,</span>
+<span class="hljs-comment">#         2,</span>
+<span class="hljs-comment">#         3,</span>
+<span class="hljs-comment">#         4,</span>
+<span class="hljs-comment">#         5,</span>
+<span class="hljs-comment">#         6,</span>
+<span class="hljs-comment">#         7,</span>
+<span class="hljs-comment">#         8,</span>
+<span class="hljs-comment">#         9,</span>
+<span class="hljs-comment">#         &quot;(490 more items hidden)&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">import</span> java.util.Arrays;
+<span class="hljs-keyword">import</span> java.util.List;
+<span class="hljs-keyword">import</span> java.util.Map;
+<span class="hljs-keyword">import</span> java.util.Random;
 
-```java
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+<span class="hljs-keyword">import</span> com.alibaba.fastjson.JSONObject;
 
-import com.alibaba.fastjson.JSONObject;
+<span class="hljs-keyword">import</span> io.milvus.v2.client.ConnectConfig;
+<span class="hljs-keyword">import</span> io.milvus.v2.client.MilvusClientV2;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.CreateCollectionReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.GetLoadStateReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.vector.request.InsertReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.vector.response.InsertResp; 
 
-import io.milvus.v2.client.ConnectConfig;
-import io.milvus.v2.client.MilvusClientV2;
-import io.milvus.v2.service.collection.request.CreateCollectionReq;
-import io.milvus.v2.service.collection.request.GetLoadStateReq;
-import io.milvus.v2.service.vector.request.InsertReq;
-import io.milvus.v2.service.vector.response.InsertResp; 
+<span class="hljs-type">String</span> <span class="hljs-variable">CLUSTER_ENDPOINT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;http://localhost:19530&quot;</span>;
 
-String CLUSTER_ENDPOINT = "http://localhost:19530";
-
-// 1. Connect to Milvus server
-ConnectConfig connectConfig = ConnectConfig.builder()
+<span class="hljs-comment">// 1. Connect to Milvus server</span>
+<span class="hljs-type">ConnectConfig</span> <span class="hljs-variable">connectConfig</span> <span class="hljs-operator">=</span> ConnectConfig.builder()
     .uri(CLUSTER_ENDPOINT)
     .build();
 
-MilvusClientV2 client = new MilvusClientV2(connectConfig);  
+<span class="hljs-type">MilvusClientV2</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClientV2</span>(connectConfig);  
 
-// 2. Create a collection in quick setup mode
-CreateCollectionReq quickSetupReq = CreateCollectionReq.builder()
-    .collectionName("quick_setup")
-    .dimension(5)
-    .metricType("IP")
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-type">CreateCollectionReq</span> <span class="hljs-variable">quickSetupReq</span> <span class="hljs-operator">=</span> CreateCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .dimension(<span class="hljs-number">5</span>)
+    .metricType(<span class="hljs-string">&quot;IP&quot;</span>)
     .build();
 
 client.createCollection(quickSetupReq);
 
-GetLoadStateReq loadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
+<span class="hljs-type">GetLoadStateReq</span> <span class="hljs-variable">loadStateReq</span> <span class="hljs-operator">=</span> GetLoadStateReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .build();
 
-boolean state = client.getLoadState(loadStateReq);
+<span class="hljs-type">boolean</span> <span class="hljs-variable">state</span> <span class="hljs-operator">=</span> client.getLoadState(loadStateReq);
 
 System.out.println(state);
 
-// Output:
-// true
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
 
-// 3. Insert randomly generated vectors into the collection
-List<String> colors = Arrays.asList("green", "blue", "yellow", "red", "black", "white", "purple", "pink", "orange", "brown", "grey");
-List<JSONObject> data = new ArrayList<>();
+<span class="hljs-comment">// 3. Insert randomly generated vectors into the collection</span>
+List&lt;String&gt; colors = Arrays.asList(<span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;yellow&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;black&quot;</span>, <span class="hljs-string">&quot;white&quot;</span>, <span class="hljs-string">&quot;purple&quot;</span>, <span class="hljs-string">&quot;pink&quot;</span>, <span class="hljs-string">&quot;orange&quot;</span>, <span class="hljs-string">&quot;brown&quot;</span>, <span class="hljs-string">&quot;grey&quot;</span>);
+List&lt;JSONObject&gt; data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
 
-for (int i=0; i<1000; i++) {
-    Random rand = new Random();
-    String current_color = colors.get(rand.nextInt(colors.size()-1));
-    JSONObject row = new JSONObject();
-    row.put("id", Long.valueOf(i));
-    row.put("vector", Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-    row.put("color_tag", current_color + "_" + String.valueOf(rand.nextInt(8999) + 1000));
+<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">1000</span>; i++) {
+    <span class="hljs-type">Random</span> <span class="hljs-variable">rand</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();
+    <span class="hljs-type">String</span> <span class="hljs-variable">current_color</span> <span class="hljs-operator">=</span> colors.get(rand.nextInt(colors.size()-<span class="hljs-number">1</span>));
+    <span class="hljs-type">JSONObject</span> <span class="hljs-variable">row</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSONObject</span>();
+    row.put(<span class="hljs-string">&quot;id&quot;</span>, Long.valueOf(i));
+    row.put(<span class="hljs-string">&quot;vector&quot;</span>, Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+    row.put(<span class="hljs-string">&quot;color_tag&quot;</span>, current_color + <span class="hljs-string">&quot;_&quot;</span> + String.valueOf(rand.nextInt(<span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>));
     data.add(row);
 }
 
-InsertReq insertReq = InsertReq.builder()
-    .collectionName("quick_setup")
+<span class="hljs-type">InsertReq</span> <span class="hljs-variable">insertReq</span> <span class="hljs-operator">=</span> InsertReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .data(data)
     .build();
 
-InsertResp insertResp = client.insert(insertReq);
+<span class="hljs-type">InsertResp</span> <span class="hljs-variable">insertResp</span> <span class="hljs-operator">=</span> client.insert(insertReq);
 
 System.out.println(JSONObject.toJSON(insertResp));
 
-// Output:
-// {"insertCnt": 1000}
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;insertCnt&quot;: 1000}</span>
 
-// 6.1. Create a partition
-CreatePartitionReq partitionReq = CreatePartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("red")
+<span class="hljs-comment">// 6.1. Create a partition</span>
+<span class="hljs-type">CreatePartitionReq</span> <span class="hljs-variable">partitionReq</span> <span class="hljs-operator">=</span> CreatePartitionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;red&quot;</span>)
     .build();
 
 client.createPartition(partitionReq);
 
 partitionReq = CreatePartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("blue")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;blue&quot;</span>)
     .build();
 
 client.createPartition(partitionReq);
 
-// 6.2 Insert data into the partition
-data = new ArrayList<>();
+<span class="hljs-comment">// 6.2 Insert data into the partition</span>
+data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
 
-for (int i=1000; i<1500; i++) {
-    Random rand = new Random();
-    String current_color = "red";
-    JSONObject row = new JSONObject();
-    row.put("id", Long.valueOf(i));
-    row.put("vector", Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-    row.put("color", current_color);
-    row.put("color_tag", current_color + "_" + String.valueOf(rand.nextInt(8999) + 1000));
+<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1000</span>; i&lt;<span class="hljs-number">1500</span>; i++) {
+    <span class="hljs-type">Random</span> <span class="hljs-variable">rand</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();
+    <span class="hljs-type">String</span> <span class="hljs-variable">current_color</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;red&quot;</span>;
+    <span class="hljs-type">JSONObject</span> <span class="hljs-variable">row</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSONObject</span>();
+    row.put(<span class="hljs-string">&quot;id&quot;</span>, Long.valueOf(i));
+    row.put(<span class="hljs-string">&quot;vector&quot;</span>, Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+    row.put(<span class="hljs-string">&quot;color&quot;</span>, current_color);
+    row.put(<span class="hljs-string">&quot;color_tag&quot;</span>, current_color + <span class="hljs-string">&quot;_&quot;</span> + String.valueOf(rand.nextInt(<span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>));
     data.add(row);
 }     
 
 insertReq = InsertReq.builder()
-    .collectionName("quick_setup")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .data(data)
-    .partitionName("red")
+    .partitionName(<span class="hljs-string">&quot;red&quot;</span>)
     .build();
 
 insertResp = client.insert(insertReq);
 
 System.out.println(JSONObject.toJSON(insertResp));
 
-// Output:
-// {"insertCnt": 500}
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;insertCnt&quot;: 500}</span>
 
-data = new ArrayList<>();
+data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
 
-for (int i=1500; i<2000; i++) {
-    Random rand = new Random();
-    String current_color = "blue";
-    JSONObject row = new JSONObject();
-    row.put("id", Long.valueOf(i));
-    row.put("vector", Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-    row.put("color", current_color);
-    row.put("color_tag", current_color + "_" + String.valueOf(rand.nextInt(8999) + 1000));
+<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i=<span class="hljs-number">1500</span>; i&lt;<span class="hljs-number">2000</span>; i++) {
+    <span class="hljs-type">Random</span> <span class="hljs-variable">rand</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();
+    <span class="hljs-type">String</span> <span class="hljs-variable">current_color</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;blue&quot;</span>;
+    <span class="hljs-type">JSONObject</span> <span class="hljs-variable">row</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSONObject</span>();
+    row.put(<span class="hljs-string">&quot;id&quot;</span>, Long.valueOf(i));
+    row.put(<span class="hljs-string">&quot;vector&quot;</span>, Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+    row.put(<span class="hljs-string">&quot;color&quot;</span>, current_color);
+    row.put(<span class="hljs-string">&quot;color_tag&quot;</span>, current_color + <span class="hljs-string">&quot;_&quot;</span> + String.valueOf(rand.nextInt(<span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>));
     data.add(row);
 }
 
 insertReq = InsertReq.builder()
-    .collectionName("quick_setup")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .data(data)
-    .partitionName("blue")
+    .partitionName(<span class="hljs-string">&quot;blue&quot;</span>)
     .build();
 
 insertResp = client.insert(insertReq);
 
 System.out.println(JSONObject.toJSON(insertResp));
 
-// Output:
-// {"insertCnt": 500}
-```
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;insertCnt&quot;: 500}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-title class_">MilvusClient</span>, <span class="hljs-title class_">DataType</span>, sleep } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;@zilliz/milvus2-sdk-node&quot;</span>)
 
-```javascript
-const { MilvusClient, DataType, sleep } = require("@zilliz/milvus2-sdk-node")
+<span class="hljs-keyword">const</span> address = <span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 
-const address = "http://localhost:19530"
+<span class="hljs-comment">// 1. Set up a Milvus Client</span>
+client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClient</span>({address});
 
-// 1. Set up a Milvus Client
-client = new MilvusClient({address});
-
-// 2. Create a collection in quick setup mode
-await client.createCollection({
-    collection_name: "quick_setup",
-    dimension: 5,
-    metric_type: "IP"
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">dimension</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-attr">metric_type</span>: <span class="hljs-string">&quot;IP&quot;</span>
 });  
 
-// 3. Insert randomly generated vectors
-const colors = ["green", "blue", "yellow", "red", "black", "white", "purple", "pink", "orange", "brown", "grey"]
+<span class="hljs-comment">// 3. Insert randomly generated vectors</span>
+<span class="hljs-keyword">const</span> colors = [<span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;yellow&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;black&quot;</span>, <span class="hljs-string">&quot;white&quot;</span>, <span class="hljs-string">&quot;purple&quot;</span>, <span class="hljs-string">&quot;pink&quot;</span>, <span class="hljs-string">&quot;orange&quot;</span>, <span class="hljs-string">&quot;brown&quot;</span>, <span class="hljs-string">&quot;grey&quot;</span>]
 data = []
 
-for (let i = 0; i < 1000; i++) {
-    current_color = colors[Math.floor(Math.random() * colors.length)]
-    data.push({
-        id: i,
-        vector: [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-        color: current_color,
-        color_tag: `${current_color}_${Math.floor(Math.random() * 8999) + 1000}`
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) {
+    current_color = colors[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * colors.<span class="hljs-property">length</span>)]
+    data.<span class="hljs-title function_">push</span>({
+        <span class="hljs-attr">id</span>: i,
+        <span class="hljs-attr">vector</span>: [<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()],
+        <span class="hljs-attr">color</span>: current_color,
+        <span class="hljs-attr">color_tag</span>: <span class="hljs-string">`<span class="hljs-subst">${current_color}</span>_<span class="hljs-subst">${<span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>}</span>`</span>
     })
 }
 
-var res = await client.insert({
-    collection_name: "quick_setup",
-    data: data
+<span class="hljs-keyword">var</span> res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">insert</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: data
 })
 
-console.log(res.insert_cnt)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">insert_cnt</span>)
 
-// Output
-// 
-// 1000
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// 1000</span>
+<span class="hljs-comment">// </span>
 
-await client.createPartition({
-    collection_name: "quick_setup",
-    partition_name: "red"
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;red&quot;</span>
 })
 
-await client.createPartition({
-    collection_name: "quick_setup",
-    partition_name: "blue"
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;blue&quot;</span>
 })
 
-// 6.1 Insert data into partitions
-var red_data = []
-var blue_data = []
+<span class="hljs-comment">// 6.1 Insert data into partitions</span>
+<span class="hljs-keyword">var</span> red_data = []
+<span class="hljs-keyword">var</span> blue_data = []
 
-for (let i = 1000; i < 1500; i++) {
-    red_data.push({
-        id: i,
-        vector: [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-        color: "red",
-        color_tag: `red_${Math.floor(Math.random() * 8999) + 1000}`
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1000</span>; i &lt; <span class="hljs-number">1500</span>; i++) {
+    red_data.<span class="hljs-title function_">push</span>({
+        <span class="hljs-attr">id</span>: i,
+        <span class="hljs-attr">vector</span>: [<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()],
+        <span class="hljs-attr">color</span>: <span class="hljs-string">&quot;red&quot;</span>,
+        <span class="hljs-attr">color_tag</span>: <span class="hljs-string">`red_<span class="hljs-subst">${<span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>}</span>`</span>
     })
 }
 
-for (let i = 1500; i < 2000; i++) {
-    blue_data.push({
-        id: i,
-        vector: [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-        color: "blue",
-        color_tag: `blue_${Math.floor(Math.random() * 8999) + 1000}`
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1500</span>; i &lt; <span class="hljs-number">2000</span>; i++) {
+    blue_data.<span class="hljs-title function_">push</span>({
+        <span class="hljs-attr">id</span>: i,
+        <span class="hljs-attr">vector</span>: [<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()],
+        <span class="hljs-attr">color</span>: <span class="hljs-string">&quot;blue&quot;</span>,
+        <span class="hljs-attr">color_tag</span>: <span class="hljs-string">`blue_<span class="hljs-subst">${<span class="hljs-built_in">Math</span>.floor(<span class="hljs-built_in">Math</span>.random() * <span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>}</span>`</span>
     })
 }
 
-res = await client.insert({
-    collection_name: "quick_setup",
-    data: red_data,
-    partition_name: "red"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">insert</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: red_data,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;red&quot;</span>
 })
 
-console.log(res.insert_cnt)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">insert_cnt</span>)
 
-// Output
-// 
-// 500
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// 500</span>
+<span class="hljs-comment">// </span>
 
-res = await client.insert({
-    collection_name: "quick_setup",
-    data: blue_data,
-    partition_name: "blue"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">insert</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: blue_data,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;blue&quot;</span>
 })
 
-console.log(res.insert_cnt)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">insert_cnt</span>)
 
-// Output
-// 
-// 500
-// 
-```
-
-## Basic search
-
-When sending a `search` request, you can provide one or more vector values representing your query embeddings and a `limit` value indicating the number of results to return.
-
-Depending on your data and your query vector, you may get fewer than `limit` results. This happens when `limit` is larger than the number of possible matching vectors for your query.
-
-### Single-vector search
-
-Single-vector search is the simplest form of `search` operations in Milvus, designed to find the most similar vectors to a given query vector.
-
-To perform a single-vector search, specify the target collection name, the query vector, and the desired number of results (`limit`). This operation returns a result set comprising the most similar vectors, their IDs, and distances from the query vector.
-
-Here is an example of searching for the top 5 entities that are most similar to the query vector:
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// 500</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Basic-search" class="common-anchor-header">Basic search
+    <button data-href="#Basic-search" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>When sending a <code>search</code> request, you can provide one or more vector values representing your query embeddings and a <code>limit</code> value indicating the number of results to return.</p>
+<p>Depending on your data and your query vector, you may get fewer than <code>limit</code> results. This happens when <code>limit</code> is larger than the number of possible matching vectors for your query.</p>
+<h3 id="Single-vector-search" class="common-anchor-header">Single-vector search</h3><p>Single-vector search is the simplest form of <code>search</code> operations in Milvus, designed to find the most similar vectors to a given query vector.</p>
+<p>To perform a single-vector search, specify the target collection name, the query vector, and the desired number of results (<code>limit</code>). This operation returns a result set comprising the most similar vectors, their IDs, and distances from the query vector.</p>
+<p>Here is an example of searching for the top 5 entities that are most similar to the query vector:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# Single vector search
+<pre><code class="language-python"><span class="hljs-comment"># Single vector search</span>
 res = client.search(
-    collection_name="test_collection", # Replace with the actual name of your collection
-    # Replace with your query vector
-    data=[[0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]],
-    limit=5, # Max. number of search results to return
-    search_params={"metric_type": "IP", "params": {}} # Search parameters
+    collection_name=<span class="hljs-string">&quot;test_collection&quot;</span>, <span class="hljs-comment"># Replace with the actual name of your collection</span>
+    <span class="hljs-comment"># Replace with your query vector</span>
+    data=[[<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]],
+    limit=<span class="hljs-number">5</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    search_params={<span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: {}} <span class="hljs-comment"># Search parameters</span>
 )
 
-# Convert the output to a formatted JSON string
-result = json.dumps(res, indent=4)
-print(result)
-```
+<span class="hljs-comment"># Convert the output to a formatted JSON string</span>
+result = json.dumps(res, indent=<span class="hljs-number">4</span>)
+<span class="hljs-built_in">print</span>(result)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 4. Single vector search</span>
+<span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">Float</span>&gt;&gt; query_vectors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>3580376395471989f, -<span class="hljs-number">0.</span>6023495712049978f, <span class="hljs-number">0.</span>18414012509913835f, -<span class="hljs-number">0.</span>26286205330961354f, <span class="hljs-number">0.</span>9029438446296592f));
 
-```java
-// 4. Single vector search
-List<List<Float>> query_vectors = Arrays.asList(Arrays.asList(0.3580376395471989f, -0.6023495712049978f, 0.18414012509913835f, -0.26286205330961354f, 0.9029438446296592f));
+<span class="hljs-title class_">SearchReq</span> searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">3</span>) <span class="hljs-comment">// The number of results to return</span>
+    .<span class="hljs-title function_">build</span>();
 
-SearchReq searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .topK(3) // The number of results to return
-    .build();
+<span class="hljs-title class_">SearchResp</span> searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-SearchResp searchResp = client.search(searchReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 4. Single vector search</span>
+<span class="hljs-keyword">var</span> query_vector = [<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>],
 
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-// 4. Single vector search
-var query_vector = [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592],
-
-res = await client.search({
-    collection_name: "quick_setup",
-    data: [query_vector],
-    limit: 3, // The number of results to return
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">search</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: [query_vector],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">3</span>, <span class="hljs-comment">// The number of results to return</span>
 })
 
-console.log(res.results)
-```
-
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">results</span>)
+<button class="copy-code-btn"></button></code></pre>
 <table class="language-python">
   <thead>
     <tr>
@@ -490,7 +519,6 @@ console.log(res.results)
     </tr>
   </tbody>
 </table>
-
 <table class="language-java">
   <thead>
     <tr>
@@ -513,7 +541,6 @@ console.log(res.results)
     </tr>
   </tbody>
 </table>
-
 <table class="language-javascript">
   <thead>
     <tr>
@@ -536,1441 +563,1329 @@ console.log(res.results)
     </tr>
   </tbody>
 </table>
-
-The output is similar to the following:
-
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 0,
-            "distance": 1.4093276262283325,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">0</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">1.4093276262283325</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 4,
-            "distance": 0.9902134537696838,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">4</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.9902134537696838</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 1,
-            "distance": 0.8519943356513977,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.8519943356513977</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 5,
-            "distance": 0.7972343564033508,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">5</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.7972343564033508</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 2,
-            "distance": 0.5928734540939331,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">2</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.5928734540939331</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         }
     ]
 ]
-```
-
-```java
-{"searchResults": [[
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">{<span class="hljs-string">&quot;searchResults&quot;</span>: [[
     {
-        "score": 1.263043,
-        "fields": {
-            "vector": [
-                0.9533119,
-                0.02538395,
-                0.76714665,
-                0.35481733,
-                0.9845762
+        <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.263043</span>,
+        <span class="hljs-string">&quot;fields&quot;</span>: {
+            <span class="hljs-string">&quot;vector&quot;</span>: [
+                <span class="hljs-number">0.9533119</span>,
+                <span class="hljs-number">0.02538395</span>,
+                <span class="hljs-number">0.76714665</span>,
+                <span class="hljs-number">0.35481733</span>,
+                <span class="hljs-number">0.9845762</span>
             ],
-            "id": 740
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">740</span>
         }
     },
     {
-        "score": 1.2377806,
-        "fields": {
-            "vector": [
-                0.7411156,
-                0.08687937,
-                0.8254139,
-                0.08370924,
-                0.99095553
+        <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.2377806</span>,
+        <span class="hljs-string">&quot;fields&quot;</span>: {
+            <span class="hljs-string">&quot;vector&quot;</span>: [
+                <span class="hljs-number">0.7411156</span>,
+                <span class="hljs-number">0.08687937</span>,
+                <span class="hljs-number">0.8254139</span>,
+                <span class="hljs-number">0.08370924</span>,
+                <span class="hljs-number">0.99095553</span>
             ],
-            "id": 640
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">640</span>
         }
     },
     {
-        "score": 1.1869997,
-        "fields": {
-            "vector": [
-                0.87928146,
-                0.05324632,
-                0.6312755,
-                0.28005534,
-                0.9542448
+        <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1869997</span>,
+        <span class="hljs-string">&quot;fields&quot;</span>: {
+            <span class="hljs-string">&quot;vector&quot;</span>: [
+                <span class="hljs-number">0.87928146</span>,
+                <span class="hljs-number">0.05324632</span>,
+                <span class="hljs-number">0.6312755</span>,
+                <span class="hljs-number">0.28005534</span>,
+                <span class="hljs-number">0.9542448</span>
             ],
-            "id": 455
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">455</span>
         }
     }
 ]]}
-```
-
-```javascript
-[
-  { score: 1.7463608980178833, id: '854' },
-  { score: 1.744946002960205, id: '425' },
-  { score: 1.7258622646331787, id: '718' }
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">[
+  { score: <span class="hljs-number">1.7463608980178833</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;854&#x27;</span> },
+  { score: <span class="hljs-number">1.744946002960205</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;425&#x27;</span> },
+  { score: <span class="hljs-number">1.7258622646331787</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;718&#x27;</span> }
 ]
-```
-
-The output showcases the top 5 neighbors nearest to your query vector, including their unique IDs and the calculated distances.
-
-### Bulk-vector search
-
-A bulk-vector search extends the [single-vector search](https://milvus.io/docs/single-vector-search.md#Single-Vector-Search) concept by allowing multiple query vectors to be searched in a single request. This type of search is ideal for scenarios where you need to find similar vectors for a set of query vectors, significantly reducing the time and computational resources required.
-
-In a bulk-vector search, you can include several query vectors in the `data` field. The system processes these vectors in parallel, returning a separate result set for each query vector, each set containing the closest matches found within the collection.
-
-Here is an example of searching for two distinct sets of the most similar entities from two query vectors:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>The output showcases the top 5 neighbors nearest to your query vector, including their unique IDs and the calculated distances.</p>
+<h3 id="Bulk-vector-search" class="common-anchor-header">Bulk-vector search</h3><p>A bulk-vector search extends the <a href="https://milvus.io/docs/single-vector-search.md#Single-Vector-Search">single-vector search</a> concept by allowing multiple query vectors to be searched in a single request. This type of search is ideal for scenarios where you need to find similar vectors for a set of query vectors, significantly reducing the time and computational resources required.</p>
+<p>In a bulk-vector search, you can include several query vectors in the <code>data</code> field. The system processes these vectors in parallel, returning a separate result set for each query vector, each set containing the closest matches found within the collection.</p>
+<p>Here is an example of searching for two distinct sets of the most similar entities from two query vectors:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# Bulk-vector search
+<pre><code class="language-python"><span class="hljs-comment"># Bulk-vector search</span>
 res = client.search(
-    collection_name="test_collection", # Replace with the actual name of your collection
+    collection_name=<span class="hljs-string">&quot;test_collection&quot;</span>, <span class="hljs-comment"># Replace with the actual name of your collection</span>
     data=[
-        [0.19886812562848388, 0.06023560599112088, 0.6976963061752597, 0.2614474506242501, 0.838729485096104],
-        [0.3172005263489739, 0.9719044792798428, -0.36981146090600725, -0.4860894583077995, 0.95791889146345]
-    ], # Replace with your query vectors
-    limit=2, # Max. number of search results to return
-    search_params={"metric_type": "IP", "params": {}} # Search parameters
+        [<span class="hljs-number">0.19886812562848388</span>, <span class="hljs-number">0.06023560599112088</span>, <span class="hljs-number">0.6976963061752597</span>, <span class="hljs-number">0.2614474506242501</span>, <span class="hljs-number">0.838729485096104</span>],
+        [<span class="hljs-number">0.3172005263489739</span>, <span class="hljs-number">0.9719044792798428</span>, -<span class="hljs-number">0.36981146090600725</span>, -<span class="hljs-number">0.4860894583077995</span>, <span class="hljs-number">0.95791889146345</span>]
+    ], <span class="hljs-comment"># Replace with your query vectors</span>
+    limit=<span class="hljs-number">2</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    search_params={<span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: {}} <span class="hljs-comment"># Search parameters</span>
 )
 
-result = json.dumps(res, indent=4)
-print(result)
-```
-
-```java
-// 5. Batch vector search
-query_vectors = Arrays.asList(
-    Arrays.asList(0.3580376395471989f, -0.6023495712049978f, 0.18414012509913835f, -0.26286205330961354f, 0.9029438446296592f),
-    Arrays.asList(0.19886812562848388f, 0.06023560599112088f, 0.6976963061752597f, 0.2614474506242501f, 0.838729485096104f)
+result = json.dumps(res, indent=<span class="hljs-number">4</span>)
+<span class="hljs-built_in">print</span>(result)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 5. Batch vector search</span>
+query_vectors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(
+    <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>3580376395471989f, -<span class="hljs-number">0.</span>6023495712049978f, <span class="hljs-number">0.</span>18414012509913835f, -<span class="hljs-number">0.</span>26286205330961354f, <span class="hljs-number">0.</span>9029438446296592f),
+    <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>19886812562848388f, <span class="hljs-number">0.</span>06023560599112088f, <span class="hljs-number">0.</span>6976963061752597f, <span class="hljs-number">0.</span>2614474506242501f, <span class="hljs-number">0.</span>838729485096104f)
 );
 
-searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .topK(2)
-    .build();
+searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">2</span>)
+    .<span class="hljs-title function_">build</span>();
 
-searchResp = client.search(searchReq);
+searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-// 5. Batch vector search
-var query_vectors = [
-    [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592],
-    [0.19886812562848388, 0.06023560599112088, 0.6976963061752597, 0.2614474506242501, 0.838729485096104]
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 5. Batch vector search</span>
+<span class="hljs-keyword">var</span> query_vectors = [
+    [<span class="hljs-meta">0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592</span>],
+    [<span class="hljs-meta">0.19886812562848388, 0.06023560599112088, 0.6976963061752597, 0.2614474506242501, 0.838729485096104</span>]
 ]
 
-res = await client.search({
-    collection_name: "quick_setup",
+res = <span class="hljs-keyword">await</span> client.search({
+    collection_name: <span class="hljs-string">&quot;quick_setup&quot;</span>,
     data: query_vectors,
-    limit: 2,
+    limit: <span class="hljs-number">2</span>,
 })
 
 console.log(res.results)
-```
-
-The output is similar to the following:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 1,
-            "distance": 1.3017789125442505,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">1.3017789125442505</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 7,
-            "distance": 1.2419954538345337,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">7</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">1.2419954538345337</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         }
-    ], # Result set 1
+    ], <span class="hljs-comment"># Result set 1</span>
     [
         {
-            "id": 3,
-            "distance": 2.3358664512634277,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">3</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">2.3358664512634277</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 8,
-            "distance": 0.5642921924591064,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">8</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.5642921924591064</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         }
-    ] # Result set 2
+    ] <span class="hljs-comment"># Result set 2</span>
 ]
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// Two sets of vectors are returned as expected</span>
 
-```java
-// Two sets of vectors are returned as expected
-
-{"searchResults": [
+{<span class="hljs-string">&quot;searchResults&quot;</span>: [
     [
         {
-            "score": 1.263043,
-            "fields": {
-                "vector": [
-                    0.9533119,
-                    0.02538395,
-                    0.76714665,
-                    0.35481733,
-                    0.9845762
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.263043</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.9533119</span>,
+                    <span class="hljs-number">0.02538395</span>,
+                    <span class="hljs-number">0.76714665</span>,
+                    <span class="hljs-number">0.35481733</span>,
+                    <span class="hljs-number">0.9845762</span>
                 ],
-                "id": 740
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">740</span>
             }
         },
         {
-            "score": 1.2377806,
-            "fields": {
-                "vector": [
-                    0.7411156,
-                    0.08687937,
-                    0.8254139,
-                    0.08370924,
-                    0.99095553
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.2377806</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.7411156</span>,
+                    <span class="hljs-number">0.08687937</span>,
+                    <span class="hljs-number">0.8254139</span>,
+                    <span class="hljs-number">0.08370924</span>,
+                    <span class="hljs-number">0.99095553</span>
                 ],
-                "id": 640
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">640</span>
             }
         }
     ],
     [
         {
-            "score": 1.8654699,
-            "fields": {
-                "vector": [
-                    0.4671427,
-                    0.8378432,
-                    0.98844475,
-                    0.82763994,
-                    0.9729997
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.8654699</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.4671427</span>,
+                    <span class="hljs-number">0.8378432</span>,
+                    <span class="hljs-number">0.98844475</span>,
+                    <span class="hljs-number">0.82763994</span>,
+                    <span class="hljs-number">0.9729997</span>
                 ],
-                "id": 638
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">638</span>
             }
         },
         {
-            "score": 1.8581753,
-            "fields": {
-                "vector": [
-                    0.735541,
-                    0.60140246,
-                    0.86730254,
-                    0.93152493,
-                    0.98603314
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.8581753</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.735541</span>,
+                    <span class="hljs-number">0.60140246</span>,
+                    <span class="hljs-number">0.86730254</span>,
+                    <span class="hljs-number">0.93152493</span>,
+                    <span class="hljs-number">0.98603314</span>
                 ],
-                "id": 855
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">855</span>
             }
         }
     ]
 ]}
-```
-
-```javascript
-[
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">[
   [
-    { score: 2.3590476512908936, id: '854' },
-    { score: 2.2896690368652344, id: '59' }
+    { score: <span class="hljs-number">2.3590476512908936</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;854&#x27;</span> },
+    { score: <span class="hljs-number">2.2896690368652344</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;59&#x27;</span> }
   [
-    { score: 2.664059638977051, id: '59' },
-    { score: 2.59483003616333, id: '854' }
+    { score: <span class="hljs-number">2.664059638977051</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;59&#x27;</span> },
+    { score: <span class="hljs-number">2.59483003616333</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;854&#x27;</span> }
   ]
 ]
-```
-
-The results include two sets of nearest neighbors, one for each query vector, showcasing the efficiency of bulk-vector searches in handling multiple query vectors at once.
-
-### Partition search
-
-Partition search narrows the scope of your search to a specific subset or partition of your collection. This is particularly useful for organized datasets where data is segmented into logical or categorical divisions, allowing for faster search operations by reducing the volume of data to scan.
-
-To conduct a partition search, simply include the name of the target partition in `partition_names` of your search request. This specifies that the `search` operation only considers vectors within the specified partition.
-
-Here is an example of searching for entities in `red`:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>The results include two sets of nearest neighbors, one for each query vector, showcasing the efficiency of bulk-vector searches in handling multiple query vectors at once.</p>
+<h3 id="Partition-search" class="common-anchor-header">Partition search</h3><p>Partition search narrows the scope of your search to a specific subset or partition of your collection. This is particularly useful for organized datasets where data is segmented into logical or categorical divisions, allowing for faster search operations by reducing the volume of data to scan.</p>
+<p>To conduct a partition search, simply include the name of the target partition in <code>partition_names</code> of your search request. This specifies that the <code>search</code> operation only considers vectors within the specified partition.</p>
+<p>Here is an example of searching for entities in <code>red</code>:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 6.2 Search within a partition
-query_vector = [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]
+<pre><code class="language-python"><span class="hljs-comment"># 6.2 Search within a partition</span>
+query_vector = [<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]
 
 res = client.search(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=[query_vector],
-    limit=5,
-    search_params={"metric_type": "IP", "params": {"level": 1}},
-    partition_names=["red"]
+    limit=<span class="hljs-number">5</span>,
+    search_params={<span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: {<span class="hljs-string">&quot;level&quot;</span>: <span class="hljs-number">1</span>}},
+    partition_names=[<span class="hljs-string">&quot;red&quot;</span>]
 )
 
-print(res)
-```
+<span class="hljs-built_in">print</span>(res)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 6.3 Search within partitions</span>
+query_vectors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>3580376395471989f, -<span class="hljs-number">0.</span>6023495712049978f, <span class="hljs-number">0.</span>18414012509913835f, -<span class="hljs-number">0.</span>26286205330961354f, <span class="hljs-number">0.</span>9029438446296592f));
 
-```java
-// 6.3 Search within partitions
-query_vectors = Arrays.asList(Arrays.asList(0.3580376395471989f, -0.6023495712049978f, 0.18414012509913835f, -0.26286205330961354f, 0.9029438446296592f));
+searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">partitionNames</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;red&quot;</span>))
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">5</span>)
+    .<span class="hljs-title function_">build</span>();
 
-searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .partitionNames(Arrays.asList("red"))
-    .topK(5)
-    .build();
+searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-searchResp = client.search(searchReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 6.2 Search within partitions</span>
+query_vector = [<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]
 
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-// 6.2 Search within partitions
-query_vector = [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]
-
-res = await client.search({
-    collection_name: "quick_setup",
-    data: [query_vector],
-    partition_names: ["red"],
-    limit: 5,
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">search</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: [query_vector],
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;red&quot;</span>],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">5</span>,
 })
 
-console.log(res.results)
-```
-
-The output is similar to the following:
-
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">results</span>)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 16,
-            "distance": 0.9200337529182434,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">16</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.9200337529182434</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 14,
-            "distance": 0.4505271911621094,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">14</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.4505271911621094</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 15,
-            "distance": 0.19924677908420563,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">15</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.19924677908420563</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 17,
-            "distance": 0.0075093843042850494,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">17</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.0075093843042850494</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 13,
-            "distance": -0.14609718322753906,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">13</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: -<span class="hljs-number">0.14609718322753906</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         }
     ]
 ]
-```
-
-```java
-{"searchResults": [
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">{<span class="hljs-string">&quot;searchResults&quot;</span>: [
     [
         {
-            "score": 1.1677284,
-            "fields": {
-                "vector": [
-                    0.9986977,
-                    0.17964739,
-                    0.49086612,
-                    0.23155272,
-                    0.98438674
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1677284</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.9986977</span>,
+                    <span class="hljs-number">0.17964739</span>,
+                    <span class="hljs-number">0.49086612</span>,
+                    <span class="hljs-number">0.23155272</span>,
+                    <span class="hljs-number">0.98438674</span>
                 ],
-                "id": 1435
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1435</span>
             }
         },
         {
-            "score": 1.1476475,
-            "fields": {
-                "vector": [
-                    0.6952647,
-                    0.13417172,
-                    0.91045254,
-                    0.119336545,
-                    0.9338931
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1476475</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.6952647</span>,
+                    <span class="hljs-number">0.13417172</span>,
+                    <span class="hljs-number">0.91045254</span>,
+                    <span class="hljs-number">0.119336545</span>,
+                    <span class="hljs-number">0.9338931</span>
                 ],
-                "id": 1291
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1291</span>
             }
         },
         {
-            "score": 1.0969629,
-            "fields": {
-                "vector": [
-                    0.3363194,
-                    0.028906643,
-                    0.6675426,
-                    0.030419827,
-                    0.9735209
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.0969629</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.3363194</span>,
+                    <span class="hljs-number">0.028906643</span>,
+                    <span class="hljs-number">0.6675426</span>,
+                    <span class="hljs-number">0.030419827</span>,
+                    <span class="hljs-number">0.9735209</span>
                 ],
-                "id": 1168
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1168</span>
             }
         },
         {
-            "score": 1.0741848,
-            "fields": {
-                "vector": [
-                    0.9980543,
-                    0.36063594,
-                    0.66427994,
-                    0.17359233,
-                    0.94954175
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.0741848</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.9980543</span>,
+                    <span class="hljs-number">0.36063594</span>,
+                    <span class="hljs-number">0.66427994</span>,
+                    <span class="hljs-number">0.17359233</span>,
+                    <span class="hljs-number">0.94954175</span>
                 ],
-                "id": 1164
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1164</span>
             }
         },
         {
-            "score": 1.0584627,
-            "fields": {
-                "vector": [
-                    0.7187005,
-                    0.12674773,
-                    0.987718,
-                    0.3110777,
-                    0.86093885
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.0584627</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.7187005</span>,
+                    <span class="hljs-number">0.12674773</span>,
+                    <span class="hljs-number">0.987718</span>,
+                    <span class="hljs-number">0.3110777</span>,
+                    <span class="hljs-number">0.86093885</span>
                 ],
-                "id": 1085
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1085</span>
             }
         }
     ],
     [
         {
-            "score": 1.8030131,
-            "fields": {
-                "vector": [
-                    0.59726167,
-                    0.7054632,
-                    0.9573117,
-                    0.94529945,
-                    0.8664103
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.8030131</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.59726167</span>,
+                    <span class="hljs-number">0.7054632</span>,
+                    <span class="hljs-number">0.9573117</span>,
+                    <span class="hljs-number">0.94529945</span>,
+                    <span class="hljs-number">0.8664103</span>
                 ],
-                "id": 1203
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1203</span>
             }
         },
         {
-            "score": 1.7728865,
-            "fields": {
-                "vector": [
-                    0.6672442,
-                    0.60448086,
-                    0.9325822,
-                    0.80272985,
-                    0.8861626
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7728865</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.6672442</span>,
+                    <span class="hljs-number">0.60448086</span>,
+                    <span class="hljs-number">0.9325822</span>,
+                    <span class="hljs-number">0.80272985</span>,
+                    <span class="hljs-number">0.8861626</span>
                 ],
-                "id": 1448
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1448</span>
             }
         },
         {
-            "score": 1.7536311,
-            "fields": {
-                "vector": [
-                    0.59663296,
-                    0.77831805,
-                    0.8578314,
-                    0.88818026,
-                    0.9030075
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7536311</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.59663296</span>,
+                    <span class="hljs-number">0.77831805</span>,
+                    <span class="hljs-number">0.8578314</span>,
+                    <span class="hljs-number">0.88818026</span>,
+                    <span class="hljs-number">0.9030075</span>
                 ],
-                "id": 1010
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1010</span>
             }
         },
         {
-            "score": 1.7520742,
-            "fields": {
-                "vector": [
-                    0.854198,
-                    0.72294194,
-                    0.9245805,
-                    0.86126596,
-                    0.7969224
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7520742</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.854198</span>,
+                    <span class="hljs-number">0.72294194</span>,
+                    <span class="hljs-number">0.9245805</span>,
+                    <span class="hljs-number">0.86126596</span>,
+                    <span class="hljs-number">0.7969224</span>
                 ],
-                "id": 1219
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1219</span>
             }
         },
         {
-            "score": 1.7452049,
-            "fields": {
-                "vector": [
-                    0.96419,
-                    0.943535,
-                    0.87611496,
-                    0.8268136,
-                    0.79786557
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7452049</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.96419</span>,
+                    <span class="hljs-number">0.943535</span>,
+                    <span class="hljs-number">0.87611496</span>,
+                    <span class="hljs-number">0.8268136</span>,
+                    <span class="hljs-number">0.79786557</span>
                 ],
-                "id": 1149
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1149</span>
             }
         }
     ]
 ]}
-```
-
-```javascript
-[
-  { score: 3.0258803367614746, id: '1201' },
-  { score: 3.004319190979004, id: '1458' },
-  { score: 2.880324363708496, id: '1187' },
-  { score: 2.8246407508850098, id: '1347' },
-  { score: 2.797295093536377, id: '1406' }
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">[
+  { score: <span class="hljs-number">3.0258803367614746</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1201&#x27;</span> },
+  { score: <span class="hljs-number">3.004319190979004</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1458&#x27;</span> },
+  { score: <span class="hljs-number">2.880324363708496</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1187&#x27;</span> },
+  { score: <span class="hljs-number">2.8246407508850098</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1347&#x27;</span> },
+  { score: <span class="hljs-number">2.797295093536377</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1406&#x27;</span> }
 ]
-```
-
-Then, search for entities in `blue`:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>Then, search for entities in <code>blue</code>:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-res = client.search(
-    collection_name="quick_setup",
+<pre><code class="language-python">res = client.search(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=[query_vector],
-    limit=5,
-    search_params={"metric_type": "IP", "params": {"level": 1}},
-    partition_names=["blue"]
+    <span class="hljs-built_in">limit</span>=5,
+    search_params={<span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: {<span class="hljs-string">&quot;level&quot;</span>: 1}},
+    partition_names=[<span class="hljs-string">&quot;blue&quot;</span>]
 )
 
-print(res)
-```
+<span class="hljs-built_in">print</span>(res)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">partitionNames</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;blue&quot;</span>))
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">5</span>)
+    .<span class="hljs-title function_">build</span>();
 
-```java
-searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .partitionNames(Arrays.asList("blue"))
-    .topK(5)
-    .build();
+searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-searchResp = client.search(searchReq);
-
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-res = await client.search({
-    collection_name: "quick_setup",
-    data: [query_vector],
-    partition_names: ["blue"],
-    limit: 5,
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">search</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: [query_vector],
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;blue&quot;</span>],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">5</span>,
 })
 
-console.log(res.results)
-```
-
-The output is similar to the following:
-
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">results</span>)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 20,
-            "distance": 2.363696813583374,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">20</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">2.363696813583374</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 26,
-            "distance": 1.0665391683578491,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">26</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">1.0665391683578491</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 23,
-            "distance": 1.066049575805664,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">23</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">1.066049575805664</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 29,
-            "distance": 0.8353596925735474,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">29</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.8353596925735474</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         },
         {
-            "id": 28,
-            "distance": 0.7484277486801147,
-            "entity": {}
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">28</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.7484277486801147</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {}
         }
     ]
 ]
-```
-
-```java
-{"searchResults": [
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">{<span class="hljs-string">&quot;searchResults&quot;</span>: [
     [
         {
-            "score": 1.1628494,
-            "fields": {
-                "vector": [
-                    0.7442872,
-                    0.046407282,
-                    0.71031404,
-                    0.3544345,
-                    0.9819991
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1628494</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.7442872</span>,
+                    <span class="hljs-number">0.046407282</span>,
+                    <span class="hljs-number">0.71031404</span>,
+                    <span class="hljs-number">0.3544345</span>,
+                    <span class="hljs-number">0.9819991</span>
                 ],
-                "id": 1992
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1992</span>
             }
         },
         {
-            "score": 1.1470042,
-            "fields": {
-                "vector": [
-                    0.5505825,
-                    0.04367262,
-                    0.9985836,
-                    0.18922359,
-                    0.93255126
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1470042</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.5505825</span>,
+                    <span class="hljs-number">0.04367262</span>,
+                    <span class="hljs-number">0.9985836</span>,
+                    <span class="hljs-number">0.18922359</span>,
+                    <span class="hljs-number">0.93255126</span>
                 ],
-                "id": 1977
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1977</span>
             }
         },
         {
-            "score": 1.1450152,
-            "fields": {
-                "vector": [
-                    0.89994013,
-                    0.052991092,
-                    0.8645576,
-                    0.6406729,
-                    0.95679337
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1450152</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.89994013</span>,
+                    <span class="hljs-number">0.052991092</span>,
+                    <span class="hljs-number">0.8645576</span>,
+                    <span class="hljs-number">0.6406729</span>,
+                    <span class="hljs-number">0.95679337</span>
                 ],
-                "id": 1573
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1573</span>
             }
         },
         {
-            "score": 1.1439825,
-            "fields": {
-                "vector": [
-                    0.9253267,
-                    0.15890503,
-                    0.7999555,
-                    0.19126713,
-                    0.898583
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1439825</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.9253267</span>,
+                    <span class="hljs-number">0.15890503</span>,
+                    <span class="hljs-number">0.7999555</span>,
+                    <span class="hljs-number">0.19126713</span>,
+                    <span class="hljs-number">0.898583</span>
                 ],
-                "id": 1552
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1552</span>
             }
         },
         {
-            "score": 1.1029172,
-            "fields": {
-                "vector": [
-                    0.95661926,
-                    0.18777144,
-                    0.38115507,
-                    0.14323527,
-                    0.93137646
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1029172</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.95661926</span>,
+                    <span class="hljs-number">0.18777144</span>,
+                    <span class="hljs-number">0.38115507</span>,
+                    <span class="hljs-number">0.14323527</span>,
+                    <span class="hljs-number">0.93137646</span>
                 ],
-                "id": 1823
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1823</span>
             }
         }
     ],
     [
         {
-            "score": 1.8005109,
-            "fields": {
-                "vector": [
-                    0.5953582,
-                    0.7794224,
-                    0.9388869,
-                    0.79825854,
-                    0.9197286
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.8005109</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.5953582</span>,
+                    <span class="hljs-number">0.7794224</span>,
+                    <span class="hljs-number">0.9388869</span>,
+                    <span class="hljs-number">0.79825854</span>,
+                    <span class="hljs-number">0.9197286</span>
                 ],
-                "id": 1888
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1888</span>
             }
         },
         {
-            "score": 1.7714822,
-            "fields": {
-                "vector": [
-                    0.56805456,
-                    0.89422905,
-                    0.88187534,
-                    0.914824,
-                    0.8944365
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7714822</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.56805456</span>,
+                    <span class="hljs-number">0.89422905</span>,
+                    <span class="hljs-number">0.88187534</span>,
+                    <span class="hljs-number">0.914824</span>,
+                    <span class="hljs-number">0.8944365</span>
                 ],
-                "id": 1648
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1648</span>
             }
         },
         {
-            "score": 1.7561421,
-            "fields": {
-                "vector": [
-                    0.83421993,
-                    0.39865613,
-                    0.92319834,
-                    0.42695504,
-                    0.96633124
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7561421</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.83421993</span>,
+                    <span class="hljs-number">0.39865613</span>,
+                    <span class="hljs-number">0.92319834</span>,
+                    <span class="hljs-number">0.42695504</span>,
+                    <span class="hljs-number">0.96633124</span>
                 ],
-                "id": 1688
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1688</span>
             }
         },
         {
-            "score": 1.7553532,
-            "fields": {
-                "vector": [
-                    0.89994013,
-                    0.052991092,
-                    0.8645576,
-                    0.6406729,
-                    0.95679337
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7553532</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.89994013</span>,
+                    <span class="hljs-number">0.052991092</span>,
+                    <span class="hljs-number">0.8645576</span>,
+                    <span class="hljs-number">0.6406729</span>,
+                    <span class="hljs-number">0.95679337</span>
                 ],
-                "id": 1573
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1573</span>
             }
         },
         {
-            "score": 1.7543385,
-            "fields": {
-                "vector": [
-                    0.16542226,
-                    0.38248396,
-                    0.9888778,
-                    0.80913955,
-                    0.9501492
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.7543385</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {
+                <span class="hljs-string">&quot;vector&quot;</span>: [
+                    <span class="hljs-number">0.16542226</span>,
+                    <span class="hljs-number">0.38248396</span>,
+                    <span class="hljs-number">0.9888778</span>,
+                    <span class="hljs-number">0.80913955</span>,
+                    <span class="hljs-number">0.9501492</span>
                 ],
-                "id": 1544
+                <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1544</span>
             }
         }
     ]
 ]}
-```
-
-```javascript
-[
-  { score: 2.8421106338500977, id: '1745' },
-  { score: 2.838560104370117, id: '1782' },
-  { score: 2.8134000301361084, id: '1511' },
-  { score: 2.718268871307373, id: '1679' },
-  { score: 2.7014894485473633, id: '1597' }
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">[
+  { score: <span class="hljs-number">2.8421106338500977</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1745&#x27;</span> },
+  { score: <span class="hljs-number">2.838560104370117</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1782&#x27;</span> },
+  { score: <span class="hljs-number">2.8134000301361084</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1511&#x27;</span> },
+  { score: <span class="hljs-number">2.718268871307373</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1679&#x27;</span> },
+  { score: <span class="hljs-number">2.7014894485473633</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1597&#x27;</span> }
 ]
-```
-
-The data in `red` differs from that in `blue`. Therefore, the search results will be constrained to the specified partition, reflecting the unique characteristics and data distribution of that subset.
-
-### Search with output fields
-
-Search with output fields allows you to specify which attributes or fields of the matched vectors should be included in the search results.
-
-You can specify `output_fields` in a request to return results with specific fields.
-
-Here is an example of returning results with `color` attribute values:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>The data in <code>red</code> differs from that in <code>blue</code>. Therefore, the search results will be constrained to the specified partition, reflecting the unique characteristics and data distribution of that subset.</p>
+<h3 id="Search-with-output-fields" class="common-anchor-header">Search with output fields</h3><p>Search with output fields allows you to specify which attributes or fields of the matched vectors should be included in the search results.</p>
+<p>You can specify <code>output_fields</code> in a request to return results with specific fields.</p>
+<p>Here is an example of returning results with <code>color</code> attribute values:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# Search with output fields
+<pre><code class="language-python"><span class="hljs-comment"># Search with output fields</span>
 res = client.search(
-    collection_name="test_collection", # Replace with the actual name of your collection
-    data=[[0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]],
-    limit=5, # Max. number of search results to return
-    search_params={"metric_type": "IP", "params": {}}, # Search parameters
-    output_fields=["color"] # Output fields to return
+    collection_name=<span class="hljs-string">&quot;test_collection&quot;</span>, <span class="hljs-comment"># Replace with the actual name of your collection</span>
+    data=[[<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]],
+    limit=<span class="hljs-number">5</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    search_params={<span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: {}}, <span class="hljs-comment"># Search parameters</span>
+    output_fields=[<span class="hljs-string">&quot;color&quot;</span>] <span class="hljs-comment"># Output fields to return</span>
 )
 
-result = json.dumps(res, indent=4)
-print(result)
-```
+result = json.dumps(res, indent=<span class="hljs-number">4</span>)
+<span class="hljs-built_in">print</span>(result)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 7. Search with output fields</span>
+query_vectors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>3580376395471989f, -<span class="hljs-number">0.</span>6023495712049978f, <span class="hljs-number">0.</span>18414012509913835f, -<span class="hljs-number">0.</span>26286205330961354f, <span class="hljs-number">0.</span>9029438446296592f));
 
-```java
-// 7. Search with output fields
-query_vectors = Arrays.asList(Arrays.asList(0.3580376395471989f, -0.6023495712049978f, 0.18414012509913835f, -0.26286205330961354f, 0.9029438446296592f));
+searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color&quot;</span>))
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">5</span>)
+    .<span class="hljs-title function_">build</span>();
 
-searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .outputFields(Arrays.asList("color"))
-    .topK(5)
-    .build();
+searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-searchResp = client.search(searchReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 7. Search with output fields</span>
+query_vector = [<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]
 
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-// 7. Search with output fields
-query_vector = [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]
-
-res = await client.search({
-    collection_name: "quick_setup",
-    data: [query_vector],
-    limit: 5,
-    output_fields: ["color"],
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">search</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: [query_vector],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color&quot;</span>],
 })
 
-console.log(res.results)
-```
-
-The output is similar to the following:
-
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">results</span>)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 0,
-            "distance": 1.4093276262283325,
-            "entity": {
-                "color": "pink_8682"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">0</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">1.4093276262283325</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;pink_8682&quot;</span>
             }
         },
         {
-            "id": 16,
-            "distance": 1.0159327983856201,
-            "entity": {
-                "color": "yellow_1496"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">16</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">1.0159327983856201</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;yellow_1496&quot;</span>
             }
         },
         {
-            "id": 4,
-            "distance": 0.9902134537696838,
-            "entity": {
-                "color": "red_4794"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">4</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.9902134537696838</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red_4794&quot;</span>
             }
         },
         {
-            "id": 14,
-            "distance": 0.9803846478462219,
-            "entity": {
-                "color": "green_2899"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">14</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.9803846478462219</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;green_2899&quot;</span>
             }
         },
         {
-            "id": 1,
-            "distance": 0.8519943356513977,
-            "entity": {
-                "color": "red_7025"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.8519943356513977</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red_7025&quot;</span>
             }
         }
     ]
 ]
-```
-
-```java
-{"searchResults": [
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">{<span class="hljs-string">&quot;searchResults&quot;</span>: [
     [
         {
-            "score": 1.263043,
-            "fields": {}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.263043</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {}
         },
         {
-            "score": 1.2377806,
-            "fields": {}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.2377806</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {}
         },
         {
-            "score": 1.1869997,
-            "fields": {}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1869997</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {}
         },
         {
-            "score": 1.1748955,
-            "fields": {}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1748955</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {}
         },
         {
-            "score": 1.1720343,
-            "fields": {}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1720343</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {}
         }
     ]
 ]}
-```
-
-```javascript
-
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">
 [
-  { score: 3.036271572113037, id: '59', color: 'orange' },
-  { score: 3.0267879962921143, id: '1745', color: 'blue' },
-  { score: 3.0069446563720703, id: '854', color: 'black' },
-  { score: 2.984386682510376, id: '718', color: 'black' },
-  { score: 2.916019916534424, id: '425', color: 'purple' }
+  { score: <span class="hljs-number">3.036271572113037</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;59&#x27;</span>, color: <span class="hljs-string">&#x27;orange&#x27;</span> },
+  { score: <span class="hljs-number">3.0267879962921143</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1745&#x27;</span>, color: <span class="hljs-string">&#x27;blue&#x27;</span> },
+  { score: <span class="hljs-number">3.0069446563720703</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;854&#x27;</span>, color: <span class="hljs-string">&#x27;black&#x27;</span> },
+  { score: <span class="hljs-number">2.984386682510376</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;718&#x27;</span>, color: <span class="hljs-string">&#x27;black&#x27;</span> },
+  { score: <span class="hljs-number">2.916019916534424</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;425&#x27;</span>, color: <span class="hljs-string">&#x27;purple&#x27;</span> }
 ]
-```
-
-Alongside the nearest neighbors, the search results will include the specified field `color`, providing a richer set of information for each matching vector.
-
-## Filtered search
-
-Filtered search applies scalar filters to vector searches, allowing you to refine the search results based on specific criteria. You can find more about filter expressions in [Boolean Expression Rules](https://milvus.io/docs/boolean.md) and examples in [Get & Scalar Query](https://milvus.io/docs/get-and-scalar-query.md).
-
-### Use the `like` operator
-
-The `like` operator enhances string searches by evaluating patterns including prefixes, infixes, and suffixes:
-
-- __Prefix matching__: To find values starting with a specific prefix, use the syntax `'like "prefix%"'`.
-- __Infix matching__: To find values containing a specific sequence of characters anywhere within the string, use the syntax `'like "%infix%"'`.
-- __Suffix matching__: To find values ending with a specific suffix, use the syntax `'like "%suffix"'`.
-
-For single-character matching, underscore (`_`) acts as a wildcard for one character, e.g., `'like "y_llow"'`.
-
-### Special characters in search strings
-
-If you want to search for a string that contains special characters like underscores (`_`) or percent signs (`%`), which are normally used as wildcards in search patterns (`_` for any single character and `%` for any sequence of characters), you must escape these characters to treat them as literal characters. Use a backslash (`\`) to escape special characters, and remember to escape the backslash itself. For instance:
-
-- To search for a literal underscore, use `\\_`.
-- To search for a literal percent sign, use `\\%`.
-
-So, if you need to search for the text `"_version_"`, your query should be formatted as `'like "\\_version\\_"'` to ensure the underscores are treated as part of the search term and not as wildcards.
-
-Filter results whose __color__ is prefixed with __red__:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>Alongside the nearest neighbors, the search results will include the specified field <code>color</code>, providing a richer set of information for each matching vector.</p>
+<h2 id="Filtered-search" class="common-anchor-header">Filtered search
+    <button data-href="#Filtered-search" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Filtered search applies scalar filters to vector searches, allowing you to refine the search results based on specific criteria. You can find more about filter expressions in <a href="https://milvus.io/docs/boolean.md">Boolean Expression Rules</a> and examples in <a href="https://milvus.io/docs/get-and-scalar-query.md">Get &amp; Scalar Query</a>.</p>
+<h3 id="Use-the-like-operator" class="common-anchor-header">Use the <code>like</code> operator</h3><p>The <code>like</code> operator enhances string searches by evaluating patterns including prefixes, infixes, and suffixes:</p>
+<ul>
+<li><strong>Prefix matching</strong>: To find values starting with a specific prefix, use the syntax <code>'like &quot;prefix%&quot;'</code>.</li>
+<li><strong>Infix matching</strong>: To find values containing a specific sequence of characters anywhere within the string, use the syntax <code>'like &quot;%infix%&quot;'</code>.</li>
+<li><strong>Suffix matching</strong>: To find values ending with a specific suffix, use the syntax <code>'like &quot;%suffix&quot;'</code>.</li>
+</ul>
+<p>For single-character matching, underscore (<code>_</code>) acts as a wildcard for one character, e.g., <code>'like &quot;y_llow&quot;'</code>.</p>
+<h3 id="Special-characters-in-search-strings" class="common-anchor-header">Special characters in search strings</h3><p>If you want to search for a string that contains special characters like underscores (<code>_</code>) or percent signs (<code>%</code>), which are normally used as wildcards in search patterns (<code>_</code> for any single character and <code>%</code> for any sequence of characters), you must escape these characters to treat them as literal characters. Use a backslash (<code>\</code>) to escape special characters, and remember to escape the backslash itself. For instance:</p>
+<ul>
+<li>To search for a literal underscore, use <code>\\_</code>.</li>
+<li>To search for a literal percent sign, use <code>\\%</code>.</li>
+</ul>
+<p>So, if you need to search for the text <code>&quot;_version_&quot;</code>, your query should be formatted as <code>'like &quot;\\_version\\_&quot;'</code> to ensure the underscores are treated as part of the search term and not as wildcards.</p>
+<p>Filter results whose <strong>color</strong> is prefixed with <strong>red</strong>:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# Search with filter
+<pre><code class="language-python"><span class="hljs-comment"># Search with filter</span>
 res = client.search(
-    collection_name="test_collection", # Replace with the actual name of your collection
-    data=[[0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]],
-    limit=5, # Max. number of search results to return
-    search_params={"metric_type": "IP", "params": {}}, # Search parameters
-    output_fields=["color"], # Output fields to return
-    filter='color like "red%"'
+    collection_name=<span class="hljs-string">&quot;test_collection&quot;</span>, <span class="hljs-comment"># Replace with the actual name of your collection</span>
+    data=[[<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]],
+    limit=<span class="hljs-number">5</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    search_params={<span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: {}}, <span class="hljs-comment"># Search parameters</span>
+    output_fields=[<span class="hljs-string">&quot;color&quot;</span>], <span class="hljs-comment"># Output fields to return</span>
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&#x27;color like &quot;red%&quot;&#x27;</span>
 )
 
-result = json.dumps(res, indent=4)
-print(result)
-```
+result = json.dumps(res, indent=<span class="hljs-number">4</span>)
+<span class="hljs-built_in">print</span>(result)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 8. Filtered search</span>
+query_vectors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>3580376395471989f, -<span class="hljs-number">0.</span>6023495712049978f, <span class="hljs-number">0.</span>18414012509913835f, -<span class="hljs-number">0.</span>26286205330961354f, <span class="hljs-number">0.</span>9029438446296592f));
 
-```java
-// 8. Filtered search
-query_vectors = Arrays.asList(Arrays.asList(0.3580376395471989f, -0.6023495712049978f, 0.18414012509913835f, -0.26286205330961354f, 0.9029438446296592f));
+searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;color_tag like \&quot;red%\&quot;&quot;</span>)
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">5</span>)
+    .<span class="hljs-title function_">build</span>();
 
-searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .outputFields(Arrays.asList("color_tag"))
-    .filter("color_tag like \"red%\"")
-    .topK(5)
-    .build();
+searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-searchResp = client.search(searchReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 8. Filtered search</span>
+<span class="hljs-comment">// 8.1 Filter with &quot;like&quot; operator and prefix wildcard</span>
+query_vector = [<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]
 
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-// 8. Filtered search
-// 8.1 Filter with "like" operator and prefix wildcard
-query_vector = [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]
-
-res = await client.search({
-    collection_name: "quick_setup",
-    data: [query_vector],
-    limit: 5,
-    filters: "color_tag like \"red%\"",
-    output_fields: ["color_tag"]
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">search</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: [query_vector],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-attr">filters</span>: <span class="hljs-string">&quot;color_tag like \&quot;red%\&quot;&quot;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>]
 })
 
-console.log(res.results)
-```
-
-The output is similar to the following:
-
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">results</span>)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 4,
-            "distance": 0.9902134537696838,
-            "entity": {
-                "color": "red_4794"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">4</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.9902134537696838</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red_4794&quot;</span>
             }
         },
         {
-            "id": 1,
-            "distance": 0.8519943356513977,
-            "entity": {
-                "color": "red_7025"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.8519943356513977</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red_7025&quot;</span>
             }
         },
         {
-            "id": 6,
-            "distance": -0.4113418459892273,
-            "entity": {
-                "color": "red_9392"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">6</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: -<span class="hljs-number">0.4113418459892273</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red_9392&quot;</span>
             }
         }
     ]
 ]
-```
-
-```java
-{"searchResults": [
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">{<span class="hljs-string">&quot;searchResults&quot;</span>: [
     [
         {
-            "score": 1.1869997,
-            "fields": {"color_tag": "red_3026"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1869997</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;red_3026&quot;</span>}
         },
         {
-            "score": 1.1677284,
-            "fields": {"color_tag": "red_9030"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1677284</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;red_9030&quot;</span>}
         },
         {
-            "score": 1.1476475,
-            "fields": {"color_tag": "red_3744"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1476475</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;red_3744&quot;</span>}
         },
         {
-            "score": 1.0969629,
-            "fields": {"color_tag": "red_4168"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.0969629</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;red_4168&quot;</span>}
         },
         {
-            "score": 1.0741848,
-            "fields": {"color_tag": "red_9678"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.0741848</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;red_9678&quot;</span>}
         }
     ]
 ]}
-```
-
-```javascript
-[
-  { score: 2.5080761909484863, id: '1201', color_tag: 'red_8904' },
-  { score: 2.491129159927368, id: '425', color_tag: 'purple_8212' },
-  { score: 2.4889798164367676, id: '1458', color_tag: 'red_6891' },
-  { score: 2.42964243888855, id: '724', color_tag: 'black_9885' },
-  { score: 2.4004223346710205, id: '854', color_tag: 'black_5990' }
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">[
+  { score: <span class="hljs-number">2.5080761909484863</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1201&#x27;</span>, color_tag: <span class="hljs-string">&#x27;red_8904&#x27;</span> },
+  { score: <span class="hljs-number">2.491129159927368</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;425&#x27;</span>, color_tag: <span class="hljs-string">&#x27;purple_8212&#x27;</span> },
+  { score: <span class="hljs-number">2.4889798164367676</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1458&#x27;</span>, color_tag: <span class="hljs-string">&#x27;red_6891&#x27;</span> },
+  { score: <span class="hljs-number">2.42964243888855</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;724&#x27;</span>, color_tag: <span class="hljs-string">&#x27;black_9885&#x27;</span> },
+  { score: <span class="hljs-number">2.4004223346710205</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;854&#x27;</span>, color_tag: <span class="hljs-string">&#x27;black_5990&#x27;</span> }
 ]
-```
-
-Filter results whose __color__ contains the letters __ll__ anywhere within the string:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>Filter results whose <strong>color</strong> contains the letters <strong>ll</strong> anywhere within the string:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# Infix match on color field
+<pre><code class="language-python"><span class="hljs-comment"># Infix match on color field</span>
 res = client.search(
-    collection_name="test_collection", # Replace with the actual name of your collection
-    data=[[0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]],
-    limit=5, # Max. number of search results to return
-    search_params={"metric_type": "IP", "params": {}}, # Search parameters
-    output_fields=["color"], # Output fields to return
-    filter='color like "%ll%"' # Filter on color field, infix match on "ll"
+    collection_name=<span class="hljs-string">&quot;test_collection&quot;</span>, <span class="hljs-comment"># Replace with the actual name of your collection</span>
+    data=[[<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]],
+    limit=<span class="hljs-number">5</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    search_params={<span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>, <span class="hljs-string">&quot;params&quot;</span>: {}}, <span class="hljs-comment"># Search parameters</span>
+    output_fields=[<span class="hljs-string">&quot;color&quot;</span>], <span class="hljs-comment"># Output fields to return</span>
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&#x27;color like &quot;%ll%&quot;&#x27;</span> <span class="hljs-comment"># Filter on color field, infix match on &quot;ll&quot;</span>
 )
 
-result = json.dumps(res, indent=4)
-print(result)
-```
+result = json.dumps(res, indent=<span class="hljs-number">4</span>)
+<span class="hljs-built_in">print</span>(result)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 8. Filtered search</span>
+query_vectors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>3580376395471989f, -<span class="hljs-number">0.</span>6023495712049978f, <span class="hljs-number">0.</span>18414012509913835f, -<span class="hljs-number">0.</span>26286205330961354f, <span class="hljs-number">0.</span>9029438446296592f));
 
-```java
-// 8. Filtered search
-query_vectors = Arrays.asList(Arrays.asList(0.3580376395471989f, -0.6023495712049978f, 0.18414012509913835f, -0.26286205330961354f, 0.9029438446296592f));
+searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;color like \&quot;%ll%\&quot;&quot;</span>)
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">5</span>)
+    .<span class="hljs-title function_">build</span>();
 
-searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .outputFields(Arrays.asList("color_tag"))
-    .filter("color like \"%ll%\"")
-    .topK(5)
-    .build();
+searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-searchResp = client.search(searchReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 8. Filtered search</span>
+<span class="hljs-comment">// 8.1 Filter with &quot;like&quot; operator and prefix wildcard</span>
+query_vector = [<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]
 
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-// 8. Filtered search
-// 8.1 Filter with "like" operator and prefix wildcard
-query_vector = [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]
-
-res = await client.search({
-    collection_name: "quick_setup",
-    data: [query_vector],
-    limit: 5,
-    filters: "color_tag like \"%ll%\"",
-    output_fields: ["color_tag"]
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">search</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: [query_vector],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-attr">filters</span>: <span class="hljs-string">&quot;color_tag like \&quot;%ll%\&quot;&quot;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>]
 })
 
-console.log(res.results)
-```
-
-The output is similar to the following:
-
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">results</span>)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 5,
-            "distance": 0.7972343564033508,
-            "entity": {
-                "color": "yellow_4222"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">5</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.7972343564033508</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;yellow_4222&quot;</span>
             }
         }
     ]
 ]
-```
-
-```java
-{"searchResults": [
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">{<span class="hljs-string">&quot;searchResults&quot;</span>: [
     [
         {
-            "score": 1.1869997,
-            "fields": {"color_tag": "yellow_4222"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1869997</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;yellow_4222&quot;</span>}
         }
     ]
 ]}
-```
-
-```javascript
-[
-  { score: 2.5080761909484863, id: '1201', color_tag: 'yellow_4222' }
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">[
+  { score: <span class="hljs-number">2.5080761909484863</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1201&#x27;</span>, color_tag: <span class="hljs-string">&#x27;yellow_4222&#x27;</span> }
 ]
-```
-
-## Range search
-
-Range search allows you to find vectors that lie within a specified distance range from your query vector.
-
-By setting `radius` and optionally `range_filter`, you can adjust the breadth of your search to include vectors that are somewhat similar to the query vector, providing a more comprehensive view of potential matches.
-
-- `radius`: Defines the outer boundary of your search space. Only vectors that are within this distance from the query vector are considered potential matches.
-
-- `range_filter`: While `radius` sets the outer limit of the search, `range_filter` can be optionally used to define an inner boundary, creating a distance range within which vectors must fall to be considered matches.
-
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Range-search" class="common-anchor-header">Range search
+    <button data-href="#Range-search" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Range search allows you to find vectors that lie within a specified distance range from your query vector.</p>
+<p>By setting <code>radius</code> and optionally <code>range_filter</code>, you can adjust the breadth of your search to include vectors that are somewhat similar to the query vector, providing a more comprehensive view of potential matches.</p>
+<ul>
+<li><p><code>radius</code>: Defines the outer boundary of your search space. Only vectors that are within this distance from the query vector are considered potential matches.</p></li>
+<li><p><code>range_filter</code>: While <code>radius</code> sets the outer limit of the search, <code>range_filter</code> can be optionally used to define an inner boundary, creating a distance range within which vectors must fall to be considered matches.</p></li>
+</ul>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# Conduct a range search
+<pre><code class="language-python"><span class="hljs-comment"># Conduct a range search</span>
 search_params = {
-    "metric_type": "IP",
-    "params": {
-        "radius": 0.8, # Radius of the search circle
-        "range_filter": 1.0 # Range filter to filter out vectors that are not within the search circle
+    <span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;IP&quot;</span>,
+    <span class="hljs-string">&quot;params&quot;</span>: {
+        <span class="hljs-string">&quot;radius&quot;</span>: <span class="hljs-number">0.8</span>, <span class="hljs-comment"># Radius of the search circle</span>
+        <span class="hljs-string">&quot;range_filter&quot;</span>: <span class="hljs-number">1.0</span> <span class="hljs-comment"># Range filter to filter out vectors that are not within the search circle</span>
     }
 }
 
 res = client.search(
-    collection_name="test_collection", # Replace with the actual name of your collection
-    data=[[0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]],
-    limit=3, # Max. number of search results to return
-    search_params=search_params, # Search parameters
-    output_fields=["color"], # Output fields to return
+    collection_name=<span class="hljs-string">&quot;test_collection&quot;</span>, <span class="hljs-comment"># Replace with the actual name of your collection</span>
+    data=[[<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]],
+    limit=<span class="hljs-number">3</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    search_params=search_params, <span class="hljs-comment"># Search parameters</span>
+    output_fields=[<span class="hljs-string">&quot;color&quot;</span>], <span class="hljs-comment"># Output fields to return</span>
 )
 
-result = json.dumps(res, indent=4)
-print(result)
-```
+result = json.dumps(res, indent=<span class="hljs-number">4</span>)
+<span class="hljs-built_in">print</span>(result)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 9. Range search</span>
+query_vectors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-number">0.</span>3580376395471989f, -<span class="hljs-number">0.</span>6023495712049978f, <span class="hljs-number">0.</span>18414012509913835f, -<span class="hljs-number">0.</span>26286205330961354f, <span class="hljs-number">0.</span>9029438446296592f));
 
-```java
-// 9. Range search
-query_vectors = Arrays.asList(Arrays.asList(0.3580376395471989f, -0.6023495712049978f, 0.18414012509913835f, -0.26286205330961354f, 0.9029438446296592f));
+searchReq = <span class="hljs-title class_">SearchReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(query_vectors)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">searchParams</span>(<span class="hljs-title class_">Map</span>.<span class="hljs-title function_">of</span>(<span class="hljs-string">&quot;radius&quot;</span>, <span class="hljs-number">0.1</span>, <span class="hljs-string">&quot;range&quot;</span>, <span class="hljs-number">1.0</span>))
+    .<span class="hljs-title function_">topK</span>(<span class="hljs-number">5</span>)
+    .<span class="hljs-title function_">build</span>();
 
-searchReq = SearchReq.builder()
-    .collectionName("quick_setup")
-    .data(query_vectors)
-    .outputFields(Arrays.asList("color_tag"))
-    .searchParams(Map.of("radius", 0.1, "range", 1.0))
-    .topK(5)
-    .build();
+searchResp = client.<span class="hljs-title function_">search</span>(searchReq);
 
-searchResp = client.search(searchReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(searchResp));
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 9. Range search</span>
+query_vector = [<span class="hljs-number">0.3580376395471989</span>, -<span class="hljs-number">0.6023495712049978</span>, <span class="hljs-number">0.18414012509913835</span>, -<span class="hljs-number">0.26286205330961354</span>, <span class="hljs-number">0.9029438446296592</span>]
 
-System.out.println(JSONObject.toJSON(searchResp));
-```
-
-```javascript
-// 9. Range search
-query_vector = [0.3580376395471989, -0.6023495712049978, 0.18414012509913835, -0.26286205330961354, 0.9029438446296592]
-
-res = await client.search({
-    collection_name: "quick_setup",
-    data: [query_vector],
-    limit: 5,
-    params: {
-        radius: 0.1,
-        range: 1.0
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">search</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: [query_vector],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-attr">params</span>: {
+        <span class="hljs-attr">radius</span>: <span class="hljs-number">0.1</span>,
+        <span class="hljs-attr">range</span>: <span class="hljs-number">1.0</span>
     },
-    output_fields: ["color_tag"]
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>]
 })
 
-console.log(res.results)
-```
-
-The output is similar to the following:
-
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">results</span>)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-[
+<pre><code class="language-python">[
     [
         {
-            "id": 4,
-            "distance": 0.9902134537696838,
-            "entity": {
-                "color": "red_4794"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">4</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.9902134537696838</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red_4794&quot;</span>
             }
         },
         {
-            "id": 14,
-            "distance": 0.9803846478462219,
-            "entity": {
-                "color": "green_2899"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">14</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.9803846478462219</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;green_2899&quot;</span>
             }
         },
         {
-            "id": 1,
-            "distance": 0.8519943356513977,
-            "entity": {
-                "color": "red_7025"
+            <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,
+            <span class="hljs-string">&quot;distance&quot;</span>: <span class="hljs-number">0.8519943356513977</span>,
+            <span class="hljs-string">&quot;entity&quot;</span>: {
+                <span class="hljs-string">&quot;color&quot;</span>: <span class="hljs-string">&quot;red_7025&quot;</span>
             }
         }
     ]
 ]
-```
-
-```java
-{"searchResults": [
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">{<span class="hljs-string">&quot;searchResults&quot;</span>: [
     [
         {
-            "score": 1.263043,
-            "fields": {"color_tag": "green_2052"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.263043</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;green_2052&quot;</span>}
         },
         {
-            "score": 1.2377806,
-            "fields": {"color_tag": "purple_3709"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.2377806</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;purple_3709&quot;</span>}
         },
         {
-            "score": 1.1869997,
-            "fields": {"color_tag": "red_3026"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1869997</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;red_3026&quot;</span>}
         },
         {
-            "score": 1.1748955,
-            "fields": {"color_tag": "black_1646"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1748955</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;black_1646&quot;</span>}
         },
         {
-            "score": 1.1720343,
-            "fields": {"color_tag": "green_4853"}
+            <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">1.1720343</span>,
+            <span class="hljs-string">&quot;fields&quot;</span>: {<span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">&quot;green_4853&quot;</span>}
         }
     ]
 ]}
-```
-
-```javascript
-[
-  { score: 2.3387961387634277, id: '718', color_tag: 'black_7154' },
-  { score: 2.3352415561676025, id: '1745', color_tag: 'blue_8741' },
-  { score: 2.290485382080078, id: '1408', color_tag: 'red_2324' },
-  { score: 2.285870313644409, id: '854', color_tag: 'black_5990' },
-  { score: 2.2593345642089844, id: '1309', color_tag: 'red_8458' }
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">[
+  { score: <span class="hljs-number">2.3387961387634277</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;718&#x27;</span>, color_tag: <span class="hljs-string">&#x27;black_7154&#x27;</span> },
+  { score: <span class="hljs-number">2.3352415561676025</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1745&#x27;</span>, color_tag: <span class="hljs-string">&#x27;blue_8741&#x27;</span> },
+  { score: <span class="hljs-number">2.290485382080078</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1408&#x27;</span>, color_tag: <span class="hljs-string">&#x27;red_2324&#x27;</span> },
+  { score: <span class="hljs-number">2.285870313644409</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;854&#x27;</span>, color_tag: <span class="hljs-string">&#x27;black_5990&#x27;</span> },
+  { score: <span class="hljs-number">2.2593345642089844</span>, <span class="hljs-built_in">id</span>: <span class="hljs-string">&#x27;1309&#x27;</span>, color_tag: <span class="hljs-string">&#x27;red_8458&#x27;</span> }
 ]
-```
+<button class="copy-code-btn"></button></code></pre>
+<p>You will observe that all the entities returned have a distance that falls within the range of 0.8 to 1.0 from the query vector.</p>
+<p>The parameter settings for <code>radius</code> and <code>range_filter</code> vary with the metric type in use.</p>
+<table>
+<thead>
+<tr><th><strong>Metric Type</strong></th><th><strong>Charactericstics</strong></th><th><strong>Range Search Settings</strong></th></tr>
+</thead>
+<tbody>
+<tr><td><code>L2</code></td><td>Smaller L2 distances indicate higher similarity.</td><td>To exclude the closest vectors from results, ensure that:<br/> <code>range_filter</code> &lt;= distance &lt; <code>radius</code></td></tr>
+<tr><td><code>IP</code></td><td>Larger IP distances indicate higher similarity.</td><td>To exclude the closest vectors from results, ensure that:<br/> <code>radius</code> &lt; distance &lt;= <code>range_filter</code></td></tr>
+<tr><td><code>COSINE</code></td><td>Larger cosine value indicates higher similarity.</td><td>To exclude the closest vectors from results, ensure that:<br/> <code>radius</code> &lt; distance &lt;= <code>range_filter</code></td></tr>
+<tr><td><code>JACCARD</code></td><td>Smaller Jaccard distances indicate higher similarity.</td><td>To exclude the closest vectors from results, ensure that:<br/> <code>range_filter</code> &lt;= distance &lt; <code>radius</code></td></tr>
+<tr><td><code>HAMMING</code></td><td>Smaller Hamming distances indicate higher similarity.</td><td>To exclude the closest vectors from results, ensure that:<br/> <code>range_filter</code> &lt;= distance &lt; <code>radius</code></td></tr>
+</tbody>
+</table>
+<p>To learn more about distance metric types, refer to <a href="/docs/metric.md">Similarity Metrics</a>.</p>
+<h2 id="Grouping-search" class="common-anchor-header">Grouping search
+    <button data-href="#Grouping-search" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>In Milvus, grouping search by a specific field can avoid redundancy of the same field item in the results. You can get a varied set of results for the specific field.</p>
+<p>Consider a collection of documents, each document splits into various passages. Each passage is represented by one vector embedding and belongs to one document. To find relevant documents instead of similar passages, you can include the <code>group_by_field</code> argument in the <code>search()</code> opeartion to group results by the document ID. This helps return the most relevant and unique documents, rather than separate passages from the same document.</p>
+<p>Here is the example code to group search results by field:</p>
+<pre><code class="language-python"><span class="hljs-comment"># Connect to Milvus</span>
+client = MilvusClient(uri=<span class="hljs-string">&#x27;http://localhost:19530&#x27;</span>) <span class="hljs-comment"># Milvus server address</span>
 
-You will observe that all the entities returned have a distance that falls within the range of 0.8 to 1.0 from the query vector.
+<span class="hljs-comment"># Load data into collection</span>
+client.load_collection(<span class="hljs-string">&quot;group_search&quot;</span>) <span class="hljs-comment"># Collection name</span>
 
-The parameter settings for `radius` and `range_filter` vary with the metric type in use.
-
-|  __Metric Type__ |  __Charactericstics__                             |  __Range Search Settings__                                                                               |
-| ---------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-|  `L2`            |  Smaller L2 distances indicate higher similarity. |  To exclude the closest vectors from results, ensure that:<br/> `range_filter` <= distance < `radius` |
-|  `IP`            |  Larger IP distances indicate higher similarity.  |  To exclude the closest vectors from results, ensure that:<br/> `radius` < distance <= `range_filter` |
-|  `COSINE`            |  Larger cosine value indicates higher similarity.  |  To exclude the closest vectors from results, ensure that:<br/> `radius` < distance <= `range_filter` |
-|  `JACCARD`            |  Smaller Jaccard distances indicate higher similarity. |  To exclude the closest vectors from results, ensure that:<br/> `range_filter` <= distance < `radius` |
-|  `HAMMING`            |  Smaller Hamming distances indicate higher similarity. |  To exclude the closest vectors from results, ensure that:<br/> `range_filter` <= distance < `radius` |
-
-To learn more about distance metric types, refer to [Similarity Metrics](metric.md).
-
-## Grouping search
-
-In Milvus, grouping search by a specific field can avoid redundancy of the same field item in the results. You can get a varied set of results for the specific field. 
-
-Consider a collection of documents, each document splits into various passages. Each passage is represented by one vector embedding and belongs to one document. To find relevant documents instead of similar passages, you can include the `group_by_field` argument in the `search()` opeartion to group results by the document ID. This helps return the most relevant and unique documents, rather than separate passages from the same document.
-
-Here is the example code to group search results by field:
-
-```python
-# Connect to Milvus
-client = MilvusClient(uri='http://localhost:19530') # Milvus server address
-
-# Load data into collection
-client.load_collection("group_search") # Collection name
-
-# Group search results
+<span class="hljs-comment"># Group search results</span>
 res = client.search(
-    collection_name="group_search", # Collection name
-    data=[[0.14529211512077012, 0.9147257273453546, 0.7965055218724449, 0.7009258593102812, 0.5605206522382088]], # Query vector
+    collection_name=<span class="hljs-string">&quot;group_search&quot;</span>, <span class="hljs-comment"># Collection name</span>
+    data=[[<span class="hljs-number">0.14529211512077012</span>, <span class="hljs-number">0.9147257273453546</span>, <span class="hljs-number">0.7965055218724449</span>, <span class="hljs-number">0.7009258593102812</span>, <span class="hljs-number">0.5605206522382088</span>]], <span class="hljs-comment"># Query vector</span>
     search_params={
-    "metric_type": "L2",
-    "params": {"nprobe": 10},
-    }, # Search parameters
-    limit=10, # Max. number of search results to return
-    group_by_field="doc_id", # Group results by document ID
-    output_fields=["doc_id", "passage_id"]
+    <span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;L2&quot;</span>,
+    <span class="hljs-string">&quot;params&quot;</span>: {<span class="hljs-string">&quot;nprobe&quot;</span>: <span class="hljs-number">10</span>},
+    }, <span class="hljs-comment"># Search parameters</span>
+    limit=<span class="hljs-number">10</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    group_by_field=<span class="hljs-string">&quot;doc_id&quot;</span>, <span class="hljs-comment"># Group results by document ID</span>
+    output_fields=[<span class="hljs-string">&quot;doc_id&quot;</span>, <span class="hljs-string">&quot;passage_id&quot;</span>]
 )
 
-# Retrieve the values in the `doc_id` column
-doc_ids = [result['entity']['doc_id'] for result in res[0]]
+<span class="hljs-comment"># Retrieve the values in the `doc_id` column</span>
+doc_ids = [result[<span class="hljs-string">&#x27;entity&#x27;</span>][<span class="hljs-string">&#x27;doc_id&#x27;</span>] <span class="hljs-keyword">for</span> result <span class="hljs-keyword">in</span> res[<span class="hljs-number">0</span>]]
 
-print(doc_ids)
-```
+<span class="hljs-built_in">print</span>(doc_ids)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
+<pre><code class="language-python">[<span class="hljs-meta">5, 10, 1, 7, 9, 6, 3, 4, 8, 2</span>]
+<button class="copy-code-btn"></button></code></pre>
+<p>In the given output, it can be observed that the returned entities do not contain any duplicate <code>doc_id</code> values.</p>
+<p>For comparison, let’s comment out the <code>group_by_field</code> and conduct a regular search:</p>
+<pre><code class="language-python"><span class="hljs-comment"># Connect to Milvus</span>
+client = MilvusClient(uri=<span class="hljs-string">&#x27;http://localhost:19530&#x27;</span>) <span class="hljs-comment"># Milvus server address</span>
 
-The output is similar to the following:
+<span class="hljs-comment"># Load data into collection</span>
+client.load_collection(<span class="hljs-string">&quot;group_search&quot;</span>) <span class="hljs-comment"># Collection name</span>
 
-```python
-[5, 10, 1, 7, 9, 6, 3, 4, 8, 2]
-```
-
-In the given output, it can be observed that the returned entities do not contain any duplicate `doc_id` values.
-
-For comparison, let's comment out the `group_by_field` and conduct a regular search:
-
-```python
-# Connect to Milvus
-client = MilvusClient(uri='http://localhost:19530') # Milvus server address
-
-# Load data into collection
-client.load_collection("group_search") # Collection name
-
-# Search without `group_by_field`
+<span class="hljs-comment"># Search without `group_by_field`</span>
 res = client.search(
-    collection_name="group_search", # Collection name
-    data=query_passage_vector, # Replace with your query vector
+    collection_name=<span class="hljs-string">&quot;group_search&quot;</span>, <span class="hljs-comment"># Collection name</span>
+    data=query_passage_vector, <span class="hljs-comment"># Replace with your query vector</span>
     search_params={
-    "metric_type": "L2",
-    "params": {"nprobe": 10},
-    }, # Search parameters
-    limit=10, # Max. number of search results to return
-    # group_by_field="doc_id", # Group results by document ID
-    output_fields=["doc_id", "passage_id"]
+    <span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;L2&quot;</span>,
+    <span class="hljs-string">&quot;params&quot;</span>: {<span class="hljs-string">&quot;nprobe&quot;</span>: <span class="hljs-number">10</span>},
+    }, <span class="hljs-comment"># Search parameters</span>
+    limit=<span class="hljs-number">10</span>, <span class="hljs-comment"># Max. number of search results to return</span>
+    <span class="hljs-comment"># group_by_field=&quot;doc_id&quot;, # Group results by document ID</span>
+    output_fields=[<span class="hljs-string">&quot;doc_id&quot;</span>, <span class="hljs-string">&quot;passage_id&quot;</span>]
 )
 
-# Retrieve the values in the `doc_id` column
-doc_ids = [result['entity']['doc_id'] for result in res[0]]
+<span class="hljs-comment"># Retrieve the values in the `doc_id` column</span>
+doc_ids = [result[<span class="hljs-string">&#x27;entity&#x27;</span>][<span class="hljs-string">&#x27;doc_id&#x27;</span>] <span class="hljs-keyword">for</span> result <span class="hljs-keyword">in</span> res[<span class="hljs-number">0</span>]]
 
-print(doc_ids)
-```
-
-The output is similar to the following:
-
-```python
-[1, 10, 3, 10, 1, 9, 4, 4, 8, 6]
-```
-
-In the given output, it can be observed that the returned entities contain duplicate `doc_id` values.
-
-__Limitations__
-
-- __Indexing__: This grouping feature works only for collections that are indexed with the __HNSW__, __IVF_FLAT__, or __FLAT__ type. For more information, refer to [In-memory Index](https://milvus.io/docs/index.md#HNSW).
-
-- __Vector__: Currently, grouping search does not support a vector field of the __BINARY_VECTOR__ type. For more information on data types, refer to [Supported data types](https://milvus.io/docs/schema.md#Supported-data-types).
-
-- __Field__: Currently, grouping search allows only for a single column. You cannot specify multiple field names in the `group_by_field` config.  Additionally, grouping search is incompatible with data types of JSON, FLOAT, DOUBLE, ARRAY, or vector fields.
-
-- __Performance Impact__: Be mindful that performance degrades with increasing query vector counts. Using a cluster with 2 CPU cores and 8 GB of memory as an example, the execution time for grouping search increases proportionally with the number of input query vectors.
-
-- __Functionality__: Currently, grouping search is not supported by [range search](https://milvus.io/docs/single-vector-search.md#Range-search), [search iterators](https://milvus.io/docs/with-iterators.md#Search-with-iterator), or [hybrid search](multi-vector-search.md).
-
-## Search parameters
-
-In the above searches except the range search, the default search parameters apply. In normal cases, you do not need to manually set search parameters. 
-
-```python
-# In normal cases, you do not need to set search parameters manually
-# Except for range searches.
+<span class="hljs-built_in">print</span>(doc_ids)
+<button class="copy-code-btn"></button></code></pre>
+<p>The output is similar to the following:</p>
+<pre><code class="language-python">[<span class="hljs-meta">1, 10, 3, 10, 1, 9, 4, 4, 8, 6</span>]
+<button class="copy-code-btn"></button></code></pre>
+<p>In the given output, it can be observed that the returned entities contain duplicate <code>doc_id</code> values.</p>
+<p><strong>Limitations</strong></p>
+<ul>
+<li><p><strong>Indexing</strong>: This grouping feature works only for collections that are indexed with the <strong>HNSW</strong>, <strong>IVF_FLAT</strong>, or <strong>FLAT</strong> type. For more information, refer to <a href="https://milvus.io/docs/index.md#HNSW">In-memory Index</a>.</p></li>
+<li><p><strong>Vector</strong>: Currently, grouping search does not support a vector field of the <strong>BINARY_VECTOR</strong> type. For more information on data types, refer to <a href="https://milvus.io/docs/schema.md#Supported-data-types">Supported data types</a>.</p></li>
+<li><p><strong>Field</strong>: Currently, grouping search allows only for a single column. You cannot specify multiple field names in the <code>group_by_field</code> config.  Additionally, grouping search is incompatible with data types of JSON, FLOAT, DOUBLE, ARRAY, or vector fields.</p></li>
+<li><p><strong>Performance Impact</strong>: Be mindful that performance degrades with increasing query vector counts. Using a cluster with 2 CPU cores and 8 GB of memory as an example, the execution time for grouping search increases proportionally with the number of input query vectors.</p></li>
+<li><p><strong>Functionality</strong>: Currently, grouping search is not supported by <a href="https://milvus.io/docs/single-vector-search.md#Range-search">range search</a>, <a href="https://milvus.io/docs/with-iterators.md#Search-with-iterator">search iterators</a>, or <a href="/docs/multi-vector-search.md">hybrid search</a>.</p></li>
+</ul>
+<h2 id="Search-parameters" class="common-anchor-header">Search parameters
+    <button data-href="#Search-parameters" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>In the above searches except the range search, the default search parameters apply. In normal cases, you do not need to manually set search parameters.</p>
+<pre><code class="language-python"><span class="hljs-comment"># In normal cases, you do not need to set search parameters manually</span>
+<span class="hljs-comment"># Except for range searches.</span>
 search_parameters = {
-    'metric_type': 'L2',
-    'params': {
-        'nprobe': 10,
-        'level': 1，
-        'radius': 1.0
-        'range_filter': 0.8
+    <span class="hljs-string">&#x27;metric_type&#x27;</span>: <span class="hljs-string">&#x27;L2&#x27;</span>,
+    <span class="hljs-string">&#x27;params&#x27;</span>: {
+        <span class="hljs-string">&#x27;nprobe&#x27;</span>: <span class="hljs-number">10</span>,
+        <span class="hljs-string">&#x27;level&#x27;</span>: <span class="hljs-number">1</span>，
+        <span class="hljs-string">&#x27;radius&#x27;</span>: <span class="hljs-number">1.0</span>
+        <span class="hljs-string">&#x27;range_filter&#x27;</span>: <span class="hljs-number">0.8</span>
     }
 }
-```
-
-The following table lists all possible settings in the search parameters.
-
-|  __Parameter Name__    |  __Parameter Description__                                                                                                                                      |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  `metric_type`         |  How to measure similarity between vector embeddings.<br/> Possible values are `IP`, `L2`, `COSINE`, `JACCARD`, and `HAMMING`, and defaults to that of the loaded index file.      |
-|  `params.nprobe`       |  Number of units to query during the search.<br/> The value falls in the range [1, nlist<sub>[1]</sub>].                                                     |
-|  `params.level`        |  Search precision level.<br/> Possible values are `1`, `2`, and `3`, and defaults to `1`. Higher values yield more accurate results but slower performance.  |
-|  `params.radius`       |  Defines the outer boundary of your search space. Only vectors that are within this distance from the query vector are considered potential matches.<br/>The value range is determined by the `metric_type` parameter. For instance, if `metric_type` is set to `L2`, the valid value range is `[0, ∞]`. If `metric_type` is set to `COSINE`, the valid value range is `[-1, 1]`. For more information, refer to [Similarity Metrics](metric.md).                              |
-|  `params.range_filter` |  While `radius` sets the outer limit of the search, `range_filter` can be optionally used to define an inner boundary, creating a distance range within which vectors must fall to be considered matches.<br/>The value range is determined by the `metric_type` parameter. For instance, if `metric_type` is set to `L2`, the valid value range is `[0, ∞]`. If `metric_type` is set to `COSINE`, the valid value range is `[-1, 1]`. For more information, refer to [Similarity Metrics](metric.md).          |
-
+<button class="copy-code-btn"></button></code></pre>
+<p>The following table lists all possible settings in the search parameters.</p>
+<table>
+<thead>
+<tr><th><strong>Parameter Name</strong></th><th><strong>Parameter Description</strong></th></tr>
+</thead>
+<tbody>
+<tr><td><code>metric_type</code></td><td>How to measure similarity between vector embeddings.<br/> Possible values are <code>IP</code>, <code>L2</code>, <code>COSINE</code>, <code>JACCARD</code>, and <code>HAMMING</code>, and defaults to that of the loaded index file.</td></tr>
+<tr><td><code>params.nprobe</code></td><td>Number of units to query during the search.<br/> The value falls in the range [1, nlist<sub>[1]</sub>].</td></tr>
+<tr><td><code>params.level</code></td><td>Search precision level.<br/> Possible values are <code>1</code>, <code>2</code>, and <code>3</code>, and defaults to <code>1</code>. Higher values yield more accurate results but slower performance.</td></tr>
+<tr><td><code>params.radius</code></td><td>Defines the outer boundary of your search space. Only vectors that are within this distance from the query vector are considered potential matches.<br/>The value range is determined by the <code>metric_type</code> parameter. For instance, if <code>metric_type</code> is set to <code>L2</code>, the valid value range is <code>[0, ∞]</code>. If <code>metric_type</code> is set to <code>COSINE</code>, the valid value range is <code>[-1, 1]</code>. For more information, refer to <a href="/docs/metric.md">Similarity Metrics</a>.</td></tr>
+<tr><td><code>params.range_filter</code></td><td>While <code>radius</code> sets the outer limit of the search, <code>range_filter</code> can be optionally used to define an inner boundary, creating a distance range within which vectors must fall to be considered matches.<br/>The value range is determined by the <code>metric_type</code> parameter. For instance, if <code>metric_type</code> is set to <code>L2</code>, the valid value range is <code>[0, ∞]</code>. If <code>metric_type</code> is set to <code>COSINE</code>, the valid value range is <code>[-1, 1]</code>. For more information, refer to <a href="/docs/metric.md">Similarity Metrics</a>.</td></tr>
+</tbody>
+</table>
 <div class="admonition note">
-
 <p><strong>notes</strong></p>
-
 <p>[1] Number of cluster units after indexing. When indexing a collection, Milvus sub-divides the vector data into multiple cluster units, the number of which varies with the actual index settings.</p>
 <p>[2] Number of entities to return in a search.</p>
-
 </div>
-

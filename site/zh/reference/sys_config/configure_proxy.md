@@ -6,18 +6,42 @@ summary: Learn how to configure proxy of Milvus.
 title: Proxy-related Configurations
 ---
 
-# Proxy-related Configurations
-
-This topic introduces the proxy-related configurations of Milvus.
-
-Proxy is the access layer of the system and endpoint to users. It validates client requests and reduces the returned results.
-
-Under this section, you can configure proxy port, system limits, etc.
-
-
-## `proxy.port`
-
-<table id="proxy.port">
+<h1 id="Proxy-related-Configurations" class="common-anchor-header">Proxy-related Configurations
+    <button data-href="#Proxy-related-Configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic introduces the proxy-related configurations of Milvus.</p>
+<p>Proxy is the access layer of the system and endpoint to users. It validates client requests and reduces the returned results.</p>
+<p>Under this section, you can configure proxy port, system limits, etc.</p>
+<h2 id="proxyport" class="common-anchor-header"><code>proxy.port</code>
+    <button data-href="#proxyport" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.port">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -31,11 +55,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-
-## `proxy.grpc.serverMaxRecvSize`
-
-<table id="proxy.grpc.serverMaxRecvSize">
+<h2 id="proxygrpcserverMaxRecvSize" class="common-anchor-header"><code>proxy.grpc.serverMaxRecvSize</code>
+    <button data-href="#proxygrpcserverMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.grpc.serverMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -52,11 +88,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-
-## `proxy.grpc.serverMaxSendSize`
-
-<table id="proxy.grpc.serverMaxSendSize">
+<h2 id="proxygrpcserverMaxSendSize" class="common-anchor-header"><code>proxy.grpc.serverMaxSendSize</code>
+    <button data-href="#proxygrpcserverMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.grpc.serverMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -73,10 +121,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.grpc.clientMaxRecvSize`
-
-<table id="proxy.grpc.clientMaxRecvSize">
+<h2 id="proxygrpcclientMaxRecvSize" class="common-anchor-header"><code>proxy.grpc.clientMaxRecvSize</code>
+    <button data-href="#proxygrpcclientMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.grpc.clientMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -93,11 +154,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-
-## `proxy.grpc.clientMaxSendSize`
-
-<table id="proxy.grpc.clientMaxSendSize">
+<h2 id="proxygrpcclientMaxSendSize" class="common-anchor-header"><code>proxy.grpc.clientMaxSendSize</code>
+    <button data-href="#proxygrpcclientMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.grpc.clientMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -114,11 +187,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-
-## `proxy.timeTickInterval`
-
-<table id="proxy.timeTickInterval">
+<h2 id="proxytimeTickInterval" class="common-anchor-header"><code>proxy.timeTickInterval</code>
+    <button data-href="#proxytimeTickInterval" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.timeTickInterval">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -135,10 +220,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.msgStream.timeTick.bufSize`
-
-<table id="proxy.msgStream.timeTick.bufSize">
+<h2 id="proxymsgStreamtimeTickbufSize" class="common-anchor-header"><code>proxy.msgStream.timeTick.bufSize</code>
+    <button data-href="#proxymsgStreamtimeTickbufSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.msgStream.timeTick.bufSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -154,10 +252,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.maxNameLength`
-
-<table id="proxy.maxNameLength">
+<h2 id="proxymaxNameLength" class="common-anchor-header"><code>proxy.maxNameLength</code>
+    <button data-href="#proxymaxNameLength" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.maxNameLength">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -171,10 +282,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.maxFieldNum`
-
-<table id="proxy.maxFieldNum">
+<h2 id="proxymaxFieldNum" class="common-anchor-header"><code>proxy.maxFieldNum</code>
+    <button data-href="#proxymaxFieldNum" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.maxFieldNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -188,10 +312,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.maxDimension`
-
-<table id="proxy.maxDimension">
+<h2 id="proxymaxDimension" class="common-anchor-header"><code>proxy.maxDimension</code>
+    <button data-href="#proxymaxDimension" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.maxDimension">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -205,10 +342,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.maxShardNum`
-
-<table id="proxy.maxShardNum">
+<h2 id="proxymaxShardNum" class="common-anchor-header"><code>proxy.maxShardNum</code>
+    <button data-href="#proxymaxShardNum" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.maxShardNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -222,10 +372,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.maxTaskNum`
-
-<table id="proxy.maxShardNum">
+<h2 id="proxymaxTaskNum" class="common-anchor-header"><code>proxy.maxTaskNum</code>
+    <button data-href="#proxymaxTaskNum" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.maxShardNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -239,10 +402,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.maxVectorFieldNum`
-
-<table id="proxy.maxVectorFieldNum">
+<h2 id="proxymaxVectorFieldNum" class="common-anchor-header"><code>proxy.maxVectorFieldNum</code>
+    <button data-href="#proxymaxVectorFieldNum" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.maxVectorFieldNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -256,10 +432,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.enable`
-
-<table id="proxy.accessLog.enable">
+<h2 id="proxyaccessLogenable" class="common-anchor-header"><code>proxy.accessLog.enable</code>
+    <button data-href="#proxyaccessLogenable" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.enable">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -273,10 +462,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.filename`
-
-<table id="proxy.accessLog.filename">
+<h2 id="proxyaccessLogfilename" class="common-anchor-header"><code>proxy.accessLog.filename</code>
+    <button data-href="#proxyaccessLogfilename" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.filename">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -290,10 +492,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.localPath`
-
-<table id="proxy.accessLog.localPath">
+<h2 id="proxyaccessLoglocalPath" class="common-anchor-header"><code>proxy.accessLog.localPath</code>
+    <button data-href="#proxyaccessLoglocalPath" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.localPath">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -307,10 +522,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.maxSize`
-
-<table id="proxy.accessLog.maxSize">
+<h2 id="proxyaccessLogmaxSize" class="common-anchor-header"><code>proxy.accessLog.maxSize</code>
+    <button data-href="#proxyaccessLogmaxSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.maxSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -327,10 +555,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.rotatedTime`
-
-<table id="proxy.accessLog.rotatedTime">
+<h2 id="proxyaccessLogrotatedTime" class="common-anchor-header"><code>proxy.accessLog.rotatedTime</code>
+    <button data-href="#proxyaccessLogrotatedTime" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.rotatedTime">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -347,10 +588,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.maxBackups`
-
-<table id="proxy.accessLog.maxBackups">
+<h2 id="proxyaccessLogmaxBackups" class="common-anchor-header"><code>proxy.accessLog.maxBackups</code>
+    <button data-href="#proxyaccessLogmaxBackups" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.maxBackups">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -364,10 +618,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.minioEnable`
-
-<table id="proxy.accessLog.minioEnable">
+<h2 id="proxyaccessLogminioEnable" class="common-anchor-header"><code>proxy.accessLog.minioEnable</code>
+    <button data-href="#proxyaccessLogminioEnable" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.minioEnable">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -381,10 +648,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.remotePath`
-
-<table id="proxy.accessLog.remotePath">
+<h2 id="proxyaccessLogremotePath" class="common-anchor-header"><code>proxy.accessLog.remotePath</code>
+    <button data-href="#proxyaccessLogremotePath" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.remotePath">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -398,10 +678,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.remoteMaxTime`
-
-<table id="proxy.accessLog.remoteMaxTime">
+<h2 id="proxyaccessLogremoteMaxTime" class="common-anchor-header"><code>proxy.accessLog.remoteMaxTime</code>
+    <button data-href="#proxyaccessLogremoteMaxTime" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.remoteMaxTime">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -415,10 +708,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.base.format`
-
-<table id="proxy.accessLog.base.format">
+<h2 id="proxyaccessLogbaseformat" class="common-anchor-header"><code>proxy.accessLog.base.format</code>
+    <button data-href="#proxyaccessLogbaseformat" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.base.format">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -427,15 +733,28 @@ Under this section, you can configure proxy port, system limits, etc.
   </thead>
   <tbody>
     <tr>
-      <td>The log format with dynamic metrics. This format applies to all methods by default. For more information about metrics, see <a href="configure_access_logs.md">Configure Access Logs</a>.</td>
+      <td>The log format with dynamic metrics. This format applies to all methods by default. For more information about metrics, see <a href="/docs/configure_access_logs.md">Configure Access Logs</a>.</td>
       <td>Empty string</td>
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.<custom_formatter_name>.format`
-
-<table id="proxy.accessLog.<custom_formatter_name>.format">
+<h2 id="proxyaccessLogcustomformatternameformat" class="common-anchor-header"><code>proxy.accessLog.&lt;custom_formatter_name&gt;.format</code>
+    <button data-href="#proxyaccessLogcustomformatternameformat" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.<custom_formatter_name>.format">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -449,10 +768,23 @@ Under this section, you can configure proxy port, system limits, etc.
     </tr>
   </tbody>
 </table>
-
-## `proxy.accessLog.<custom_formatter_name>.methods`
-
-<table id="proxy.accessLog.<custom_formatter_name>.methods">
+<h2 id="proxyaccessLogcustomformatternamemethods" class="common-anchor-header"><code>proxy.accessLog.&lt;custom_formatter_name&gt;.methods</code>
+    <button data-href="#proxyaccessLogcustomformatternamemethods" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="proxy.accessLog.<custom_formatter_name>.methods">
   <thead>
     <tr>
       <th class="width80">Description</th>

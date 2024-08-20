@@ -5,1587 +5,1521 @@ summary: This guide demonstrates how to get entities by ID and conduct scalar fi
 title: Get & Scalar Query
 ---
 
-# Get & Scalar Query
-
-This guide demonstrates how to get entities by ID and conduct scalar filtering. A scalar filtering retrieves entities that match the specified filtering conditions.
-
-## Overview
-
-A scalar query filters entities in a collection based on a defined condition using boolean expressions. The query result is a set of entities that match the defined condition. Unlike a vector search, which identifies the closest vector to a given vector in a collection, queries filter entities based on specific criteria.
-
-In Milvus, __a filter is always a string compising field names joined by operators__. In this guide, you will find various filter examples. To learn more about the operator details, go to the [Reference](https://milvus.io/docs/get-and-scalar-query.md#Reference-on-scalar-filters) section.
-
-## Preparations
-
-The following steps repurpose the code to connect to Milvus, quickly set up a collection, and insert over 1,000 randomly generated entities into the collection.
-
-### Step 1: Create a collection
-
-<div class="language-python">
-
-Use [`MilvusClient`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md) to connect to the Milvus server and [`create_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md) to create a collection.
-
+<h1 id="Get--Scalar-Query" class="common-anchor-header">Get &amp; Scalar Query
+    <button data-href="#Get--Scalar-Query" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This guide demonstrates how to get entities by ID and conduct scalar filtering. A scalar filtering retrieves entities that match the specified filtering conditions.</p>
+<h2 id="Overview" class="common-anchor-header">Overview
+    <button data-href="#Overview" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>A scalar query filters entities in a collection based on a defined condition using boolean expressions. The query result is a set of entities that match the defined condition. Unlike a vector search, which identifies the closest vector to a given vector in a collection, queries filter entities based on specific criteria.</p>
+<p>In Milvus, <strong>a filter is always a string compising field names joined by operators</strong>. In this guide, you will find various filter examples. To learn more about the operator details, go to the <a href="https://milvus.io/docs/get-and-scalar-query.md#Reference-on-scalar-filters">Reference</a> section.</p>
+<h2 id="Preparations" class="common-anchor-header">Preparations
+    <button data-href="#Preparations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>The following steps repurpose the code to connect to Milvus, quickly set up a collection, and insert over 1,000 randomly generated entities into the collection.</p>
+<h3 id="Step-1-Create-a-collection" class="common-anchor-header">Step 1: Create a collection</h3><div class="language-python">
+<p>Use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md"><code>MilvusClient</code></a> to connect to the Milvus server and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md"><code>create_collection()</code></a> to create a collection.</p>
 </div>
-
 <div class="language-java">
-
-Use [`MilvusClientV2`](https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md) to connect to the Milvus server and [`createCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md) to create a collection.
-
+<p>Use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md"><code>MilvusClientV2</code></a> to connect to the Milvus server and <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md"><code>createCollection()</code></a> to create a collection.</p>
 </div>
-
 <div class="language-javascript">
-
-Use [`MilvusClient`](https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md) to connect to the Milvus server and [`createCollection()`](https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md) to create a collection.
-
+<p>Use <a href="https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md"><code>MilvusClient</code></a> to connect to the Milvus server and <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md"><code>createCollection()</code></a> to create a collection.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> MilvusClient
 
-```python
-from pymilvus import MilvusClient
-
-# 1. Set up a Milvus client
+<span class="hljs-comment"># 1. Set up a Milvus client</span>
 client = MilvusClient(
-    uri="http://localhost:19530"
+    uri=<span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 )
 
-# 2. Create a collection
+<span class="hljs-comment"># 2. Create a collection</span>
 client.create_collection(
-    collection_name="quick_setup",
-    dimension=5,
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    dimension=<span class="hljs-number">5</span>,
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-type">String</span> <span class="hljs-variable">CLUSTER_ENDPOINT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;http://localhost:19530&quot;</span>;
 
-```java
-String CLUSTER_ENDPOINT = "http://localhost:19530";
-
-// 1. Connect to Milvus server
-ConnectConfig connectConfig = ConnectConfig.builder()
+<span class="hljs-comment">// 1. Connect to Milvus server</span>
+<span class="hljs-type">ConnectConfig</span> <span class="hljs-variable">connectConfig</span> <span class="hljs-operator">=</span> ConnectConfig.builder()
     .uri(CLUSTER_ENDPOINT)
     .build();
 
-MilvusClientV2 client = new MilvusClientV2(connectConfig);  
+<span class="hljs-type">MilvusClientV2</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClientV2</span>(connectConfig);  
 
-// 2. Create a collection in quick setup mode
-CreateCollectionReq quickSetupReq = CreateCollectionReq.builder()
-    .collectionName("quick_setup")
-    .dimension(5)
-    .metricType("IP")
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-type">CreateCollectionReq</span> <span class="hljs-variable">quickSetupReq</span> <span class="hljs-operator">=</span> CreateCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .dimension(<span class="hljs-number">5</span>)
+    .metricType(<span class="hljs-string">&quot;IP&quot;</span>)
     .build();
 
 client.createCollection(quickSetupReq);
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> { <span class="hljs-title class_">MilvusClient</span>, <span class="hljs-title class_">DataType</span>, sleep } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&quot;@zilliz/milvus2-sdk-node&quot;</span>)
 
-```javascript
-const { MilvusClient, DataType, sleep } = require("@zilliz/milvus2-sdk-node")
+<span class="hljs-keyword">const</span> address = <span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 
-const address = "http://localhost:19530"
+<span class="hljs-comment">// 1. Set up a Milvus Client</span>
+client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClient</span>({address}); 
 
-// 1. Set up a Milvus Client
-client = new MilvusClient({address}); 
-
-// 2. Create a collection in quick setup mode
-await client.createCollection({
-    collection_name: "quick_setup",
-    dimension: 5,
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">dimension</span>: <span class="hljs-number">5</span>,
 }); 
-```
-
-### Step 2: Insert randomly generated entities
-
-<div class="language-python">
-
-Use [`insert()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/insert.md) to insert entities into the collection.
-
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Step-2-Insert-randomly-generated-entities" class="common-anchor-header">Step 2: Insert randomly generated entities</h3><div class="language-python">
+<p>Use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/insert.md"><code>insert()</code></a> to insert entities into the collection.</p>
 </div>
-
 <div class="language-java">
-
-Use [`insert()`](https://milvus.io/api-reference/java/v2.4.x/v2/Vector/insert.md) to insert entities into the collection.
-
+<p>Use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Vector/insert.md"><code>insert()</code></a> to insert entities into the collection.</p>
 </div>
-
 <div class="language-javascript">
-
-Use [`insert()`](https://milvus.io/api-reference/node/v2.4.x/Vector/insert.md) to insert entities into the collection.
-
+<p>Use <a href="https://milvus.io/api-reference/node/v2.4.x/Vector/insert.md"><code>insert()</code></a> to insert entities into the collection.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 3. Insert randomly generated vectors 
-colors = ["green", "blue", "yellow", "red", "black", "white", "purple", "pink", "orange", "brown", "grey"]
+<pre><code class="language-python"><span class="hljs-comment"># 3. Insert randomly generated vectors </span>
+colors = [<span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;yellow&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;black&quot;</span>, <span class="hljs-string">&quot;white&quot;</span>, <span class="hljs-string">&quot;purple&quot;</span>, <span class="hljs-string">&quot;pink&quot;</span>, <span class="hljs-string">&quot;orange&quot;</span>, <span class="hljs-string">&quot;brown&quot;</span>, <span class="hljs-string">&quot;grey&quot;</span>]
 data = []
 
-for i in range(1000):
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):
     current_color = random.choice(colors)
-    current_tag = random.randint(1000, 9999)
+    current_tag = random.randint(<span class="hljs-number">1000</span>, <span class="hljs-number">9999</span>)
     data.append({
-        "id": i,
-        "vector": [ random.uniform(-1, 1) for _ in range(5) ],
-        "color": current_color,
-        "tag": current_tag,
-        "color_tag": f"{current_color}_{str(current_tag)}"
+        <span class="hljs-string">&quot;id&quot;</span>: i,
+        <span class="hljs-string">&quot;vector&quot;</span>: [ random.uniform(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ],
+        <span class="hljs-string">&quot;color&quot;</span>: current_color,
+        <span class="hljs-string">&quot;tag&quot;</span>: current_tag,
+        <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">f&quot;<span class="hljs-subst">{current_color}</span>_<span class="hljs-subst">{<span class="hljs-built_in">str</span>(current_tag)}</span>&quot;</span>
     })
 
-print(data[0])
+<span class="hljs-built_in">print</span>(data[<span class="hljs-number">0</span>])
 
-# Output
-#
-# {
-#     "id": 0,
-#     "vector": [
-#         0.7371107800002366,
-#         -0.7290389773227746,
-#         0.38367002049157417,
-#         0.36996000494220627,
-#         -0.3641898951462792
-#     ],
-#     "color": "yellow",
-#     "tag": 6781,
-#     "color_tag": "yellow_6781"
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;id&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;vector&quot;: [</span>
+<span class="hljs-comment">#         0.7371107800002366,</span>
+<span class="hljs-comment">#         -0.7290389773227746,</span>
+<span class="hljs-comment">#         0.38367002049157417,</span>
+<span class="hljs-comment">#         0.36996000494220627,</span>
+<span class="hljs-comment">#         -0.3641898951462792</span>
+<span class="hljs-comment">#     ],</span>
+<span class="hljs-comment">#     &quot;color&quot;: &quot;yellow&quot;,</span>
+<span class="hljs-comment">#     &quot;tag&quot;: 6781,</span>
+<span class="hljs-comment">#     &quot;color_tag&quot;: &quot;yellow_6781&quot;</span>
+<span class="hljs-comment"># }</span>
 
 res = client.insert(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=data
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "insert_count": 1000,
-#     "ids": [
-#         0,
-#         1,
-#         2,
-#         3,
-#         4,
-#         5,
-#         6,
-#         7,
-#         8,
-#         9,
-#         "(990 more items hidden)"
-#     ]
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;insert_count&quot;: 1000,</span>
+<span class="hljs-comment">#     &quot;ids&quot;: [</span>
+<span class="hljs-comment">#         0,</span>
+<span class="hljs-comment">#         1,</span>
+<span class="hljs-comment">#         2,</span>
+<span class="hljs-comment">#         3,</span>
+<span class="hljs-comment">#         4,</span>
+<span class="hljs-comment">#         5,</span>
+<span class="hljs-comment">#         6,</span>
+<span class="hljs-comment">#         7,</span>
+<span class="hljs-comment">#         8,</span>
+<span class="hljs-comment">#         9,</span>
+<span class="hljs-comment">#         &quot;(990 more items hidden)&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 3. Insert randomly generated vectors into the collection</span>
+<span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">String</span>&gt; colors = <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;yellow&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;black&quot;</span>, <span class="hljs-string">&quot;white&quot;</span>, <span class="hljs-string">&quot;purple&quot;</span>, <span class="hljs-string">&quot;pink&quot;</span>, <span class="hljs-string">&quot;orange&quot;</span>, <span class="hljs-string">&quot;brown&quot;</span>, <span class="hljs-string">&quot;grey&quot;</span>);
+<span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>&gt; data = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
 
-```java
-// 3. Insert randomly generated vectors into the collection
-List<String> colors = Arrays.asList("green", "blue", "yellow", "red", "black", "white", "purple", "pink", "orange", "brown", "grey");
-List<JSONObject> data = new ArrayList<>();
-
-for (int i=0; i<1000; i++) {
-    Random rand = new Random();
-    String current_color = colors.get(rand.nextInt(colors.size()-1));
-    int current_tag = rand.nextInt(8999) + 1000;
-    JSONObject row = new JSONObject();
-    row.put("id", Long.valueOf(i));
-    row.put("vector", Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-    row.put("color", current_color);
-    row.put("tag", current_tag);
-    row.put("color_tag", current_color + '_' + String.valueOf(rand.nextInt(8999) + 1000));
-    data.add(row);
+<span class="hljs-keyword">for</span> (int i=<span class="hljs-number">0</span>; i&lt;<span class="hljs-number">1000</span>; i++) {
+    <span class="hljs-title class_">Random</span> rand = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();
+    <span class="hljs-title class_">String</span> current_color = colors.<span class="hljs-title function_">get</span>(rand.<span class="hljs-title function_">nextInt</span>(colors.<span class="hljs-title function_">size</span>()-<span class="hljs-number">1</span>));
+    int current_tag = rand.<span class="hljs-title function_">nextInt</span>(<span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>;
+    <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span> row = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>();
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-title class_">Long</span>.<span class="hljs-title function_">valueOf</span>(i));
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;vector&quot;</span>, <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>()));
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;color&quot;</span>, current_color);
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;tag&quot;</span>, current_tag);
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;color_tag&quot;</span>, current_color + <span class="hljs-string">&#x27;_&#x27;</span> + <span class="hljs-title class_">String</span>.<span class="hljs-title function_">valueOf</span>(rand.<span class="hljs-title function_">nextInt</span>(<span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>));
+    data.<span class="hljs-title function_">add</span>(row);
 }
 
-InsertReq insertReq = InsertReq.builder()
-    .collectionName("quick_setup")
-    .data(data)
-    .build();
+<span class="hljs-title class_">InsertReq</span> insertReq = <span class="hljs-title class_">InsertReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(data)
+    .<span class="hljs-title function_">build</span>();
 
-InsertResp insertResp = client.insert(insertReq);
+<span class="hljs-title class_">InsertResp</span> insertResp = client.<span class="hljs-title function_">insert</span>(insertReq);
 
-System.out.println(JSONObject.toJSON(insertResp));
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(insertResp));
 
-// Output:
-// {"insertCnt": 1000}
-```
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;insertCnt&quot;: 1000}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 3. Insert randomly generated vectors</span>
+<span class="hljs-keyword">const</span> colors = [<span class="hljs-string">&quot;green&quot;</span>, <span class="hljs-string">&quot;blue&quot;</span>, <span class="hljs-string">&quot;yellow&quot;</span>, <span class="hljs-string">&quot;red&quot;</span>, <span class="hljs-string">&quot;black&quot;</span>, <span class="hljs-string">&quot;white&quot;</span>, <span class="hljs-string">&quot;purple&quot;</span>, <span class="hljs-string">&quot;pink&quot;</span>, <span class="hljs-string">&quot;orange&quot;</span>, <span class="hljs-string">&quot;brown&quot;</span>, <span class="hljs-string">&quot;grey&quot;</span>]
+<span class="hljs-keyword">var</span> data = []
 
-```javascript
-// 3. Insert randomly generated vectors
-const colors = ["green", "blue", "yellow", "red", "black", "white", "purple", "pink", "orange", "brown", "grey"]
-var data = []
-
-for (let i = 0; i < 1000; i++) {
-    current_color = colors[Math.floor(Math.random() * colors.length)]
-    current_tag = Math.floor(Math.random() * 8999 + 1000)
-    data.push({
-        "id": i,
-        "vector": [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-        "color": current_color,
-        "tag": current_tag,
-        "color_tag": `${current_color}_${current_tag}`
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) {
+    current_color = colors[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * colors.<span class="hljs-property">length</span>)]
+    current_tag = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">8999</span> + <span class="hljs-number">1000</span>)
+    data.<span class="hljs-title function_">push</span>({
+        <span class="hljs-string">&quot;id&quot;</span>: i,
+        <span class="hljs-string">&quot;vector&quot;</span>: [<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()],
+        <span class="hljs-string">&quot;color&quot;</span>: current_color,
+        <span class="hljs-string">&quot;tag&quot;</span>: current_tag,
+        <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">`<span class="hljs-subst">${current_color}</span>_<span class="hljs-subst">${current_tag}</span>`</span>
     })
 }
 
-console.log(data[0])
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(data[<span class="hljs-number">0</span>])
 
-// Output
-// 
-// {
-//   id: 0,
-//   vector: [
-//     0.16022394821966035,
-//     0.6514875214491056,
-//     0.18294484964044666,
-//     0.30227694168725394,
-//     0.47553087493572255
-//   ],
-//   color: 'blue',
-//   tag: 8907,
-//   color_tag: 'blue_8907'
-// }
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// {</span>
+<span class="hljs-comment">//   id: 0,</span>
+<span class="hljs-comment">//   vector: [</span>
+<span class="hljs-comment">//     0.16022394821966035,</span>
+<span class="hljs-comment">//     0.6514875214491056,</span>
+<span class="hljs-comment">//     0.18294484964044666,</span>
+<span class="hljs-comment">//     0.30227694168725394,</span>
+<span class="hljs-comment">//     0.47553087493572255</span>
+<span class="hljs-comment">//   ],</span>
+<span class="hljs-comment">//   color: &#x27;blue&#x27;,</span>
+<span class="hljs-comment">//   tag: 8907,</span>
+<span class="hljs-comment">//   color_tag: &#x27;blue_8907&#x27;</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">// </span>
 
-res = await client.insert({
-    collection_name: "quick_setup",
-    data: data
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">insert</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: data
 })
 
-console.log(res.insert_cnt)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">insert_cnt</span>)
 
-// Output
-// 
-// 1000
-// 
-```
-
-### Step 3: Create partitions and insert more entities
-
-<div class="language-python">
-
-Use [`create_partition()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/create_partition.md) to create partitions and [`insert()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/insert.md) to insert more entities into the collection.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// 1000</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Step-3-Create-partitions-and-insert-more-entities" class="common-anchor-header">Step 3: Create partitions and insert more entities</h3><div class="language-python">
+<p>Use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/create_partition.md"><code>create_partition()</code></a> to create partitions and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/insert.md"><code>insert()</code></a> to insert more entities into the collection.</p>
 </div>
-
 <div class="language-java">
-
-Use [`createPartition()`](https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/createPartition.md) to create partitions and [`insert()`](https://milvus.io/api-reference/java/v2.4.x/v2/Vector/insert.md) to insert more entities into the collection.
-
+<p>Use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/createPartition.md"><code>createPartition()</code></a> to create partitions and <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Vector/insert.md"><code>insert()</code></a> to insert more entities into the collection.</p>
 </div>
-
 <div class="language-javascript">
-
-Use [`createPartition()`](https://milvus.io/api-reference/node/v2.4.x/Partitions/createPartition.md) to create partitions and [`insert()`](https://milvus.io/api-reference/node/v2.4.x/Vector/insert.md) to insert more entities into the collection.
-
+<p>Use <a href="https://milvus.io/api-reference/node/v2.4.x/Partitions/createPartition.md"><code>createPartition()</code></a> to create partitions and <a href="https://milvus.io/api-reference/node/v2.4.x/Vector/insert.md"><code>insert()</code></a> to insert more entities into the collection.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 4. Create partitions and insert more entities
+<pre><code class="language-python"><span class="hljs-comment"># 4. Create partitions and insert more entities</span>
 client.create_partition(
-    collection_name="quick_setup",
-    partition_name="partitionA"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionA&quot;</span>
 )
 
 client.create_partition(
-    collection_name="quick_setup",
-    partition_name="partitionB"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionB&quot;</span>
 )
 
 data = []
 
-for i in range(1000, 1500):
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>, <span class="hljs-number">1500</span>):
     current_color = random.choice(colors)
     data.append({
-        "id": i,
-        "vector": [ random.uniform(-1, 1) for _ in range(5) ],
-        "color": current_color,
-        "tag": current_tag,
-        "color_tag": f"{current_color}_{str(current_tag)}"
+        <span class="hljs-string">&quot;id&quot;</span>: i,
+        <span class="hljs-string">&quot;vector&quot;</span>: [ random.uniform(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ],
+        <span class="hljs-string">&quot;color&quot;</span>: current_color,
+        <span class="hljs-string">&quot;tag&quot;</span>: current_tag,
+        <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">f&quot;<span class="hljs-subst">{current_color}</span>_<span class="hljs-subst">{<span class="hljs-built_in">str</span>(current_tag)}</span>&quot;</span>
     })
 
 res = client.insert(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=data,
-    partition_name="partitionA"
+    partition_name=<span class="hljs-string">&quot;partitionA&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "insert_count": 500,
-#     "ids": [
-#         1000,
-#         1001,
-#         1002,
-#         1003,
-#         1004,
-#         1005,
-#         1006,
-#         1007,
-#         1008,
-#         1009,
-#         "(490 more items hidden)"
-#     ]
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;insert_count&quot;: 500,</span>
+<span class="hljs-comment">#     &quot;ids&quot;: [</span>
+<span class="hljs-comment">#         1000,</span>
+<span class="hljs-comment">#         1001,</span>
+<span class="hljs-comment">#         1002,</span>
+<span class="hljs-comment">#         1003,</span>
+<span class="hljs-comment">#         1004,</span>
+<span class="hljs-comment">#         1005,</span>
+<span class="hljs-comment">#         1006,</span>
+<span class="hljs-comment">#         1007,</span>
+<span class="hljs-comment">#         1008,</span>
+<span class="hljs-comment">#         1009,</span>
+<span class="hljs-comment">#         &quot;(490 more items hidden)&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
 
 data = []
 
-for i in range(1500, 2000):
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1500</span>, <span class="hljs-number">2000</span>):
     current_color = random.choice(colors)
     data.append({
-        "id": i,
-        "vector": [ random.uniform(-1, 1) for _ in range(5) ],
-        "color": current_color,
-        "tag": current_tag,
-        "color_tag": f"{current_color}_{str(current_tag)}"
+        <span class="hljs-string">&quot;id&quot;</span>: i,
+        <span class="hljs-string">&quot;vector&quot;</span>: [ random.uniform(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ],
+        <span class="hljs-string">&quot;color&quot;</span>: current_color,
+        <span class="hljs-string">&quot;tag&quot;</span>: current_tag,
+        <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">f&quot;<span class="hljs-subst">{current_color}</span>_<span class="hljs-subst">{<span class="hljs-built_in">str</span>(current_tag)}</span>&quot;</span>
     })
 
 res = client.insert(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
     data=data,
-    partition_name="partitionB"
+    partition_name=<span class="hljs-string">&quot;partitionB&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "insert_count": 500,
-#     "ids": [
-#         1500,
-#         1501,
-#         1502,
-#         1503,
-#         1504,
-#         1505,
-#         1506,
-#         1507,
-#         1508,
-#         1509,
-#         "(490 more items hidden)"
-#     ]
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;insert_count&quot;: 500,</span>
+<span class="hljs-comment">#     &quot;ids&quot;: [</span>
+<span class="hljs-comment">#         1500,</span>
+<span class="hljs-comment">#         1501,</span>
+<span class="hljs-comment">#         1502,</span>
+<span class="hljs-comment">#         1503,</span>
+<span class="hljs-comment">#         1504,</span>
+<span class="hljs-comment">#         1505,</span>
+<span class="hljs-comment">#         1506,</span>
+<span class="hljs-comment">#         1507,</span>
+<span class="hljs-comment">#         1508,</span>
+<span class="hljs-comment">#         1509,</span>
+<span class="hljs-comment">#         &quot;(490 more items hidden)&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 4. Create partitions and insert some more data</span>
+<span class="hljs-title class_">CreatePartitionReq</span> createPartitionReq = <span class="hljs-title class_">CreatePartitionReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">partitionName</span>(<span class="hljs-string">&quot;partitionA&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-```java
-// 4. Create partitions and insert some more data
-CreatePartitionReq createPartitionReq = CreatePartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionA")
-    .build();
+client.<span class="hljs-title function_">createPartition</span>(createPartitionReq);
 
-client.createPartition(createPartitionReq);
+createPartitionReq = <span class="hljs-title class_">CreatePartitionReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">partitionName</span>(<span class="hljs-string">&quot;partitionB&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-createPartitionReq = CreatePartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionB")
-    .build();
+client.<span class="hljs-title function_">createPartition</span>(createPartitionReq);
 
-client.createPartition(createPartitionReq);
+data.<span class="hljs-title function_">clear</span>();
 
-data.clear();
-
-for (int i=1000; i<1500; i++) {
-    Random rand = new Random();
-    String current_color = colors.get(rand.nextInt(colors.size()-1));
-    int current_tag = rand.nextInt(8999) + 1000;
-    JSONObject row = new JSONObject();
-    row.put("id", Long.valueOf(i));
-    row.put("vector", Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-    row.put("color", current_color);
-    row.put("tag", current_tag);
-    data.add(row);
+<span class="hljs-keyword">for</span> (int i=<span class="hljs-number">1000</span>; i&lt;<span class="hljs-number">1500</span>; i++) {
+    <span class="hljs-title class_">Random</span> rand = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();
+    <span class="hljs-title class_">String</span> current_color = colors.<span class="hljs-title function_">get</span>(rand.<span class="hljs-title function_">nextInt</span>(colors.<span class="hljs-title function_">size</span>()-<span class="hljs-number">1</span>));
+    int current_tag = rand.<span class="hljs-title function_">nextInt</span>(<span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>;
+    <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span> row = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>();
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-title class_">Long</span>.<span class="hljs-title function_">valueOf</span>(i));
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;vector&quot;</span>, <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>()));
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;color&quot;</span>, current_color);
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;tag&quot;</span>, current_tag);
+    data.<span class="hljs-title function_">add</span>(row);
 }
 
-insertReq = InsertReq.builder()
-    .collectionName("quick_setup")
-    .data(data)
-    .partitionName("partitionA")
-    .build();
+insertReq = <span class="hljs-title class_">InsertReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(data)
+    .<span class="hljs-title function_">partitionName</span>(<span class="hljs-string">&quot;partitionA&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-insertResp = client.insert(insertReq);
+insertResp = client.<span class="hljs-title function_">insert</span>(insertReq);
 
-System.out.println(JSONObject.toJSON(insertResp));
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(insertResp));
 
-// Output:
-// {"insertCnt": 500}
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;insertCnt&quot;: 500}</span>
 
-data.clear();
+data.<span class="hljs-title function_">clear</span>();
 
-for (int i=1500; i<2000; i++) {
-    Random rand = new Random();
-    String current_color = colors.get(rand.nextInt(colors.size()-1));
-    int current_tag = rand.nextInt(8999) + 1000;
-    JSONObject row = new JSONObject();
-    row.put("id", Long.valueOf(i));
-    row.put("vector", Arrays.asList(rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-    row.put("color", current_color);
-    row.put("tag", current_tag);
-    data.add(row);
+<span class="hljs-keyword">for</span> (int i=<span class="hljs-number">1500</span>; i&lt;<span class="hljs-number">2000</span>; i++) {
+    <span class="hljs-title class_">Random</span> rand = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();
+    <span class="hljs-title class_">String</span> current_color = colors.<span class="hljs-title function_">get</span>(rand.<span class="hljs-title function_">nextInt</span>(colors.<span class="hljs-title function_">size</span>()-<span class="hljs-number">1</span>));
+    int current_tag = rand.<span class="hljs-title function_">nextInt</span>(<span class="hljs-number">8999</span>) + <span class="hljs-number">1000</span>;
+    <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span> row = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>();
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-title class_">Long</span>.<span class="hljs-title function_">valueOf</span>(i));
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;vector&quot;</span>, <span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>(), rand.<span class="hljs-title function_">nextFloat</span>()));
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;color&quot;</span>, current_color);
+    row.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;tag&quot;</span>, current_tag);
+    data.<span class="hljs-title function_">add</span>(row);
 }
 
-insertReq = InsertReq.builder()
-    .collectionName("quick_setup")
-    .data(data)
-    .partitionName("partitionB")
-    .build();
+insertReq = <span class="hljs-title class_">InsertReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">data</span>(data)
+    .<span class="hljs-title function_">partitionName</span>(<span class="hljs-string">&quot;partitionB&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-insertResp = client.insert(insertReq);
+insertResp = client.<span class="hljs-title function_">insert</span>(insertReq);
 
-System.out.println(JSONObject.toJSON(insertResp));
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(insertResp));
 
-// Output:
-// {"insertCnt": 500}
-```
-
-```javascript
-// 4. Create partitions and insert more entities
-await client.createPartition({
-    collection_name: "quick_setup",
-    partition_name: "partitionA"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;insertCnt&quot;: 500}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 4. Create partitions and insert more entities</span>
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionA&quot;</span>
 })
 
-await client.createPartition({
-    collection_name: "quick_setup",
-    partition_name: "partitionB"
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionB&quot;</span>
 })
 
 data = []
 
-for (let i = 1000; i < 1500; i++) {
-    current_color = colors[Math.floor(Math.random() * colors.length)]
-    current_tag = Math.floor(Math.random() * 8999 + 1000)
-    data.push({
-        "id": i,
-        "vector": [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-        "color": current_color,
-        "tag": current_tag,
-        "color_tag": `${current_color}_${current_tag}`
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1000</span>; i &lt; <span class="hljs-number">1500</span>; i++) {
+    current_color = colors[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * colors.<span class="hljs-property">length</span>)]
+    current_tag = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">8999</span> + <span class="hljs-number">1000</span>)
+    data.<span class="hljs-title function_">push</span>({
+        <span class="hljs-string">&quot;id&quot;</span>: i,
+        <span class="hljs-string">&quot;vector&quot;</span>: [<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()],
+        <span class="hljs-string">&quot;color&quot;</span>: current_color,
+        <span class="hljs-string">&quot;tag&quot;</span>: current_tag,
+        <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">`<span class="hljs-subst">${current_color}</span>_<span class="hljs-subst">${current_tag}</span>`</span>
     })
 }
 
-res = await client.insert({
-    collection_name: "quick_setup",
-    data: data,
-    partition_name: "partitionA"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">insert</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: data,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionA&quot;</span>
 })
 
-console.log(res.insert_cnt)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">insert_cnt</span>)
 
-// Output
-// 
-// 500
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// 500</span>
+<span class="hljs-comment">// </span>
 
-await sleep(5000)
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">sleep</span>(<span class="hljs-number">5000</span>)
 
 data = []
 
-for (let i = 1500; i < 2000; i++) {
-    current_color = colors[Math.floor(Math.random() * colors.length)]
-    current_tag = Math.floor(Math.random() * 8999 + 1000)
-    data.push({
-        "id": i,
-        "vector": [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-        "color": current_color,
-        "tag": current_tag,
-        "color_tag": `${current_color}_${current_tag}`
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1500</span>; i &lt; <span class="hljs-number">2000</span>; i++) {
+    current_color = colors[<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * colors.<span class="hljs-property">length</span>)]
+    current_tag = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">floor</span>(<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">8999</span> + <span class="hljs-number">1000</span>)
+    data.<span class="hljs-title function_">push</span>({
+        <span class="hljs-string">&quot;id&quot;</span>: i,
+        <span class="hljs-string">&quot;vector&quot;</span>: [<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>(), <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>()],
+        <span class="hljs-string">&quot;color&quot;</span>: current_color,
+        <span class="hljs-string">&quot;tag&quot;</span>: current_tag,
+        <span class="hljs-string">&quot;color_tag&quot;</span>: <span class="hljs-string">`<span class="hljs-subst">${current_color}</span>_<span class="hljs-subst">${current_tag}</span>`</span>
     })
 }
 
-res = await client.insert({
-    collection_name: "quick_setup",
-    data: data,
-    partition_name: "partitionB"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">insert</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">data</span>: data,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionB&quot;</span>
 })
 
-console.log(res.insert_cnt)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">insert_cnt</span>)
 
-// Output
-// 
-// 500
-// 
-```
-
-## Get Entities by ID
-
-<div class="language-python">
-
-If you know the IDs of the entities of your interests, you can use the [`get()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/get.md) method.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// 500</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Get-Entities-by-ID" class="common-anchor-header">Get Entities by ID
+    <button data-href="#Get-Entities-by-ID" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><div class="language-python">
+<p>If you know the IDs of the entities of your interests, you can use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/get.md"><code>get()</code></a> method.</p>
 </div>
-
 <div class="language-java">
-
-If you know the IDs of the entities of your interests, you can use the [`get()`](https://milvus.io/api-reference/java/v2.4.x/v2/Vector/get.md) method.
-
+<p>If you know the IDs of the entities of your interests, you can use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Vector/get.md"><code>get()</code></a> method.</p>
 </div>
-
 <div class="language-javascript">
-
-If you know the IDs of the entities of your interests, you can use the [`get()`](https://milvus.io/api-reference/node/v2.4.x/Vector/get.md) method.
-
+<p>If you know the IDs of the entities of your interests, you can use the <a href="https://milvus.io/api-reference/node/v2.4.x/Vector/get.md"><code>get()</code></a> method.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 4. Get entities by ID
+<pre><code class="language-python"><span class="hljs-comment"># 4. Get entities by ID</span>
 res = client.get(
-    collection_name="quick_setup",
-    ids=[0, 1, 2]
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    ids=[<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>]
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# [
-#     {
-#         "id": 0,
-#         "vector": [
-#             0.68824464,
-#             0.6552274,
-#             0.33593303,
-#             -0.7099536,
-#             -0.07070546
-#         ],
-#         "color_tag": "green_2006",
-#         "color": "green"
-#     },
-#     {
-#         "id": 1,
-#         "vector": [
-#             -0.98531723,
-#             0.33456197,
-#             0.2844234,
-#             0.42886782,
-#             0.32753858
-#         ],
-#         "color_tag": "white_9298",
-#         "color": "white"
-#     },
-#     {
-#         "id": 2,
-#         "vector": [
-#             -0.9886812,
-#             -0.44129863,
-#             -0.29859528,
-#             0.06059075,
-#             -0.43817034
-#         ],
-#         "color_tag": "grey_5312",
-#         "color": "grey"
-#     }
-# ]
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;id&quot;: 0,</span>
+<span class="hljs-comment">#         &quot;vector&quot;: [</span>
+<span class="hljs-comment">#             0.68824464,</span>
+<span class="hljs-comment">#             0.6552274,</span>
+<span class="hljs-comment">#             0.33593303,</span>
+<span class="hljs-comment">#             -0.7099536,</span>
+<span class="hljs-comment">#             -0.07070546</span>
+<span class="hljs-comment">#         ],</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;green_2006&quot;,</span>
+<span class="hljs-comment">#         &quot;color&quot;: &quot;green&quot;</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;id&quot;: 1,</span>
+<span class="hljs-comment">#         &quot;vector&quot;: [</span>
+<span class="hljs-comment">#             -0.98531723,</span>
+<span class="hljs-comment">#             0.33456197,</span>
+<span class="hljs-comment">#             0.2844234,</span>
+<span class="hljs-comment">#             0.42886782,</span>
+<span class="hljs-comment">#             0.32753858</span>
+<span class="hljs-comment">#         ],</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;white_9298&quot;,</span>
+<span class="hljs-comment">#         &quot;color&quot;: &quot;white&quot;</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;id&quot;: 2,</span>
+<span class="hljs-comment">#         &quot;vector&quot;: [</span>
+<span class="hljs-comment">#             -0.9886812,</span>
+<span class="hljs-comment">#             -0.44129863,</span>
+<span class="hljs-comment">#             -0.29859528,</span>
+<span class="hljs-comment">#             0.06059075,</span>
+<span class="hljs-comment">#             -0.43817034</span>
+<span class="hljs-comment">#         ],</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;grey_5312&quot;,</span>
+<span class="hljs-comment">#         &quot;color&quot;: &quot;grey&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 5. Get entities by ID</span>
+<span class="hljs-title class_">GetReq</span> getReq = <span class="hljs-title class_">GetReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">ids</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(0L, 1L, 2L))
+    .<span class="hljs-title function_">build</span>();
 
-```java
-// 5. Get entities by ID
-GetReq getReq = GetReq.builder()
-    .collectionName("quick_setup")
-    .ids(Arrays.asList(0L, 1L, 2L))
-    .build();
+<span class="hljs-title class_">GetResp</span> entities = client.<span class="hljs-title function_">get</span>(getReq);
 
-GetResp entities = client.get(getReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(entities));
 
-System.out.println(JSONObject.toJSON(entities));
-
-// Output:
-// {"getResults": [
-//     {"entity": {
-//         "color": "white",
-//         "color_tag": "white_4597",
-//         "vector": [
-//             0.09665024,
-//             0.1163497,
-//             0.0701347,
-//             0.32577968,
-//             0.40943468
-//         ],
-//         "tag": 8946,
-//         "id": 0
-//     }},
-//     {"entity": {
-//         "color": "green",
-//         "color_tag": "green_3039",
-//         "vector": [
-//             0.90689456,
-//             0.4377399,
-//             0.75387514,
-//             0.36454988,
-//             0.8702918
-//         ],
-//         "tag": 2341,
-//         "id": 1
-//     }},
-//     {"entity": {
-//         "color": "white",
-//         "color_tag": "white_8708",
-//         "vector": [
-//             0.9757728,
-//             0.13974023,
-//             0.8023141,
-//             0.61947155,
-//             0.8290197
-//         ],
-//         "tag": 9913,
-//         "id": 2
-//     }}
-// ]}
-```
-
-```javascript
-// 5. Get entities by id
-res = await client.get({
-    collection_name: "quick_setup",
-    ids: [0, 1, 2],
-    output_fields: ["vector", "color_tag"]
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;getResults&quot;: [</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color&quot;: &quot;white&quot;,</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;white_4597&quot;,</span>
+<span class="hljs-comment">//         &quot;vector&quot;: [</span>
+<span class="hljs-comment">//             0.09665024,</span>
+<span class="hljs-comment">//             0.1163497,</span>
+<span class="hljs-comment">//             0.0701347,</span>
+<span class="hljs-comment">//             0.32577968,</span>
+<span class="hljs-comment">//             0.40943468</span>
+<span class="hljs-comment">//         ],</span>
+<span class="hljs-comment">//         &quot;tag&quot;: 8946,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 0</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color&quot;: &quot;green&quot;,</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;green_3039&quot;,</span>
+<span class="hljs-comment">//         &quot;vector&quot;: [</span>
+<span class="hljs-comment">//             0.90689456,</span>
+<span class="hljs-comment">//             0.4377399,</span>
+<span class="hljs-comment">//             0.75387514,</span>
+<span class="hljs-comment">//             0.36454988,</span>
+<span class="hljs-comment">//             0.8702918</span>
+<span class="hljs-comment">//         ],</span>
+<span class="hljs-comment">//         &quot;tag&quot;: 2341,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 1</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color&quot;: &quot;white&quot;,</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;white_8708&quot;,</span>
+<span class="hljs-comment">//         &quot;vector&quot;: [</span>
+<span class="hljs-comment">//             0.9757728,</span>
+<span class="hljs-comment">//             0.13974023,</span>
+<span class="hljs-comment">//             0.8023141,</span>
+<span class="hljs-comment">//             0.61947155,</span>
+<span class="hljs-comment">//             0.8290197</span>
+<span class="hljs-comment">//         ],</span>
+<span class="hljs-comment">//         &quot;tag&quot;: 9913,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 2</span>
+<span class="hljs-comment">//     }}</span>
+<span class="hljs-comment">// ]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 5. Get entities by id</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">get</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">ids</span>: [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>],
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;vector&quot;</span>, <span class="hljs-string">&quot;color_tag&quot;</span>]
 })
 
-console.log(res.data)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
 
-// Output
-// 
-// [
-//   {
-//     vector: [
-//       0.16022394597530365,
-//       0.6514875292778015,
-//       0.18294484913349152,
-//       0.30227693915367126,
-//       0.47553086280822754
-//     ],
-//     '$meta': { color: 'blue', tag: 8907, color_tag: 'blue_8907' },
-//     id: '0'
-//   },
-//   {
-//     vector: [
-//       0.2459285855293274,
-//       0.4974019527435303,
-//       0.2154673933982849,
-//       0.03719571232795715,
-//       0.8348019123077393
-//     ],
-//     '$meta': { color: 'grey', tag: 3710, color_tag: 'grey_3710' },
-//     id: '1'
-//   },
-//   {
-//     vector: [
-//       0.9404329061508179,
-//       0.49662265181541443,
-//       0.8088793158531189,
-//       0.9337621331214905,
-//       0.8269071578979492
-//     ],
-//     '$meta': { color: 'blue', tag: 2993, color_tag: 'blue_2993' },
-//     id: '2'
-//   }
-// ]
-// 
-```
-
-### Get entities from partitions
-
-You can also get entities from specific partitions.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     vector: [</span>
+<span class="hljs-comment">//       0.16022394597530365,</span>
+<span class="hljs-comment">//       0.6514875292778015,</span>
+<span class="hljs-comment">//       0.18294484913349152,</span>
+<span class="hljs-comment">//       0.30227693915367126,</span>
+<span class="hljs-comment">//       0.47553086280822754</span>
+<span class="hljs-comment">//     ],</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;blue&#x27;, tag: 8907, color_tag: &#x27;blue_8907&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;0&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     vector: [</span>
+<span class="hljs-comment">//       0.2459285855293274,</span>
+<span class="hljs-comment">//       0.4974019527435303,</span>
+<span class="hljs-comment">//       0.2154673933982849,</span>
+<span class="hljs-comment">//       0.03719571232795715,</span>
+<span class="hljs-comment">//       0.8348019123077393</span>
+<span class="hljs-comment">//     ],</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;grey&#x27;, tag: 3710, color_tag: &#x27;grey_3710&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;1&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     vector: [</span>
+<span class="hljs-comment">//       0.9404329061508179,</span>
+<span class="hljs-comment">//       0.49662265181541443,</span>
+<span class="hljs-comment">//       0.8088793158531189,</span>
+<span class="hljs-comment">//       0.9337621331214905,</span>
+<span class="hljs-comment">//       0.8269071578979492</span>
+<span class="hljs-comment">//     ],</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;blue&#x27;, tag: 2993, color_tag: &#x27;blue_2993&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;2&#x27;</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Get-entities-from-partitions" class="common-anchor-header">Get entities from partitions</h3><p>You can also get entities from specific partitions.</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 5. Get entities from partitions
+<pre><code class="language-python"><span class="hljs-comment"># 5. Get entities from partitions</span>
 res = client.get(
-    collection_name="quick_setup",
-    ids=[1000, 1001, 1002],
-    partition_names=["partitionA"]
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    ids=[<span class="hljs-number">1000</span>, <span class="hljs-number">1001</span>, <span class="hljs-number">1002</span>],
+    partition_names=[<span class="hljs-string">&quot;partitionA&quot;</span>]
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# [
-#     {
-#         "color": "green",
-#         "tag": 1995,
-#         "color_tag": "green_1995",
-#         "id": 1000,
-#         "vector": [
-#             0.7807706,
-#             0.8083741,
-#             0.17276904,
-#             -0.8580777,
-#             0.024156934
-#         ]
-#     },
-#     {
-#         "color": "red",
-#         "tag": 1995,
-#         "color_tag": "red_1995",
-#         "id": 1001,
-#         "vector": [
-#             0.065074645,
-#             -0.44882354,
-#             -0.29479212,
-#             -0.19798489,
-#             -0.77542555
-#         ]
-#     },
-#     {
-#         "color": "green",
-#         "tag": 1995,
-#         "color_tag": "green_1995",
-#         "id": 1002,
-#         "vector": [
-#             0.027934508,
-#             -0.44199976,
-#             -0.40262738,
-#             -0.041511405,
-#             0.024782438
-#         ]
-#     }
-# ]
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color&quot;: &quot;green&quot;,</span>
+<span class="hljs-comment">#         &quot;tag&quot;: 1995,</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;green_1995&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 1000,</span>
+<span class="hljs-comment">#         &quot;vector&quot;: [</span>
+<span class="hljs-comment">#             0.7807706,</span>
+<span class="hljs-comment">#             0.8083741,</span>
+<span class="hljs-comment">#             0.17276904,</span>
+<span class="hljs-comment">#             -0.8580777,</span>
+<span class="hljs-comment">#             0.024156934</span>
+<span class="hljs-comment">#         ]</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color&quot;: &quot;red&quot;,</span>
+<span class="hljs-comment">#         &quot;tag&quot;: 1995,</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_1995&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 1001,</span>
+<span class="hljs-comment">#         &quot;vector&quot;: [</span>
+<span class="hljs-comment">#             0.065074645,</span>
+<span class="hljs-comment">#             -0.44882354,</span>
+<span class="hljs-comment">#             -0.29479212,</span>
+<span class="hljs-comment">#             -0.19798489,</span>
+<span class="hljs-comment">#             -0.77542555</span>
+<span class="hljs-comment">#         ]</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color&quot;: &quot;green&quot;,</span>
+<span class="hljs-comment">#         &quot;tag&quot;: 1995,</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;green_1995&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 1002,</span>
+<span class="hljs-comment">#         &quot;vector&quot;: [</span>
+<span class="hljs-comment">#             0.027934508,</span>
+<span class="hljs-comment">#             -0.44199976,</span>
+<span class="hljs-comment">#             -0.40262738,</span>
+<span class="hljs-comment">#             -0.041511405,</span>
+<span class="hljs-comment">#             0.024782438</span>
+<span class="hljs-comment">#         ]</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 5. Get entities by ID in a partition</span>
+getReq = <span class="hljs-title class_">GetReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">ids</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(1001L, 1002L, 1003L))
+    .<span class="hljs-title function_">partitionName</span>(<span class="hljs-string">&quot;partitionA&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-```java
-// 5. Get entities by ID in a partition
-getReq = GetReq.builder()
-    .collectionName("quick_setup")
-    .ids(Arrays.asList(1001L, 1002L, 1003L))
-    .partitionName("partitionA")
-    .build();
+entities = client.<span class="hljs-title function_">get</span>(getReq);
 
-entities = client.get(getReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(entities));
 
-System.out.println(JSONObject.toJSON(entities));
-
-// Output:
-// {"getResults": [
-//     {"entity": {
-//         "color": "yellow",
-//         "vector": [
-//             0.4300114,
-//             0.599917,
-//             0.799163,
-//             0.75395125,
-//             0.89947814
-//         ],
-//         "id": 1001,
-//         "tag": 5803
-//     }},
-//     {"entity": {
-//         "color": "blue",
-//         "vector": [
-//             0.009218454,
-//             0.64637834,
-//             0.19815737,
-//             0.30519038,
-//             0.8218663
-//         ],
-//         "id": 1002,
-//         "tag": 7212
-//     }},
-//     {"entity": {
-//         "color": "black",
-//         "vector": [
-//             0.76521933,
-//             0.7818409,
-//             0.16976339,
-//             0.8719652,
-//             0.1434964
-//         ],
-//         "id": 1003,
-//         "tag": 1710
-//     }}
-// ]}
-```
-
-```javascript
-// 5.1 Get entities by id in a partition
-res = await client.get({
-    collection_name: "quick_setup",
-    ids: [1000, 1001, 1002],
-    partition_names: ["partitionA"],
-    output_fields: ["vector", "color_tag"]
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;getResults&quot;: [</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color&quot;: &quot;yellow&quot;,</span>
+<span class="hljs-comment">//         &quot;vector&quot;: [</span>
+<span class="hljs-comment">//             0.4300114,</span>
+<span class="hljs-comment">//             0.599917,</span>
+<span class="hljs-comment">//             0.799163,</span>
+<span class="hljs-comment">//             0.75395125,</span>
+<span class="hljs-comment">//             0.89947814</span>
+<span class="hljs-comment">//         ],</span>
+<span class="hljs-comment">//         &quot;id&quot;: 1001,</span>
+<span class="hljs-comment">//         &quot;tag&quot;: 5803</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color&quot;: &quot;blue&quot;,</span>
+<span class="hljs-comment">//         &quot;vector&quot;: [</span>
+<span class="hljs-comment">//             0.009218454,</span>
+<span class="hljs-comment">//             0.64637834,</span>
+<span class="hljs-comment">//             0.19815737,</span>
+<span class="hljs-comment">//             0.30519038,</span>
+<span class="hljs-comment">//             0.8218663</span>
+<span class="hljs-comment">//         ],</span>
+<span class="hljs-comment">//         &quot;id&quot;: 1002,</span>
+<span class="hljs-comment">//         &quot;tag&quot;: 7212</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color&quot;: &quot;black&quot;,</span>
+<span class="hljs-comment">//         &quot;vector&quot;: [</span>
+<span class="hljs-comment">//             0.76521933,</span>
+<span class="hljs-comment">//             0.7818409,</span>
+<span class="hljs-comment">//             0.16976339,</span>
+<span class="hljs-comment">//             0.8719652,</span>
+<span class="hljs-comment">//             0.1434964</span>
+<span class="hljs-comment">//         ],</span>
+<span class="hljs-comment">//         &quot;id&quot;: 1003,</span>
+<span class="hljs-comment">//         &quot;tag&quot;: 1710</span>
+<span class="hljs-comment">//     }}</span>
+<span class="hljs-comment">// ]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 5.1 Get entities by id in a partition</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">get</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">ids</span>: [<span class="hljs-number">1000</span>, <span class="hljs-number">1001</span>, <span class="hljs-number">1002</span>],
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;partitionA&quot;</span>],
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;vector&quot;</span>, <span class="hljs-string">&quot;color_tag&quot;</span>]
 })
 
-console.log(res.data)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
 
-// Output
-// 
-// [
-//   {
-//     id: '1000',
-//     vector: [
-//       0.014254206791520119,
-//       0.5817716121673584,
-//       0.19793470203876495,
-//       0.8064294457435608,
-//       0.7745839357376099
-//     ],
-//     '$meta': { color: 'white', tag: 5996, color_tag: 'white_5996' }
-//   },
-//   {
-//     id: '1001',
-//     vector: [
-//       0.6073881983757019,
-//       0.05214758217334747,
-//       0.730999231338501,
-//       0.20900958776474,
-//       0.03665429726243019
-//     ],
-//     '$meta': { color: 'grey', tag: 2834, color_tag: 'grey_2834' }
-//   },
-//   {
-//     id: '1002',
-//     vector: [
-//       0.48877206444740295,
-//       0.34028753638267517,
-//       0.6527213454246521,
-//       0.9763909578323364,
-//       0.8031482100486755
-//     ],
-//     '$meta': { color: 'pink', tag: 9107, color_tag: 'pink_9107' }
-//   }
-// ]
-// 
-```
-
-
-## Use Basic Operators
-
-In this section, you will find examples of how to use basic operators in scalar filtering. You can apply these filters to [vector searches](https://milvus.io/docs/single-vector-search.md#Filtered-search) and [data deletions](https://milvus.io/docs/insert-update-delete.md#Delete-entities) too.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     id: &#x27;1000&#x27;,</span>
+<span class="hljs-comment">//     vector: [</span>
+<span class="hljs-comment">//       0.014254206791520119,</span>
+<span class="hljs-comment">//       0.5817716121673584,</span>
+<span class="hljs-comment">//       0.19793470203876495,</span>
+<span class="hljs-comment">//       0.8064294457435608,</span>
+<span class="hljs-comment">//       0.7745839357376099</span>
+<span class="hljs-comment">//     ],</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;white&#x27;, tag: 5996, color_tag: &#x27;white_5996&#x27; }</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     id: &#x27;1001&#x27;,</span>
+<span class="hljs-comment">//     vector: [</span>
+<span class="hljs-comment">//       0.6073881983757019,</span>
+<span class="hljs-comment">//       0.05214758217334747,</span>
+<span class="hljs-comment">//       0.730999231338501,</span>
+<span class="hljs-comment">//       0.20900958776474,</span>
+<span class="hljs-comment">//       0.03665429726243019</span>
+<span class="hljs-comment">//     ],</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;grey&#x27;, tag: 2834, color_tag: &#x27;grey_2834&#x27; }</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     id: &#x27;1002&#x27;,</span>
+<span class="hljs-comment">//     vector: [</span>
+<span class="hljs-comment">//       0.48877206444740295,</span>
+<span class="hljs-comment">//       0.34028753638267517,</span>
+<span class="hljs-comment">//       0.6527213454246521,</span>
+<span class="hljs-comment">//       0.9763909578323364,</span>
+<span class="hljs-comment">//       0.8031482100486755</span>
+<span class="hljs-comment">//     ],</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;pink&#x27;, tag: 9107, color_tag: &#x27;pink_9107&#x27; }</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Use-Basic-Operators" class="common-anchor-header">Use Basic Operators
+    <button data-href="#Use-Basic-Operators" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>In this section, you will find examples of how to use basic operators in scalar filtering. You can apply these filters to <a href="https://milvus.io/docs/single-vector-search.md#Filtered-search">vector searches</a> and <a href="https://milvus.io/docs/insert-update-delete.md#Delete-entities">data deletions</a> too.</p>
 <div class="language-python">
-
-For more information, refer to [`query()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/query.md) in the SDK reference.
-
+<p>For more information, refer to <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Vector/query.md"><code>query()</code></a> in the SDK reference.</p>
 </div>
-
 <div class="language-java">
-
-For more information, refer to [`query()`](https://milvus.io/api-reference/java/v2.4.x/v2/Vector/query.md) in the SDK reference.
-
+<p>For more information, refer to <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Vector/query.md"><code>query()</code></a> in the SDK reference.</p>
 </div>
-
 <div class="language-javascript">
-
-For more information, refer to [`query()`](https://milvus.io/api-reference/node/v2.4.x/Vector/query.md) in the SDK reference.
-
+<p>For more information, refer to <a href="https://milvus.io/api-reference/node/v2.4.x/Vector/query.md"><code>query()</code></a> in the SDK reference.</p>
 </div>
-
-- Filter entities with their tag values falling between 1,000 to 1,500.
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    # 6. Use basic operators
-
-    res = client.query(
-        collection_name="quick_setup",
-        filter="1000 < tag < 1500",
-        output_fields=["color_tag"],
-        limit=3
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "id": 1,
-    #         "color_tag": "pink_1023"
-    #     },
-    #     {
-    #         "id": 41,
-    #         "color_tag": "red_1483"
-    #     },
-    #     {
-    #         "id": 44,
-    #         "color_tag": "grey_1146"
-    #     }
-    # ]
-    ```
-
-    ```java
-    // 6. Use basic operators
-
-    QueryReq queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .filter("1000 < tag < 1500")
-        .outputFields(Arrays.asList("color_tag"))
-        .limit(3)
-        .build();
-
-    QueryResp queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));
-
-    // Output:
-    // {"queryResults": [
-    //     {"entity": {
-    //         "color_tag": "white_7588",
-    //         "id": 34
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "orange_4989",
-    //         "id": 64
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "white_3415",
-    //         "id": 73
-    //     }}
-    // ]}
-    ```
-
-    ```javascript
-    // 6. Use basic operators
-    res = await client.query({
-        collection_name: "quick_setup",
-        filter: "1000 < tag < 1500",
-        output_fields: ["color_tag"],
-        limit: 3
-    })
-
-    console.log(res.data)
-
-    // Output
-    // 
-    // [
-    //   {
-    //     '$meta': { color: 'pink', tag: 1050, color_tag: 'pink_1050' },
-    //     id: '6'
-    //   },
-    //   {
-    //     '$meta': { color: 'purple', tag: 1174, color_tag: 'purple_1174' },
-    //     id: '24'
-    //   },
-    //   {
-    //     '$meta': { color: 'orange', tag: 1023, color_tag: 'orange_1023' },
-    //     id: '40'
-    //   }
-    // ]
-    // 
-    ```
-
-- Filter entities with their __color__ values set to __brown__.
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    res = client.query(
-        collection_name="quick_setup",
-        filter='color == "brown"',
-        output_fields=["color_tag"],
-        limit=3
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "color_tag": "brown_5343",
-    #         "id": 15
-    #     },
-    #     {
-    #         "color_tag": "brown_3167",
-    #         "id": 27
-    #     },
-    #     {
-    #         "color_tag": "brown_3100",
-    #         "id": 30
-    #     }
-    # ]
-    ```
-
-    ```java
-    queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .filter("color == \"brown\"")
-        .outputFields(Arrays.asList("color_tag"))
-        .limit(3)
-        .build();
-
-    queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));
-
-    // Output:
-    // {"queryResults": [
-    //     {"entity": {
-    //         "color_tag": "brown_7792",
-    //         "id": 3
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "brown_9695",
-    //         "id": 7
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "brown_2551",
-    //         "id": 15
-    //     }}
-    // ]}
-    ```
-
-    ```javascript
-    res = await client.query({
-        collection_name: "quick_setup",
-        filter: 'color == "brown"',
-        output_fields: ["color_tag"],
-        limit: 3
-    })
-
-    console.log(res.data)
-
-    // Output
-    // 
-    // [
-    //   {
-    //     '$meta': { color: 'brown', tag: 6839, color_tag: 'brown_6839' },
-    //     id: '22'
-    //   },
-    //   {
-    //     '$meta': { color: 'brown', tag: 7849, color_tag: 'brown_7849' },
-    //     id: '32'
-    //   },
-    //   {
-    //     '$meta': { color: 'brown', tag: 7855, color_tag: 'brown_7855' },
-    //     id: '33'
-    //   }
-    // ]
-    // 
-    ```
-
-- Filter entities with their __color__ values not set to __green__ and __purple__.
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    res = client.query(
-        collection_name="quick_setup",
-        filter='color not in ["green", "purple"]',
-        output_fields=["color_tag"],
-        limit=3
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "color_tag": "yellow_6781",
-    #         "id": 0
-    #     },
-    #     {
-    #         "color_tag": "pink_1023",
-    #         "id": 1
-    #     },
-    #     {
-    #         "color_tag": "blue_3972",
-    #         "id": 2
-    #     }
-    # ]
-    ```
-
-    ```java
-    queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .filter("color not in [\"green\", \"purple\"]")
-        .outputFields(Arrays.asList("color_tag"))
-        .limit(3)
-        .build();
-
-    queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));   
-
-    // Output:
-    // {"queryResults": [
-    //     {"entity": {
-    //         "color_tag": "white_4597",
-    //         "id": 0
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "white_8708",
-    //         "id": 2
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "brown_7792",
-    //         "id": 3
-    //     }}
-    // ]}
-    ```
-
-    ```javascript
-    res = await client.query({
-        collection_name: "quick_setup",
-        filter: 'color not in ["green", "purple"]',
-        output_fields: ["color_tag"],
-        limit: 3
-    })
-
-    console.log(res.data)
-
-    // Output
-    // 
-    // [
-    //   {
-    //     '$meta': { color: 'blue', tag: 8907, color_tag: 'blue_8907' },
-    //     id: '0'
-    //   },
-    //   {
-    //     '$meta': { color: 'grey', tag: 3710, color_tag: 'grey_3710' },
-    //     id: '1'
-    //   },
-    //   {
-    //     '$meta': { color: 'blue', tag: 2993, color_tag: 'blue_2993' },
-    //     id: '2'
-    //   }
-    // ]
-    // 
-    ```    
-
-- Filter articles whose color tags start with __red__.
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    res = client.query(
-        collection_name="quick_setup",
-        filter='color_tag like "red%"',
-        output_fields=["color_tag"],
-        limit=3
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "color_tag": "red_6443",
-    #         "id": 17
-    #     },
-    #     {
-    #         "color_tag": "red_1483",
-    #         "id": 41
-    #     },
-    #     {
-    #         "color_tag": "red_4348",
-    #         "id": 47
-    #     }
-    # ]
-    ```
-
-    ```java
-    queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .filter("color_tag like \"red%\"")
-        .outputFields(Arrays.asList("color_tag"))
-        .limit(3)
-        .build();
-
-    queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));  
-
-    // Output:
-    // {"queryResults": [
-    //     {"entity": {
-    //         "color_tag": "red_4929",
-    //         "id": 9
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "red_8284",
-    //         "id": 13
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "red_3021",
-    //         "id": 44
-    //     }}
-    // ]}
-    ```    
-
-    ```javascript
-    res = await client.query({
-        collection_name: "quick_setup",
-        filter: 'color_tag like "red%"',
-        output_fields: ["color_tag"],
-        limit: 3
-    })
-
-    console.log(res.data)
-
-    // Output
-    // 
-    // [
-    //   {
-    //     '$meta': { color: 'red', tag: 8773, color_tag: 'red_8773' },
-    //     id: '17'
-    //   },
-    //   {
-    //     '$meta': { color: 'red', tag: 9197, color_tag: 'red_9197' },
-    //     id: '34'
-    //   },
-    //   {
-    //     '$meta': { color: 'red', tag: 7914, color_tag: 'red_7914' },
-    //     id: '46'
-    //   }
-    // ]
-    // 
-    ```    
-
-- Filter entities with their colors set to red and tag values within the range from 1,000 to 1,500.
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    res = client.query(
-        collection_name="quick_setup",
-        filter='(color == "red") and (1000 < tag < 1500)',
-        output_fields=["color_tag"],
-        limit=3
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "color_tag": "red_1483",
-    #         "id": 41
-    #     },
-    #     {
-    #         "color_tag": "red_1100",
-    #         "id": 94
-    #     },
-    #     {
-    #         "color_tag": "red_1343",
-    #         "id": 526
-    #     }
-    # ]
-    ```
-
-    ```java
-    queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .filter("(color == \"red\") and (1000 < tag < 1500)")
-        .outputFields(Arrays.asList("color_tag"))
-        .limit(3)
-        .build();
-
-    queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));  
-
-    // Output:
-    // {"queryResults": [
-    //     {"entity": {
-    //         "color_tag": "red_8124",
-    //         "id": 83
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "red_5358",
-    //         "id": 501
-    //     }},
-    //     {"entity": {
-    //         "color_tag": "red_3564",
-    //         "id": 638
-    //     }}
-    // ]}
-    ```
-
-    ```javascript
-    res = await client.query({
-        collection_name: "quick_setup",
-        filter: '(color == "red") and (1000 < tag < 1500)',
-        output_fields: ["color_tag"],
-        limit: 3
-    })
-
-    console.log(res.data)
-
-    // Output
-    // 
-    // [
-    //   {
-    //     '$meta': { color: 'red', tag: 1436, color_tag: 'red_1436' },
-    //     id: '67'
-    //   },
-    //   {
-    //     '$meta': { color: 'red', tag: 1463, color_tag: 'red_1463' },
-    //     id: '160'
-    //   },
-    //   {
-    //     '$meta': { color: 'red', tag: 1073, color_tag: 'red_1073' },
-    //     id: '291'
-    //   }
-    // ]
-    // 
-    ```    
-
-## Use Advanced Operators
-
-In this section, you will find examples of how to use advanced operators in scalar filtering. You can apply these filters to [vector searches](https://milvus.io/docs/single-vector-search.md#Filtered-search) and [data deletions](https://milvus.io/docs/insert-update-delete.md#Delete-entities) too.
-
-### Count entities
-
-- Counts the total number of entities in a collection.
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    # 7. Use advanced operators
-
-    # Count the total number of entities in a collection
-    res = client.query(
-        collection_name="quick_setup",
-        output_fields=["count(*)"]
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "count(*)": 2000
-    #     }
-    # ]
-    ```
-
-    ```java
-    // 7. Use advanced operators
-    // Count the total number of entities in the collection
-    queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .filter("")
-        .outputFields(Arrays.asList("count(*)"))
-        .build();
-
-    queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));
-
-    // Output:
-    // {"queryResults": [{"entity": {"count(*)": 2000}}]}
-    ```    
-
-    ```javascript
-    // 7. Use advanced operators
-    // Count the total number of entities in a collection
-    res = await client.query({
-        collection_name: "quick_setup",
-        output_fields: ["count(*)"]
-    })
-
-    console.log(res.data)   
-
-    // Output
-    // 
-    // [ { 'count(*)': '2000' } ]
-    // 
-    ```
-
-- Counts the total number of entities in specific partitions.
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    # Count the number of entities in a partition
-    res = client.query(
-        collection_name="quick_setup",
-        output_fields=["count(*)"],
-        partition_names=["partitionA"]
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "count(*)": 500
-    #     }
-    # ]
-    ```
-
-    ```java
-    // Count the number of entities in a partition
-    queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .partitionNames(Arrays.asList("partitionA"))
-        .filter("")
-        .outputFields(Arrays.asList("count(*)"))
-        .build();
-
-    queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));
-
-    // Output:
-    // {"queryResults": [{"entity": {"count(*)": 500}}]}
-    ```    
-
-    ```javascript
-    // Count the number of entities in a partition
-    res = await client.query({
-        collection_name: "quick_setup",
-        output_fields: ["count(*)"],
-        partition_names: ["partitionA"]
-    })
-
-    console.log(res.data)     
-
-    // Output
-    // 
-    // [ { 'count(*)': '500' } ]
-    // 
-    ```
-
-- Counts the number of entities that match a filtering condition
-
-    <div class="multipleCode">
-       <a href="#python">Python </a>
-       <a href="#java">Java</a>
-       <a href="#javascript">Node.js</a>
-    </div>
-
-    ```python
-    # Count the number of entities that match a specific filter
-    res = client.query(
-        collection_name="quick_setup",
-        filter='(color == "red") and (1000 < tag < 1500)',
-        output_fields=["count(*)"],
-    )
-
-    print(res)
-
-    # Output
-    #
-    # [
-    #     {
-    #         "count(*)": 3
-    #     }
-    # ]
-    ```
-
-    ```java
-    // Count the number of entities that match a specific filter
-    queryReq = QueryReq.builder()
-        .collectionName("quick_setup")
-        .filter("(color == \"red\") and (1000 < tag < 1500)")
-        .outputFields(Arrays.asList("count(*)"))
-        .build();
-
-    queryResp = client.query(queryReq);
-
-    System.out.println(JSONObject.toJSON(queryResp));
-
-    // Output:
-    // {"queryResults": [{"entity": {"count(*)": 7}}]}
-    ```    
-
-    ```javascript
-    // Count the number of entities that match a specific filter
-    res = await client.query({
-        collection_name: "quick_setup",
-        filter: '(color == "red") and (1000 < tag < 1500)',
-        output_fields: ["count(*)"]
-    })
-
-    console.log(res.data)   
-
-    // Output
-    // 
-    // [ { 'count(*)': '10' } ]
-    // 
-    ```
-
-## Reference on scalar filters
-
-### Basic Operators
-
-A __boolean expression__ is always __a string comprising field names joined by operators__. In this section, you will learn more about basic operators.
-
-|  __Operator__   |  __Description__                                                                                                                            |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-|  __and (&&)__   |  True if both operands are true                                                                                                             |
-|  __or (&#124;&#124;)__  |  True if either operand is true                                                                                                             |
-|  __+, -, *, /__ |  Addition, subtraction, multiplication, and division                                                                                        |
-|  __**__         |  Exponent                                                                                                                                   |
-|  __%__          |  Modulus                                                                                                                                    |
-|  __<, >__       |  Less than, greater than                                                                                                                    |
-|  __==, !=__     |  Equal to, not equal to                                                                                                                     |
-|  __<=, >=__     |  Less than or equal to, greater than or equal to                                                                                            |
-|  __not__        |  Reverses the result of a given condition.                                                                                                  |
-|  __like__       |  Compares a value to similar values using wildcard operators.<br/> For example, like "prefix%" matches strings that begin with "prefix". |
-|  __in__         |  Tests if an expression matches any value in a list of values.                                                                              |
-
-### Advanced operators
-
-- `count(*)`
-
-    Counts the exact number of entities in the collection. Use this as an output field to get the exact number of entities in a collection or partition.
-
-    <div class="admonition note">
-
-    <p><b>notes</b></p>
-
-    <p>This applies to loaded collections. You should use it as the only output field.</p>
-
-    </div>
-
-    
+<ul>
+<li><p>Filter entities with their tag values falling between 1,000 to 1,500.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python"><span class="hljs-comment"># 6. Use basic operators</span>
+
+res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&quot;1000 &lt; tag &lt; 1500&quot;</span>,
+    output_fields=[<span class="hljs-string">&quot;color_tag&quot;</span>],
+    limit=<span class="hljs-number">3</span>
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;id&quot;: 1,</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;pink_1023&quot;</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;id&quot;: 41,</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_1483&quot;</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;id&quot;: 44,</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;grey_1146&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 6. Use basic operators</span>
+
+<span class="hljs-title class_">QueryReq</span> queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;1000 &lt; tag &lt; 1500&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">limit</span>(<span class="hljs-number">3</span>)
+    .<span class="hljs-title function_">build</span>();
+
+<span class="hljs-title class_">QueryResp</span> queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;white_7588&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 34</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;orange_4989&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 64</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;white_3415&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 73</span>
+<span class="hljs-comment">//     }}</span>
+<span class="hljs-comment">// ]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 6. Use basic operators</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">filter</span>: <span class="hljs-string">&quot;1000 &lt; tag &lt; 1500&quot;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">3</span>
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;pink&#x27;, tag: 1050, color_tag: &#x27;pink_1050&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;6&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;purple&#x27;, tag: 1174, color_tag: &#x27;purple_1174&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;24&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;orange&#x27;, tag: 1023, color_tag: &#x27;orange_1023&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;40&#x27;</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Filter entities with their <strong>color</strong> values set to <strong>brown</strong>.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python">res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&#x27;color == &quot;brown&quot;&#x27;</span>,
+    output_fields=[<span class="hljs-string">&quot;color_tag&quot;</span>],
+    limit=<span class="hljs-number">3</span>
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;brown_5343&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 15</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;brown_3167&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 27</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;brown_3100&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 30</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;color == \&quot;brown\&quot;&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">limit</span>(<span class="hljs-number">3</span>)
+    .<span class="hljs-title function_">build</span>();
+
+queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;brown_7792&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 3</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;brown_9695&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 7</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;brown_2551&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 15</span>
+<span class="hljs-comment">//     }}</span>
+<span class="hljs-comment">// ]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;color == &quot;brown&quot;&#x27;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">3</span>
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;brown&#x27;, tag: 6839, color_tag: &#x27;brown_6839&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;22&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;brown&#x27;, tag: 7849, color_tag: &#x27;brown_7849&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;32&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;brown&#x27;, tag: 7855, color_tag: &#x27;brown_7855&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;33&#x27;</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Filter entities with their <strong>color</strong> values not set to <strong>green</strong> and <strong>purple</strong>.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python">res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&#x27;color not in [&quot;green&quot;, &quot;purple&quot;]&#x27;</span>,
+    output_fields=[<span class="hljs-string">&quot;color_tag&quot;</span>],
+    limit=<span class="hljs-number">3</span>
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;yellow_6781&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 0</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;pink_1023&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 1</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;blue_3972&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 2</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;color not in [\&quot;green\&quot;, \&quot;purple\&quot;]&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">limit</span>(<span class="hljs-number">3</span>)
+    .<span class="hljs-title function_">build</span>();
+
+queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));   
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;white_4597&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 0</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;white_8708&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 2</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;brown_7792&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 3</span>
+<span class="hljs-comment">//     }}</span>
+<span class="hljs-comment">// ]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;color not in [&quot;green&quot;, &quot;purple&quot;]&#x27;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">3</span>
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;blue&#x27;, tag: 8907, color_tag: &#x27;blue_8907&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;0&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;grey&#x27;, tag: 3710, color_tag: &#x27;grey_3710&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;1&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;blue&#x27;, tag: 2993, color_tag: &#x27;blue_2993&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;2&#x27;</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Filter articles whose color tags start with <strong>red</strong>.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python">res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&#x27;color_tag like &quot;red%&quot;&#x27;</span>,
+    output_fields=[<span class="hljs-string">&quot;color_tag&quot;</span>],
+    limit=<span class="hljs-number">3</span>
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_6443&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 17</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_1483&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 41</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_4348&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 47</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;color_tag like \&quot;red%\&quot;&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">limit</span>(<span class="hljs-number">3</span>)
+    .<span class="hljs-title function_">build</span>();
+
+queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));  
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;red_4929&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 9</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;red_8284&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 13</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;red_3021&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 44</span>
+<span class="hljs-comment">//     }}</span>
+<span class="hljs-comment">// ]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;color_tag like &quot;red%&quot;&#x27;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">3</span>
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;red&#x27;, tag: 8773, color_tag: &#x27;red_8773&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;17&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;red&#x27;, tag: 9197, color_tag: &#x27;red_9197&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;34&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;red&#x27;, tag: 7914, color_tag: &#x27;red_7914&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;46&#x27;</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Filter entities with their colors set to red and tag values within the range from 1,000 to 1,500.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python">res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&#x27;(color == &quot;red&quot;) and (1000 &lt; tag &lt; 1500)&#x27;</span>,
+    output_fields=[<span class="hljs-string">&quot;color_tag&quot;</span>],
+    limit=<span class="hljs-number">3</span>
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_1483&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 41</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_1100&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 94</span>
+<span class="hljs-comment">#     },</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;color_tag&quot;: &quot;red_1343&quot;,</span>
+<span class="hljs-comment">#         &quot;id&quot;: 526</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;(color == \&quot;red\&quot;) and (1000 &lt; tag &lt; 1500)&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;color_tag&quot;</span>))
+    .<span class="hljs-title function_">limit</span>(<span class="hljs-number">3</span>)
+    .<span class="hljs-title function_">build</span>();
+
+queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));  
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;red_8124&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 83</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;red_5358&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 501</span>
+<span class="hljs-comment">//     }},</span>
+<span class="hljs-comment">//     {&quot;entity&quot;: {</span>
+<span class="hljs-comment">//         &quot;color_tag&quot;: &quot;red_3564&quot;,</span>
+<span class="hljs-comment">//         &quot;id&quot;: 638</span>
+<span class="hljs-comment">//     }}</span>
+<span class="hljs-comment">// ]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;(color == &quot;red&quot;) and (1000 &lt; tag &lt; 1500)&#x27;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;color_tag&quot;</span>],
+    <span class="hljs-attr">limit</span>: <span class="hljs-number">3</span>
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;red&#x27;, tag: 1436, color_tag: &#x27;red_1436&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;67&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;red&#x27;, tag: 1463, color_tag: &#x27;red_1463&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;160&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &#x27;$meta&#x27;: { color: &#x27;red&#x27;, tag: 1073, color_tag: &#x27;red_1073&#x27; },</span>
+<span class="hljs-comment">//     id: &#x27;291&#x27;</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+</ul>
+<h2 id="Use-Advanced-Operators" class="common-anchor-header">Use Advanced Operators
+    <button data-href="#Use-Advanced-Operators" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>In this section, you will find examples of how to use advanced operators in scalar filtering. You can apply these filters to <a href="https://milvus.io/docs/single-vector-search.md#Filtered-search">vector searches</a> and <a href="https://milvus.io/docs/insert-update-delete.md#Delete-entities">data deletions</a> too.</p>
+<h3 id="Count-entities" class="common-anchor-header">Count entities</h3><ul>
+<li><p>Counts the total number of entities in a collection.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python"><span class="hljs-comment"># 7. Use advanced operators</span>
+
+<span class="hljs-comment"># Count the total number of entities in a collection</span>
+res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    output_fields=[<span class="hljs-string">&quot;count(*)&quot;</span>]
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;count(*)&quot;: 2000</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 7. Use advanced operators</span>
+<span class="hljs-comment">// Count the total number of entities in the collection</span>
+queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;count(*)&quot;</span>))
+    .<span class="hljs-title function_">build</span>();
+
+queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [{&quot;entity&quot;: {&quot;count(*)&quot;: 2000}}]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 7. Use advanced operators</span>
+<span class="hljs-comment">// Count the total number of entities in a collection</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;count(*)&quot;</span>]
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)   
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ { &#x27;count(*)&#x27;: &#x27;2000&#x27; } ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Counts the total number of entities in specific partitions.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python"><span class="hljs-comment"># Count the number of entities in a partition</span>
+res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    output_fields=[<span class="hljs-string">&quot;count(*)&quot;</span>],
+    partition_names=[<span class="hljs-string">&quot;partitionA&quot;</span>]
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;count(*)&quot;: 500</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// Count the number of entities in a partition</span>
+queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">partitionNames</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;partitionA&quot;</span>))
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;count(*)&quot;</span>))
+    .<span class="hljs-title function_">build</span>();
+
+queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [{&quot;entity&quot;: {&quot;count(*)&quot;: 500}}]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// Count the number of entities in a partition</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;count(*)&quot;</span>],
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;partitionA&quot;</span>]
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)     
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ { &#x27;count(*)&#x27;: &#x27;500&#x27; } ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Counts the number of entities that match a filtering condition</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+</div></p>
+<pre><code class="language-python"><span class="hljs-comment"># Count the number of entities that match a specific filter</span>
+res = client.query(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-built_in">filter</span>=<span class="hljs-string">&#x27;(color == &quot;red&quot;) and (1000 &lt; tag &lt; 1500)&#x27;</span>,
+    output_fields=[<span class="hljs-string">&quot;count(*)&quot;</span>],
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     {</span>
+<span class="hljs-comment">#         &quot;count(*)&quot;: 3</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// Count the number of entities that match a specific filter</span>
+queryReq = <span class="hljs-title class_">QueryReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">filter</span>(<span class="hljs-string">&quot;(color == \&quot;red\&quot;) and (1000 &lt; tag &lt; 1500)&quot;</span>)
+    .<span class="hljs-title function_">outputFields</span>(<span class="hljs-title class_">Arrays</span>.<span class="hljs-title function_">asList</span>(<span class="hljs-string">&quot;count(*)&quot;</span>))
+    .<span class="hljs-title function_">build</span>();
+
+queryResp = client.<span class="hljs-title function_">query</span>(queryReq);
+
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(queryResp));
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {&quot;queryResults&quot;: [{&quot;entity&quot;: {&quot;count(*)&quot;: 7}}]}</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// Count the number of entities that match a specific filter</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">query</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">filter</span>: <span class="hljs-string">&#x27;(color == &quot;red&quot;) and (1000 &lt; tag &lt; 1500)&#x27;</span>,
+    <span class="hljs-attr">output_fields</span>: [<span class="hljs-string">&quot;count(*)&quot;</span>]
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">data</span>)   
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ { &#x27;count(*)&#x27;: &#x27;10&#x27; } ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre></li>
+</ul>
+<h2 id="Reference-on-scalar-filters" class="common-anchor-header">Reference on scalar filters
+    <button data-href="#Reference-on-scalar-filters" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><h3 id="Basic-Operators" class="common-anchor-header">Basic Operators</h3><p>A <strong>boolean expression</strong> is always <strong>a string comprising field names joined by operators</strong>. In this section, you will learn more about basic operators.</p>
+<table>
+<thead>
+<tr><th><strong>Operator</strong></th><th><strong>Description</strong></th></tr>
+</thead>
+<tbody>
+<tr><td><strong>and (&amp;&amp;)</strong></td><td>True if both operands are true</td></tr>
+<tr><td><strong>or (||)</strong></td><td>True if either operand is true</td></tr>
+<tr><td><strong>+, -, *, /</strong></td><td>Addition, subtraction, multiplication, and division</td></tr>
+<tr><td><strong>**</strong></td><td>Exponent</td></tr>
+<tr><td><strong>%</strong></td><td>Modulus</td></tr>
+<tr><td><strong>&lt;, &gt;</strong></td><td>Less than, greater than</td></tr>
+<tr><td><strong>==, !=</strong></td><td>Equal to, not equal to</td></tr>
+<tr><td><strong>&lt;=, &gt;=</strong></td><td>Less than or equal to, greater than or equal to</td></tr>
+<tr><td><strong>not</strong></td><td>Reverses the result of a given condition.</td></tr>
+<tr><td><strong>like</strong></td><td>Compares a value to similar values using wildcard operators.<br/> For example, like “prefix%” matches strings that begin with &quot;prefix&quot;.</td></tr>
+<tr><td><strong>in</strong></td><td>Tests if an expression matches any value in a list of values.</td></tr>
+</tbody>
+</table>
+<h3 id="Advanced-operators" class="common-anchor-header">Advanced operators</h3><ul>
+<li><p><code>count(*)</code></p>
+<p>Counts the exact number of entities in the collection. Use this as an output field to get the exact number of entities in a collection or partition.</p>
+<p><div class="admonition note"></p>
+<p><p><b>notes</b></p></p>
+<p><p>This applies to loaded collections. You should use it as the only output field.</p></p>
+<p></div></p></li>
+</ul>

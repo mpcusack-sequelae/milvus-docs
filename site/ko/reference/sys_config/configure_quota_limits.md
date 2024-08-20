@@ -6,17 +6,42 @@ summary: Learn how to configure quotas and limitations.
 title: Quota- and Limit-related configurations
 ---
 
-# Quota- and Limit-related configurations
-
-This topic introduces the configuration items related to quotas and limits in Milvus.
-
-Some of these configuration items are used to set thresholds for Milvus to proactively throttle DDL/DML/DQL requests related to collections, partitions, indexes, etc.
-
-Some of them are used to set backpressure signals that force Milvus to lower the rate of DDL/DML/DQL requests.
-
-## `quotaAndLimits.limits.maxCollectionNumPerDB`
-
-<table id="quotaAndLimits.ddl.enabled">
+<h1 id="Quota--and-Limit-related-configurations" class="common-anchor-header">Quota- and Limit-related configurations
+    <button data-href="#Quota--and-Limit-related-configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic introduces the configuration items related to quotas and limits in Milvus.</p>
+<p>Some of these configuration items are used to set thresholds for Milvus to proactively throttle DDL/DML/DQL requests related to collections, partitions, indexes, etc.</p>
+<p>Some of them are used to set backpressure signals that force Milvus to lower the rate of DDL/DML/DQL requests.</p>
+<h2 id="quotaAndLimitslimitsmaxCollectionNumPerDB" class="common-anchor-header"><code>quotaAndLimits.limits.maxCollectionNumPerDB</code>
+    <button data-href="#quotaAndLimitslimitsmaxCollectionNumPerDB" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.ddl.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -30,10 +55,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.ddl.enabled`
-
-<table id="quotaAndLimits.ddl.enabled">
+<h2 id="quotaAndLimitsddlenabled" class="common-anchor-header"><code>quotaAndLimits.ddl.enabled</code>
+    <button data-href="#quotaAndLimitsddlenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.ddl.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -47,10 +85,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.ddl.collectionRate`
-
-<table id="quotaAndLimits.ddl.collectionRate">
+<h2 id="quotaAndLimitsddlcollectionRate" class="common-anchor-header"><code>quotaAndLimits.ddl.collectionRate</code>
+    <button data-href="#quotaAndLimitsddlcollectionRate" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.ddl.collectionRate">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -68,10 +119,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.ddl.partitionRate`
-
-<table id="quotaAndLimits.ddl.partitionRate">
+<h2 id="quotaAndLimitsddlpartitionRate" class="common-anchor-header"><code>quotaAndLimits.ddl.partitionRate</code>
+    <button data-href="#quotaAndLimitsddlpartitionRate" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.ddl.partitionRate">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -89,10 +153,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.indexRate.enabled`
-
-<table id="quotaAndLimits.indexRate.enabled">
+<h2 id="quotaAndLimitsindexRateenabled" class="common-anchor-header"><code>quotaAndLimits.indexRate.enabled</code>
+    <button data-href="#quotaAndLimitsindexRateenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.indexRate.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -106,10 +183,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.indexRate.max`
-
-<table id="quotaAndLimits.indexRate.max">
+<h2 id="quotaAndLimitsindexRatemax" class="common-anchor-header"><code>quotaAndLimits.indexRate.max</code>
+    <button data-href="#quotaAndLimitsindexRatemax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.indexRate.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -127,10 +217,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.flushRate.enabled`
-
-<table id="quotaAndLimits.flushRate.enabled">
+<h2 id="quotaAndLimitsflushRateenabled" class="common-anchor-header"><code>quotaAndLimits.flushRate.enabled</code>
+    <button data-href="#quotaAndLimitsflushRateenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.flushRate.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -144,10 +247,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.flush.max`
-
-<table id="quotaAndLimits.flush.max">
+<h2 id="quotaAndLimitsflushmax" class="common-anchor-header"><code>quotaAndLimits.flush.max</code>
+    <button data-href="#quotaAndLimitsflushmax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.flush.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -165,10 +281,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.compaction.enabled`
-
-<table id="quotaAndLimits.compaction.enabled">
+<h2 id="quotaAndLimitscompactionenabled" class="common-anchor-header"><code>quotaAndLimits.compaction.enabled</code>
+    <button data-href="#quotaAndLimitscompactionenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.compaction.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -182,10 +311,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.compaction.max`
-
-<table id="quotaAndLimits.compaction.max">
+<h2 id="quotaAndLimitscompactionmax" class="common-anchor-header"><code>quotaAndLimits.compaction.max</code>
+    <button data-href="#quotaAndLimitscompactionmax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.compaction.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -203,10 +345,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dml.enabled`
-
-<table id="quotaAndLimits.dml.enabled">
+<h2 id="quotaAndLimitsdmlenabled" class="common-anchor-header"><code>quotaAndLimits.dml.enabled</code>
+    <button data-href="#quotaAndLimitsdmlenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dml.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -220,10 +375,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dml.insertRate.max`
-
-<table id="quotaAndLimits.dml.insertRate.max">
+<h2 id="quotaAndLimitsdmlinsertRatemax" class="common-anchor-header"><code>quotaAndLimits.dml.insertRate.max</code>
+    <button data-href="#quotaAndLimitsdmlinsertRatemax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dml.insertRate.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -241,10 +409,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dml.insertRate.collection.max`
-
-<table id="quotaAndLimits.dml.insertRate.collection.max">
+<h2 id="quotaAndLimitsdmlinsertRatecollectionmax" class="common-anchor-header"><code>quotaAndLimits.dml.insertRate.collection.max</code>
+    <button data-href="#quotaAndLimitsdmlinsertRatecollectionmax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dml.insertRate.collection.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -262,10 +443,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dml.deleteRate.max`
-
-<table id="quotaAndLimits.dml.deleteRate.max">
+<h2 id="quotaAndLimitsdmldeleteRatemax" class="common-anchor-header"><code>quotaAndLimits.dml.deleteRate.max</code>
+    <button data-href="#quotaAndLimitsdmldeleteRatemax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dml.deleteRate.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -283,10 +477,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dml.deleteRate.collection.max`
-
-<table id="quotaAndLimits.dml.deleteRate.collection.max">
+<h2 id="quotaAndLimitsdmldeleteRatecollectionmax" class="common-anchor-header"><code>quotaAndLimits.dml.deleteRate.collection.max</code>
+    <button data-href="#quotaAndLimitsdmldeleteRatecollectionmax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dml.deleteRate.collection.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -304,10 +511,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dql.enabled`
-
-<table id="quotaAndLimits.dql.enabled">
+<h2 id="quotaAndLimitsdqlenabled" class="common-anchor-header"><code>quotaAndLimits.dql.enabled</code>
+    <button data-href="#quotaAndLimitsdqlenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dql.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -321,10 +541,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dql.searchRate.max`
-
-<table id="quotaAndLimits.dql.searchRate.max">
+<h2 id="quotaAndLimitsdqlsearchRatemax" class="common-anchor-header"><code>quotaAndLimits.dql.searchRate.max</code>
+    <button data-href="#quotaAndLimitsdqlsearchRatemax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dql.searchRate.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -342,10 +575,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dql.searchRate.collection.max`
-
-<table id="quotaAndLimits.dql.searchRate.collection.max">
+<h2 id="quotaAndLimitsdqlsearchRatecollectionmax" class="common-anchor-header"><code>quotaAndLimits.dql.searchRate.collection.max</code>
+    <button data-href="#quotaAndLimitsdqlsearchRatecollectionmax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dql.searchRate.collection.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -363,10 +609,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dql.queryRate.max`
-
-<table id="quotaAndLimits.dql.queryRate.max">
+<h2 id="quotaAndLimitsdqlqueryRatemax" class="common-anchor-header"><code>quotaAndLimits.dql.queryRate.max</code>
+    <button data-href="#quotaAndLimitsdqlqueryRatemax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dql.queryRate.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -384,10 +643,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.dql.queryRate.collection.max`
-
-<table id="quotaAndLimits.dql.queryRate.collection.max">
+<h2 id="quotaAndLimitsdqlqueryRatecollectionmax" class="common-anchor-header"><code>quotaAndLimits.dql.queryRate.collection.max</code>
+    <button data-href="#quotaAndLimitsdqlqueryRatecollectionmax" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.dql.queryRate.collection.max">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -405,10 +677,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.ttProtection.enabled`
-
-<table id="quotaAndLimits.limitWriting.ttProtection.enabled">
+<h2 id="quotaAndLimitslimitWritingttProtectionenabled" class="common-anchor-header"><code>quotaAndLimits.limitWriting.ttProtection.enabled</code>
+    <button data-href="#quotaAndLimitslimitWritingttProtectionenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.ttProtection.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -422,10 +707,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.ttProtection.maxTimeTickDelay`
-
-<table id="quotaAndLimits.limitWriting.ttProtection.maxTimeTickDelay">
+<h2 id="quotaAndLimitslimitWritingttProtectionmaxTimeTickDelay" class="common-anchor-header"><code>quotaAndLimits.limitWriting.ttProtection.maxTimeTickDelay</code>
+    <button data-href="#quotaAndLimitslimitWritingttProtectionmaxTimeTickDelay" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.ttProtection.maxTimeTickDelay">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -443,10 +741,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.memProtection.enabled`
-
-<table id="quotaAndLimits.limitWriting.memProtection.enabled">
+<h2 id="quotaAndLimitslimitWritingmemProtectionenabled" class="common-anchor-header"><code>quotaAndLimits.limitWriting.memProtection.enabled</code>
+    <button data-href="#quotaAndLimitslimitWritingmemProtectionenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.memProtection.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -460,10 +771,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.memProtection.dataNodeMemoryLowWaterLevel`
-
-<table id="quotaAndLimits.limitWriting.memProtection.dataNodeMemoryLowWaterLevel">
+<h2 id="quotaAndLimitslimitWritingmemProtectiondataNodeMemoryLowWaterLevel" class="common-anchor-header"><code>quotaAndLimits.limitWriting.memProtection.dataNodeMemoryLowWaterLevel</code>
+    <button data-href="#quotaAndLimitslimitWritingmemProtectiondataNodeMemoryLowWaterLevel" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.memProtection.dataNodeMemoryLowWaterLevel">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -481,10 +805,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.memProtection.queryNodeMemoryLowWaterLevel`
-
-<table id="quotaAndLimits.limitWriting.memProtection.queryNodeMemoryLowWaterLevel">
+<h2 id="quotaAndLimitslimitWritingmemProtectionqueryNodeMemoryLowWaterLevel" class="common-anchor-header"><code>quotaAndLimits.limitWriting.memProtection.queryNodeMemoryLowWaterLevel</code>
+    <button data-href="#quotaAndLimitslimitWritingmemProtectionqueryNodeMemoryLowWaterLevel" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.memProtection.queryNodeMemoryLowWaterLevel">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -502,10 +839,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.memProtection.dataNodeMemoryHighWaterLevel`
-
-<table id="quotaAndLimits.limitWriting.memProtection.dataNodeMemoryHighWaterLevel">
+<h2 id="quotaAndLimitslimitWritingmemProtectiondataNodeMemoryHighWaterLevel" class="common-anchor-header"><code>quotaAndLimits.limitWriting.memProtection.dataNodeMemoryHighWaterLevel</code>
+    <button data-href="#quotaAndLimitslimitWritingmemProtectiondataNodeMemoryHighWaterLevel" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.memProtection.dataNodeMemoryHighWaterLevel">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -523,10 +873,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.memProtection.queryNodeMemoryHighWaterLevel`
-
-<table id="quotaAndLimits.limitWriting.memProtection.queryNodeMemoryHighWaterLevel">
+<h2 id="quotaAndLimitslimitWritingmemProtectionqueryNodeMemoryHighWaterLevel" class="common-anchor-header"><code>quotaAndLimits.limitWriting.memProtection.queryNodeMemoryHighWaterLevel</code>
+    <button data-href="#quotaAndLimitslimitWritingmemProtectionqueryNodeMemoryHighWaterLevel" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.memProtection.queryNodeMemoryHighWaterLevel">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -544,10 +907,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.diskProtection.enabled`
-
-<table id="quotaAndLimits.limitWriting.diskProtection.enabled">
+<h2 id="quotaAndLimitslimitWritingdiskProtectionenabled" class="common-anchor-header"><code>quotaAndLimits.limitWriting.diskProtection.enabled</code>
+    <button data-href="#quotaAndLimitslimitWritingdiskProtectionenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.diskProtection.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -561,10 +937,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.diskProtection.diskQuota`
-
-<table id="quotaAndLimits.limitWriting.diskProtection.diskQuota">
+<h2 id="quotaAndLimitslimitWritingdiskProtectiondiskQuota" class="common-anchor-header"><code>quotaAndLimits.limitWriting.diskProtection.diskQuota</code>
+    <button data-href="#quotaAndLimitslimitWritingdiskProtectiondiskQuota" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.diskProtection.diskQuota">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -582,10 +971,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.diskProtection.diskQuotaPerCollection`
-
-<table id="quotaAndLimits.limitWriting.diskProtection.diskQuotaPerCollection">
+<h2 id="quotaAndLimitslimitWritingdiskProtectiondiskQuotaPerCollection" class="common-anchor-header"><code>quotaAndLimits.limitWriting.diskProtection.diskQuotaPerCollection</code>
+    <button data-href="#quotaAndLimitslimitWritingdiskProtectiondiskQuotaPerCollection" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.diskProtection.diskQuotaPerCollection">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -603,10 +1005,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.forceDeny`
-
-<table id="quotaAndLimits.limitWriting.forceDeny">
+<h2 id="quotaAndLimitslimitWritingforceDeny" class="common-anchor-header"><code>quotaAndLimits.limitWriting.forceDeny</code>
+    <button data-href="#quotaAndLimitslimitWritingforceDeny" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.forceDeny">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -620,10 +1035,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitReading.queueProtection.enabled`
-
-<table id="quotaAndLimits.limitReading.queueProtection.enabled">
+<h2 id="quotaAndLimitslimitReadingqueueProtectionenabled" class="common-anchor-header"><code>quotaAndLimits.limitReading.queueProtection.enabled</code>
+    <button data-href="#quotaAndLimitslimitReadingqueueProtectionenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitReading.queueProtection.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -637,10 +1065,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitReading.queueProtection.nqInQueueThreshold`
-
-<table id="quotaAndLimits.limitReading.queueProtection.nqInQueueThreshold">
+<h2 id="quotaAndLimitslimitReadingqueueProtectionnqInQueueThreshold" class="common-anchor-header"><code>quotaAndLimits.limitReading.queueProtection.nqInQueueThreshold</code>
+    <button data-href="#quotaAndLimitslimitReadingqueueProtectionnqInQueueThreshold" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitReading.queueProtection.nqInQueueThreshold">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -658,10 +1099,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitReading.queueProtection.queueLatencyThreshold`
-
-<table id="quotaAndLimits.limitReading.queueProtection.queueLatencyThreshold">
+<h2 id="quotaAndLimitslimitReadingqueueProtectionqueueLatencyThreshold" class="common-anchor-header"><code>quotaAndLimits.limitReading.queueProtection.queueLatencyThreshold</code>
+    <button data-href="#quotaAndLimitslimitReadingqueueProtectionqueueLatencyThreshold" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitReading.queueProtection.queueLatencyThreshold">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -679,10 +1133,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitReading.resultProtection.enabled`
-
-<table id="quotaAndLimits.limitReading.resultProtection.enabled">
+<h2 id="quotaAndLimitslimitReadingresultProtectionenabled" class="common-anchor-header"><code>quotaAndLimits.limitReading.resultProtection.enabled</code>
+    <button data-href="#quotaAndLimitslimitReadingresultProtectionenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitReading.resultProtection.enabled">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -696,10 +1163,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitReading.resultProtection.maxReadResultRate`
-
-<table id="quotaAndLimits.limitReading.resultProtection.maxReadResultRate">
+<h2 id="quotaAndLimitslimitReadingresultProtectionmaxReadResultRate" class="common-anchor-header"><code>quotaAndLimits.limitReading.resultProtection.maxReadResultRate</code>
+    <button data-href="#quotaAndLimitslimitReadingresultProtectionmaxReadResultRate" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitReading.resultProtection.maxReadResultRate">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -717,10 +1197,23 @@ Some of them are used to set backpressure signals that force Milvus to lower the
     </tr>
   </tbody>
 </table>
-
-## `quotaAndLimits.limitWriting.forceDeny`
-
-<table id="quotaAndLimits.limitWriting.forceDeny">
+<h2 id="quotaAndLimitslimitWritingforceDeny" class="common-anchor-header"><code>quotaAndLimits.limitWriting.forceDeny</code>
+    <button data-href="#quotaAndLimitslimitWritingforceDeny" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="quotaAndLimits.limitWriting.forceDeny">
   <thead>
     <tr>
       <th class="width80">Description</th>

@@ -3,328 +3,320 @@ id: manage-collections.md
 title: Manage Collections
 ---
 
-# Manage Collections
-
-This guide walks you through creating and managing collections using the SDK of your choice.
-
-## Before you start
-
-- You have installed [Milvus standalone](https://milvus.io/docs/install_standalone-docker.md) or [Milvus cluster](https://milvus.io/docs/install_cluster-milvusoperator.md).
-
-- You have installed preferred SDKs. You can choose among various languages, including [Python](https://milvus.io/docs/install-pymilvus.md), [Java](https://milvus.io/docs/install-java.md), [Go](https://milvus.io/docs/install-go.md), and [Node.js](https://milvus.io/docs/install-node.md).
-
-## Overview
-
-In Milvus, you store your vector embeddings in collections. All vector embeddings within a collection share the same dimensionality and distance metric for measuring similarity. 
-
-Milvus collections support dynamic fields (i.e., fields not pre-defined in the schema) and automatic incrementation of primary keys.
-
-To accommodate different preferences, Milvus offers two methods for creating a collection. One provides a quick setup, while the other allows for detailed customization of the collection schema and index parameters.
-
-Additionally, you can view, load, release, and drop a collection when necessary.
-
-## Create Collection
-
-You can create a collection in either of the following manners:
-
-- __Quick setup__
-
-    In this manner, you can create a collection by simply giving it a name and specifying the number of dimensions of the vector embeddings to be stored in this collection. For details, refer to [Quick setup](manage-collections.md).
-
-- __Customized setup__
-
-    Instead of letting In Milvus decide almost everything for your collection, you can determine the __schema__ and __index parameters__ of the collection on your own. For details, refer to [Customized setup](manage-collections.md).
-
-### Quick setup
-
-Against the backdrop of the great leap in the AI industry, most developers just need a simple yet dynamic collection to start with. Milvus allows a quick setup of such a collection with just three arguments: 
-
-- Name of the collection to create,
-
-- Dimension of the vector embeddings to insert, and
-
-- Metric type used to measure similarities between vector embeddings.
-
+<h1 id="Manage-Collections" class="common-anchor-header">Manage Collections
+    <button data-href="#Manage-Collections" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This guide walks you through creating and managing collections using the SDK of your choice.</p>
+<h2 id="Before-you-start" class="common-anchor-header">Before you start
+    <button data-href="#Before-you-start" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li><p>You have installed <a href="https://milvus.io/docs/install_standalone-docker.md">Milvus standalone</a> or <a href="https://milvus.io/docs/install_cluster-milvusoperator.md">Milvus cluster</a>.</p></li>
+<li><p>You have installed preferred SDKs. You can choose among various languages, including <a href="https://milvus.io/docs/install-pymilvus.md">Python</a>, <a href="https://milvus.io/docs/install-java.md">Java</a>, <a href="https://milvus.io/docs/install-go.md">Go</a>, and <a href="https://milvus.io/docs/install-node.md">Node.js</a>.</p></li>
+</ul>
+<h2 id="Overview" class="common-anchor-header">Overview
+    <button data-href="#Overview" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>In Milvus, you store your vector embeddings in collections. All vector embeddings within a collection share the same dimensionality and distance metric for measuring similarity.</p>
+<p>Milvus collections support dynamic fields (i.e., fields not pre-defined in the schema) and automatic incrementation of primary keys.</p>
+<p>To accommodate different preferences, Milvus offers two methods for creating a collection. One provides a quick setup, while the other allows for detailed customization of the collection schema and index parameters.</p>
+<p>Additionally, you can view, load, release, and drop a collection when necessary.</p>
+<h2 id="Create-Collection" class="common-anchor-header">Create Collection
+    <button data-href="#Create-Collection" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>You can create a collection in either of the following manners:</p>
+<ul>
+<li><p><strong>Quick setup</strong></p>
+<p>In this manner, you can create a collection by simply giving it a name and specifying the number of dimensions of the vector embeddings to be stored in this collection. For details, refer to <a href="/docs/manage-collections.md">Quick setup</a>.</p></li>
+<li><p><strong>Customized setup</strong></p>
+<p>Instead of letting In Milvus decide almost everything for your collection, you can determine the <strong>schema</strong> and <strong>index parameters</strong> of the collection on your own. For details, refer to <a href="/docs/manage-collections.md">Customized setup</a>.</p></li>
+</ul>
+<h3 id="Quick-setup" class="common-anchor-header">Quick setup</h3><p>Against the backdrop of the great leap in the AI industry, most developers just need a simple yet dynamic collection to start with. Milvus allows a quick setup of such a collection with just three arguments:</p>
+<ul>
+<li><p>Name of the collection to create,</p></li>
+<li><p>Dimension of the vector embeddings to insert, and</p></li>
+<li><p>Metric type used to measure similarities between vector embeddings.</p></li>
+</ul>
 <div class="language-python">
-
-For quick setup, use the [`create_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md) method of the [`MilvusClient`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md) class to create a collection with the specified name and dimension.
-
+<p>For quick setup, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md"><code>create_collection()</code></a> method of the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md"><code>MilvusClient</code></a> class to create a collection with the specified name and dimension.</p>
 </div>
-
 <div class="language-java">
-
-For quick setup, use the [`createCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md) method of the [`MilvusClientV2`](https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md) class to create a collection with the specified name and dimension.
-
+<p>For quick setup, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md"><code>createCollection()</code></a> method of the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md"><code>MilvusClientV2</code></a> class to create a collection with the specified name and dimension.</p>
 </div>
-
 <div class="language-javascript">
-
-For quick setup, use the [`createCollection()`](https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md) method of the [`MilvusClient`](https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md) class to create a collection with the specified name and dimension.
-
+<p>For quick setup, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md"><code>createCollection()</code></a> method of the <a href="https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md"><code>MilvusClient</code></a> class to create a collection with the specified name and dimension.</p>
 </div>
-
 <div class="language-shell">
-
-For quick setup, use the [`POST /v2/vectordb/collections/create`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Create.md) API endpoint to create a collection with the specified name and dimension.
-
+<p>For quick setup, use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Create.md"><code>POST /v2/vectordb/collections/create</code></a> API endpoint to create a collection with the specified name and dimension.</p>
 </div>
-
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
   <a href="#javascript">Node.js</a>
   <a href="#shell">cURL</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> MilvusClient, DataType
 
-```python
-from pymilvus import MilvusClient, DataType
-
-# 1. Set up a Milvus client
+<span class="hljs-comment"># 1. Set up a Milvus client</span>
 client = MilvusClient(
-    uri="http://localhost:19530"
+    uri=<span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 )
 
-# 2. Create a collection in quick setup mode
+<span class="hljs-comment"># 2. Create a collection in quick setup mode</span>
 client.create_collection(
-    collection_name="quick_setup",
-    dimension=5
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    dimension=<span class="hljs-number">5</span>
 )
 
 res = client.get_load_state(
-    collection_name="quick_setup"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "state": "<LoadState: Loaded>"
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.client.ConnectConfig;
+<span class="hljs-keyword">import</span> io.milvus.v2.client.MilvusClientV2;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.GetLoadStateReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.CreateCollectionReq;
 
-```java
-import io.milvus.v2.client.ConnectConfig;
-import io.milvus.v2.client.MilvusClientV2;
-import io.milvus.v2.service.collection.request.GetLoadStateReq;
-import io.milvus.v2.service.collection.request.CreateCollectionReq;
+<span class="hljs-type">String</span> <span class="hljs-variable">CLUSTER_ENDPOINT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;http://localhost:19530&quot;</span>;
 
-String CLUSTER_ENDPOINT = "http://localhost:19530";
-
-// 1. Connect to Milvus server
-ConnectConfig connectConfig = ConnectConfig.builder()
+<span class="hljs-comment">// 1. Connect to Milvus server</span>
+<span class="hljs-type">ConnectConfig</span> <span class="hljs-variable">connectConfig</span> <span class="hljs-operator">=</span> ConnectConfig.builder()
     .uri(CLUSTER_ENDPOINT)
     .build();
 
-MilvusClientV2 client = new MilvusClientV2(connectConfig);
+<span class="hljs-type">MilvusClientV2</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClientV2</span>(connectConfig);
 
-// 2. Create a collection in quick setup mode
-CreateCollectionReq quickSetupReq = CreateCollectionReq.builder()
-    .collectionName("quick_setup")
-    .dimension(5)
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-type">CreateCollectionReq</span> <span class="hljs-variable">quickSetupReq</span> <span class="hljs-operator">=</span> CreateCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .dimension(<span class="hljs-number">5</span>)
     .build();
 
 client.createCollection(quickSetupReq);
 
-// Thread.sleep(5000);
+<span class="hljs-comment">// Thread.sleep(5000);</span>
 
-GetLoadStateReq quickSetupLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
+<span class="hljs-type">GetLoadStateReq</span> <span class="hljs-variable">quickSetupLoadStateReq</span> <span class="hljs-operator">=</span> GetLoadStateReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .build();
 
-Boolean res = client.getLoadState(quickSetupLoadStateReq);
+<span class="hljs-type">Boolean</span> <span class="hljs-variable">res</span> <span class="hljs-operator">=</span> client.getLoadState(quickSetupLoadStateReq);
 
 System.out.println(res);
 
-// Output:
-// true
-```
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">address = <span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 
-```javascript
-address = "http://localhost:19530"
+<span class="hljs-comment">// 1. Set up a Milvus Client</span>
+client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClient</span>({address});
 
-// 1. Set up a Milvus Client
-client = new MilvusClient({address});
-
-// 2. Create a collection in quick setup mode
-let res = await client.createCollection({
-    collection_name: "quick_setup",
-    dimension: 5,
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-keyword">let</span> res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">dimension</span>: <span class="hljs-number">5</span>,
 });  
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-res = await client.getLoadState({
-    collection_name: "quick_setup"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateLoaded
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ <span class="hljs-built_in">export</span> MILVUS_URI=<span class="hljs-string">&quot;localhost:19530&quot;</span>
 
-```shell
-$ export MILVUS_URI="localhost:19530"
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/create&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+  &quot;collectionName&quot;: &quot;quick_setup&quot;,
+  &quot;dimension&quot;: 5
+}&#x27;</span>
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/create" \
--H "Content-Type: application/json" \
--d '{
-  "collectionName": "quick_setup",
-  "dimension": 5
-}'
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {},</span>
+<span class="hljs-comment"># }</span>
 
-# Output
-#
-# {
-#     "code": 0,
-#     "data": {},
-# }
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/get_load_state&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+  &quot;collectionName&quot;: &quot;quick_setup&quot;
+}&#x27;</span>
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/get_load_state" \
--H "Content-Type: application/json" \
--d '{
-  "collectionName": "quick_setup"
-}'
-
-# {
-#     "code": 0,
-#     "data": {
-#         "loadProgress": 100,
-#         "loadState": "LoadStateLoaded"
-#     }
-# }
-```
-
-The collection generated in the above code contains only two fields: `id` (as the primary key) and `vector` (as the vector field), with `auto_id` and `enable_dynamic_field` settings enabled by default.
-
-- `auto_id` 
-
-    Enabling this setting ensures that the primary key increments automatically. There's no need for manual provision of primary keys during data insertion.
-
-- `enable_dynamic_field`
-
-    When enabled, all fields, excluding `id` and `vector` in the data to be inserted, are treated as dynamic fields. These additional fields are saved as key-value pairs within a special field named `$meta`. This feature allows the inclusion of extra fields during data insertion.
-
-The automatically indexed and loaded collection from the provided code is ready for immediate data insertions.
-
-### Customized setup
-
-Instead of letting Milvus decide almost everything for your collection, you can determine the __schema__ and __index parameters__ of the collection on your own.
-
-#### Step 1: Set up schema
-
-A schema defines the structure of a collection. Within the schema, you have the option to enable or disable `enable_dynamic_field`, add pre-defined fields, and set attributes for each field. For a detailed explanation of the concept and available data types, refer to [Schema Explained](schema.md).
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;loadProgress&quot;: 100,</span>
+<span class="hljs-comment">#         &quot;loadState&quot;: &quot;LoadStateLoaded&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>The collection generated in the above code contains only two fields: <code>id</code> (as the primary key) and <code>vector</code> (as the vector field), with <code>auto_id</code> and <code>enable_dynamic_field</code> settings enabled by default.</p>
+<ul>
+<li><p><code>auto_id</code></p>
+<p>Enabling this setting ensures that the primary key increments automatically. There’s no need for manual provision of primary keys during data insertion.</p></li>
+<li><p><code>enable_dynamic_field</code></p>
+<p>When enabled, all fields, excluding <code>id</code> and <code>vector</code> in the data to be inserted, are treated as dynamic fields. These additional fields are saved as key-value pairs within a special field named <code>$meta</code>. This feature allows the inclusion of extra fields during data insertion.</p></li>
+</ul>
+<p>The automatically indexed and loaded collection from the provided code is ready for immediate data insertions.</p>
+<h3 id="Customized-setup" class="common-anchor-header">Customized setup</h3><p>Instead of letting Milvus decide almost everything for your collection, you can determine the <strong>schema</strong> and <strong>index parameters</strong> of the collection on your own.</p>
+<h4 id="Step-1-Set-up-schema" class="common-anchor-header">Step 1: Set up schema</h4><p>A schema defines the structure of a collection. Within the schema, you have the option to enable or disable <code>enable_dynamic_field</code>, add pre-defined fields, and set attributes for each field. For a detailed explanation of the concept and available data types, refer to <a href="/docs/schema.md">Schema Explained</a>.</p>
 <div class="language-python">
-
-To set up a schema, use [`create_schema()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_schema.md) to create a schema object and [`add_field()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/CollectionSchema/add_field.md) to add fields to the schema.
-
+<p>To set up a schema, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_schema.md"><code>create_schema()</code></a> to create a schema object and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/CollectionSchema/add_field.md"><code>add_field()</code></a> to add fields to the schema.</p>
 </div>
-
 <div class="language-java">
-
-To set up a schema, use [`createSchema()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createSchema.md) to create a schema object and [`addField()`](https://milvus.io/api-reference/java/v2.4.x/v2/CollectionSchema/addField.md) to add fields to the schema.
-
+<p>To set up a schema, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createSchema.md"><code>createSchema()</code></a> to create a schema object and <a href="https://milvus.io/api-reference/java/v2.4.x/v2/CollectionSchema/addField.md"><code>addField()</code></a> to add fields to the schema.</p>
 </div>
-
 <div class="language-javascript">
-
-To set up a schema, use [`createCollection()`](https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md).
-
+<p>To set up a schema, use <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md"><code>createCollection()</code></a>.</p>
 </div>
-
 <div class="language-shell">
-
-To set up a schema, you need to define a JSON object that follows the schema format as displayed on the [`POST /v2/vectordb/collections/create`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Create.md) API endpoint reference page.
-
+<p>To set up a schema, you need to define a JSON object that follows the schema format as displayed on the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Create.md"><code>POST /v2/vectordb/collections/create</code></a> API endpoint reference page.</p>
 </div>
-
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
   <a href="#javascript">Node.js</a>
   <a href="#shell">cURL</a>
 </div>
+<pre><code class="language-python"><span class="hljs-comment"># 3. Create a collection in customized setup mode</span>
 
-```python
-# 3. Create a collection in customized setup mode
-
-# 3.1. Create schema
+<span class="hljs-comment"># 3.1. Create schema</span>
 schema = MilvusClient.create_schema(
-    auto_id=False,
-    enable_dynamic_field=True,
+    auto_id=<span class="hljs-literal">False</span>,
+    enable_dynamic_field=<span class="hljs-literal">True</span>,
 )
 
-# 3.2. Add fields to schema
-schema.add_field(field_name="my_id", datatype=DataType.INT64, is_primary=True)
-schema.add_field(field_name="my_vector", datatype=DataType.FLOAT_VECTOR, dim=5)
-```
+<span class="hljs-comment"># 3.2. Add fields to schema</span>
+schema.add_field(field_name=<span class="hljs-string">&quot;my_id&quot;</span>, datatype=DataType.INT64, is_primary=<span class="hljs-literal">True</span>)
+schema.add_field(field_name=<span class="hljs-string">&quot;my_vector&quot;</span>, datatype=DataType.FLOAT_VECTOR, dim=<span class="hljs-number">5</span>)
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.common.DataType;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.CreateCollectionReq;
 
-```java
-import io.milvus.v2.common.DataType;
-import io.milvus.v2.service.collection.request.CreateCollectionReq;
+<span class="hljs-comment">// 3. Create a collection in customized setup mode</span>
 
-// 3. Create a collection in customized setup mode
+<span class="hljs-comment">// 3.1 Create schema</span>
+CreateCollectionReq.<span class="hljs-type">CollectionSchema</span> <span class="hljs-variable">schema</span> <span class="hljs-operator">=</span> client.createSchema();
 
-// 3.1 Create schema
-CreateCollectionReq.CollectionSchema schema = client.createSchema();
-
-// 3.2 Add fields to schema
+<span class="hljs-comment">// 3.2 Add fields to schema</span>
 schema.addField(AddFieldReq.builder()
-    .fieldName("my_id")
+    .fieldName(<span class="hljs-string">&quot;my_id&quot;</span>)
     .dataType(DataType.Int64)
-    .isPrimaryKey(true)
-    .autoID(false)
+    .isPrimaryKey(<span class="hljs-literal">true</span>)
+    .autoID(<span class="hljs-literal">false</span>)
     .build());
 
 schema.addField(AddFieldReq.builder()
-    .fieldName("my_vector")
+    .fieldName(<span class="hljs-string">&quot;my_vector&quot;</span>)
     .dataType(DataType.FloatVector)
-    .dimension(5)
+    .dimension(<span class="hljs-number">5</span>)
     .build());
-```
-
-```javascript
-// 3. Create a collection in customized setup mode
-// 3.1 Define fields
-const fields = [
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 3. Create a collection in customized setup mode</span>
+<span class="hljs-comment">// 3.1 Define fields</span>
+<span class="hljs-keyword">const</span> fields = [
     {
-        name: "my_id",
-        data_type: DataType.Int64,
-        is_primary_key: true,
-        auto_id: false
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;my_id&quot;</span>,
+        <span class="hljs-attr">data_type</span>: <span class="hljs-title class_">DataType</span>.<span class="hljs-property">Int64</span>,
+        <span class="hljs-attr">is_primary_key</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">auto_id</span>: <span class="hljs-literal">false</span>
     },
     {
-        name: "my_vector",
-        data_type: DataType.FloatVector,
-        dim: 5
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;my_vector&quot;</span>,
+        <span class="hljs-attr">data_type</span>: <span class="hljs-title class_">DataType</span>.<span class="hljs-property">FloatVector</span>,
+        <span class="hljs-attr">dim</span>: <span class="hljs-number">5</span>
     },
 ]
-```
-
-```shell
-export fields='[{ \
-    "fieldName": "my_id", \
-    "dataType": "Int64", \
-    "isPrimary": true \
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell"><span class="hljs-keyword">export</span> fields=<span class="hljs-string">&#x27;[{ \
+    &quot;fieldName&quot;: &quot;my_id&quot;, \
+    &quot;dataType&quot;: &quot;Int64&quot;, \
+    &quot;isPrimary&quot;: true \
 }, \
 { \
-    "fieldName": "my_vector", \
-    "dataType": "FloatVector", \
-    "elementTypeParams": { \
-        "dim": 5 \
+    &quot;fieldName&quot;: &quot;my_vector&quot;, \
+    &quot;dataType&quot;: &quot;FloatVector&quot;, \
+    &quot;elementTypeParams&quot;: { \
+        &quot;dim&quot;: 5 \
     } \
-}]'
-```
-
+}]&#x27;</span>
+<button class="copy-code-btn"></button></code></pre>
 <table class="language-python">
   <thead>
     <tr>
@@ -359,7 +351,6 @@ export fields='[{ \
     </tr>
   </tbody>
 </table>
-
 <table class="language-java">
   <thead>
     <tr>
@@ -390,7 +381,6 @@ export fields='[{ \
     </tr>
   </tbody>
 </table>
-
 <table class="language-javascript">
   <thead>
     <tr>
@@ -421,7 +411,6 @@ export fields='[{ \
     </tr>
   </tbody>
 </table>
-
 <table class="language-shell">
   <thead>
     <tr>
@@ -452,112 +441,87 @@ export fields='[{ \
     </tr>
   </tbody>
 </table>
-
-#### Step 2: Set up index parameters
-
-Index parameters dictate how Milvus organizes your data within a collection. You can tailor the indexing process for specific fields by adjusting their `metric_type` and `index_type`. For the vector field, you have the flexibility to select `COSINE`, `L2`, `IP`, `HAMMING`, or `JACCARD` as the `metric_type`, depending on the type of vectors you are working with. For more information, refer to [Similarity Metrics](metric.md).
-
+<h4 id="Step-2-Set-up-index-parameters" class="common-anchor-header">Step 2: Set up index parameters</h4><p>Index parameters dictate how Milvus organizes your data within a collection. You can tailor the indexing process for specific fields by adjusting their <code>metric_type</code> and <code>index_type</code>. For the vector field, you have the flexibility to select <code>COSINE</code>, <code>L2</code>, <code>IP</code>, <code>HAMMING</code>, or <code>JACCARD</code> as the <code>metric_type</code>, depending on the type of vectors you are working with. For more information, refer to <a href="/docs/metric.md">Similarity Metrics</a>.</p>
 <div class="language-python">
-
-To set up index parameters, use [`prepare_index_params()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/prepare_index_params.md) to prepare index parameters and [`add_index()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/add_index.md) to add the index.
-
+<p>To set up index parameters, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/prepare_index_params.md"><code>prepare_index_params()</code></a> to prepare index parameters and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/add_index.md"><code>add_index()</code></a> to add the index.</p>
 </div>
-
 <div class="language-java">
-
-To set up index parameters, use [IndexParam](https://milvus.io/api-reference/java/v2.4.x/v2/Management/IndexParam.md).
-
+<p>To set up index parameters, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/IndexParam.md">IndexParam</a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To set up index parameters, use [`createIndex()`](https://milvus.io/api-reference/node/v2.4.x/Management/createIndex.md).
-
+<p>To set up index parameters, use <a href="https://milvus.io/api-reference/node/v2.4.x/Management/createIndex.md"><code>createIndex()</code></a>.</p>
 </div>
-
 <div class="language-shell">
-
-To set up index parameters, you need to define a JSON object that follows the index parameters format as displayed on the [`POST /v2/vectordb/collections/create`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Create.md) API endpoint reference page.
-
+<p>To set up index parameters, you need to define a JSON object that follows the index parameters format as displayed on the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Create.md"><code>POST /v2/vectordb/collections/create</code></a> API endpoint reference page.</p>
 </div>
-
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
   <a href="#javascript">Node.js</a>
   <a href="#shell">cURL</a>
 </div>
-
-```python
-# 3.3. Prepare index parameters
+<pre><code class="language-python"><span class="hljs-meta"># 3.3. Prepare index parameters</span>
 index_params = client.prepare_index_params()
 
-# 3.4. Add indexes
+<span class="hljs-meta"># 3.4. Add indexes</span>
 index_params.add_index(
-    field_name="my_id",
-    index_type="STL_SORT"
+    field_name=<span class="hljs-string">&quot;my_id&quot;</span>,
+    index_type=<span class="hljs-string">&quot;STL_SORT&quot;</span>
 )
 
 index_params.add_index(
-    field_name="my_vector", 
-    index_type="IVF_FLAT",
-    metric_type="IP",
-    params={ "nlist": 128 }
+    field_name=<span class="hljs-string">&quot;my_vector&quot;</span>, 
+    index_type=<span class="hljs-string">&quot;IVF_FLAT&quot;</span>,
+    metric_type=<span class="hljs-string">&quot;IP&quot;</span>,
+    <span class="hljs-keyword">params</span>={ <span class="hljs-string">&quot;nlist&quot;</span>: <span class="hljs-number">128</span> }
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.common.IndexParam;
 
-```java
-import io.milvus.v2.common.IndexParam;
-
-// 3.3 Prepare index parameters
-IndexParam indexParamForIdField = IndexParam.builder()
-    .fieldName("my_id")
+<span class="hljs-comment">// 3.3 Prepare index parameters</span>
+<span class="hljs-type">IndexParam</span> <span class="hljs-variable">indexParamForIdField</span> <span class="hljs-operator">=</span> IndexParam.builder()
+    .fieldName(<span class="hljs-string">&quot;my_id&quot;</span>)
     .indexType(IndexParam.IndexType.STL_SORT)
     .build();
 
-IndexParam indexParamForVectorField = IndexParam.builder()
-    .fieldName("my_vector")
+<span class="hljs-type">IndexParam</span> <span class="hljs-variable">indexParamForVectorField</span> <span class="hljs-operator">=</span> IndexParam.builder()
+    .fieldName(<span class="hljs-string">&quot;my_vector&quot;</span>)
     .indexType(IndexParam.IndexType.IVF_FLAT)
     .metricType(IndexParam.MetricType.L2)
-    .extraParams(Map.of("nlist", 1024))
+    .extraParams(Map.of(<span class="hljs-string">&quot;nlist&quot;</span>, <span class="hljs-number">1024</span>))
     .build();
 
-List<IndexParam> indexParams = new ArrayList<>();
+List&lt;IndexParam&gt; indexParams = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
 indexParams.add(indexParamForIdField);
 indexParams.add(indexParamForVectorField);
-```
-
-```javascript
-// 3.2 Prepare index parameters
-const index_params = [{
-    field_name: "my_id",
-    index_type: "STL_SORT"
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 3.2 Prepare index parameters</span>
+<span class="hljs-keyword">const</span> index_params = [{
+    field_name: <span class="hljs-string">&quot;my_id&quot;</span>,
+    index_type: <span class="hljs-string">&quot;STL_SORT&quot;</span>
 },{
-    field_name: "my_vector",
-    index_type: "IVF_FLAT",
-    metric_type: "IP",
-    params: { nlist: 1024}
+    field_name: <span class="hljs-string">&quot;my_vector&quot;</span>,
+    index_type: <span class="hljs-string">&quot;IVF_FLAT&quot;</span>,
+    metric_type: <span class="hljs-string">&quot;IP&quot;</span>,
+    <span class="hljs-keyword">params</span>: { nlist: <span class="hljs-number">1024</span>}
 }]
-```
-
-```shell
-export indexParams='[{ \
-    "fieldName": "my_id", \
-    "indexName": "my_id", \
-    "params": { \
-        "index_type": "SLT_SORT" \
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell"><span class="hljs-keyword">export</span> indexParams=<span class="hljs-string">&#x27;[{ \
+    &quot;fieldName&quot;: &quot;my_id&quot;, \
+    &quot;indexName&quot;: &quot;my_id&quot;, \
+    &quot;params&quot;: { \
+        &quot;index_type&quot;: &quot;SLT_SORT&quot; \
   } \
 }, { \
-    "fieldName": "my_vector", \
-    "metricType": "COSINE", \
-    "indexName": "my_vector", \
-    "params": { \
-        "index_type": "IVF_FLAT", \
-        "nlist": 1024 \
+    &quot;fieldName&quot;: &quot;my_vector&quot;, \
+    &quot;metricType&quot;: &quot;COSINE&quot;, \
+    &quot;indexName&quot;: &quot;my_vector&quot;, \
+    &quot;params&quot;: { \
+        &quot;index_type&quot;: &quot;IVF_FLAT&quot;, \
+        &quot;nlist&quot;: 1024 \
   } \
-}]'
-```
-
+}]&#x27;</span>
+<button class="copy-code-btn"></button></code></pre>
 <table class="language-python">
   <thead>
     <tr>
@@ -584,7 +548,6 @@ export indexParams='[{ \
     </tr>
   </tbody>
 </table>
-
 <table class="language-java">
   <thead>
     <tr>
@@ -611,7 +574,6 @@ export indexParams='[{ \
     </tr>
   </tbody>
 </table>
-
 <table class="language-javascript">
   <thead>
     <tr>
@@ -638,7 +600,6 @@ export indexParams='[{ \
     </tr>
   </tbody>
 </table>
-
 <table class="language-shell">
   <thead>
     <tr>
@@ -673,532 +634,483 @@ export indexParams='[{ \
     </tr>
   </tbody>
 </table>
-
-The code snippet above demonstrates how to set up index parameters for the vector field and a scalar field, respectively. For the vector field, set both the metric type and the index type. For a scalar field, set only the index type. It is recommended to create an index for the vector field and any scalar fields that are frequently used for filtering.
-
-#### Step 3: Create the collection
-
-You have the option to create a collection and an index file separately or to create a collection with the index loaded simultaneously upon creation.
-
+<p>The code snippet above demonstrates how to set up index parameters for the vector field and a scalar field, respectively. For the vector field, set both the metric type and the index type. For a scalar field, set only the index type. It is recommended to create an index for the vector field and any scalar fields that are frequently used for filtering.</p>
+<h4 id="Step-3-Create-the-collection" class="common-anchor-header">Step 3: Create the collection</h4><p>You have the option to create a collection and an index file separately or to create a collection with the index loaded simultaneously upon creation.</p>
 <div class="language-python">
-
-Use [create_collection()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md) to create a collection with the specified schema and index parameters and [get_load_state()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/get_load_state.md) to check the load state of the collection.
-
+<p>Use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md">create_collection()</a> to create a collection with the specified schema and index parameters and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/get_load_state.md">get_load_state()</a> to check the load state of the collection.</p>
 </div>
-
 <div class="language-java">
-
-Use [createCollection()](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md) to create a collection with the specified schema and index parameters and [getLoadState()](https://milvus.io/api-reference/java/v2.4.x/v2/Management/getLoadState.md) to check the load state of the collection.
-
+<p>Use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md">createCollection()</a> to create a collection with the specified schema and index parameters and <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/getLoadState.md">getLoadState()</a> to check the load state of the collection.</p>
 </div>
-
 <div class="language-javascript">
-
-Use [createCollection()](https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md) to create a collection with the specified schema and index parameters and [getLoadState()](https://milvus.io/api-reference/node/v2.4.x/Management/getLoadState.md) to check the load state of the collection.
-
+<p>Use <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md">createCollection()</a> to create a collection with the specified schema and index parameters and <a href="https://milvus.io/api-reference/node/v2.4.x/Management/getLoadState.md">getLoadState()</a> to check the load state of the collection.</p>
 </div>
+<ul>
+<li><p><strong>Create a collection with the index loaded simultaneously upon creation.</strong></p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+<a href="#shell">cURL</a>
+</div></p>
+<pre><code class="language-python"><span class="hljs-comment"># 3.5. Create a collection with the index loaded simultaneously</span>
+client.create_collection(
+    collection_name=<span class="hljs-string">&quot;customized_setup_1&quot;</span>,
+    schema=schema,
+    index_params=index_params
+)
 
-- __Create a collection with the index loaded simultaneously upon creation.__
+time.sleep(<span class="hljs-number">5</span>)
 
-    <div class="multipleCode">
-    <a href="#python">Python </a>
-    <a href="#java">Java</a>
-    <a href="#javascript">Node.js</a>
-    <a href="#shell">cURL</a>
-    </div>
+res = client.get_load_state(
+    collection_name=<span class="hljs-string">&quot;customized_setup_1&quot;</span>
+)
 
-    ```python
-    # 3.5. Create a collection with the index loaded simultaneously
-    client.create_collection(
-        collection_name="customized_setup_1",
-        schema=schema,
-        index_params=index_params
-    )
-    
-    time.sleep(5)
-    
-    res = client.get_load_state(
-        collection_name="customized_setup_1"
-    )
-    
-    print(res)
-    
-    # Output
-    #
-    # {
-    #     "state": "<LoadState: Loaded>"
-    # }
-    ```
+<span class="hljs-built_in">print</span>(res)
 
-    ```java
-    import io.milvus.v2.service.collection.request.CreateCollectionReq;
-    import io.milvus.v2.service.collection.request.GetLoadStateReq;
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.CreateCollectionReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.GetLoadStateReq;
 
-    // 3.4 Create a collection with schema and index parameters
-    CreateCollectionReq customizedSetupReq1 = CreateCollectionReq.builder()
-        .collectionName("customized_setup_1")
-        .collectionSchema(schema)
-        .indexParams(indexParams)
-        .build();
+<span class="hljs-comment">// 3.4 Create a collection with schema and index parameters</span>
+<span class="hljs-type">CreateCollectionReq</span> <span class="hljs-variable">customizedSetupReq1</span> <span class="hljs-operator">=</span> CreateCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_1&quot;</span>)
+    .collectionSchema(schema)
+    .indexParams(indexParams)
+    .build();
 
-    client.createCollection(customizedSetupReq1);
+client.createCollection(customizedSetupReq1);
 
-    // Thread.sleep(5000);
+<span class="hljs-comment">// Thread.sleep(5000);</span>
 
-    // 3.5 Get load state of the collection
-    GetLoadStateReq customSetupLoadStateReq1 = GetLoadStateReq.builder()
-        .collectionName("customized_setup_1")
-        .build();
+<span class="hljs-comment">// 3.5 Get load state of the collection</span>
+<span class="hljs-type">GetLoadStateReq</span> <span class="hljs-variable">customSetupLoadStateReq1</span> <span class="hljs-operator">=</span> GetLoadStateReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_1&quot;</span>)
+    .build();
 
-    res = client.getLoadState(customSetupLoadStateReq1);
+res = client.getLoadState(customSetupLoadStateReq1);
 
-    System.out.println(res);
+System.out.println(res);
 
-    // Output:
-    // true
-    ```
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 3.3 Create a collection with fields and index parameters</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_1&quot;</span>,
+    <span class="hljs-attr">fields</span>: fields,
+    <span class="hljs-attr">index_params</span>: index_params,
+})
 
-    ```javascript
-    // 3.3 Create a collection with fields and index parameters
-    res = await client.createCollection({
-        collection_name: "customized_setup_1",
-        fields: fields,
-        index_params: index_params,
-    })
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)  
 
-    console.log(res.error_code)  
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-    // Output
-    // 
-    // Success
-    // 
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_1&quot;</span>
+})
 
-    res = await client.getLoadState({
-        collection_name: "customized_setup_1"
-    })
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-    console.log(res.state)
-
-    // Output
-    // 
-    // LoadStateLoaded
-    //   
-    ```
-
-    ```shell
-    $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/create" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "collectionName": "customized_setup_1",
-        "schema": {
-            "autoId": false,
-            "enabledDynamicField": false,
-            "fields": [
-                {
-                    "fieldName": "my_id",
-                    "dataType": "Int64",
-                    "isPrimary": true
-                },
-                {
-                    "fieldName": "my_vector",
-                    "dataType": "FloatVector",
-                    "elementTypeParams": {
-                        "dim": "5"
-                    }
-                }
-            ]
-        },
-        "indexParams": [
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">//   </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/create&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_1&quot;,
+    &quot;schema&quot;: {
+        &quot;autoId&quot;: false,
+        &quot;enabledDynamicField&quot;: false,
+        &quot;fields&quot;: [
             {
-                "fieldName": "my_vector",
-                "metricType": "COSINE",
-                "indexName": "my_vector",
-                "params": {
-                    "index_type": "IVF_FLAT",
-                    "nlist": "1024"
-                }
+                &quot;fieldName&quot;: &quot;my_id&quot;,
+                &quot;dataType&quot;: &quot;Int64&quot;,
+                &quot;isPrimary&quot;: true
             },
             {
-                "fieldName": "my_id",
-                "indexName": "my_id",
-                "params": {
-                    "index_type": "STL_SORT"
-                }            
+                &quot;fieldName&quot;: &quot;my_vector&quot;,
+                &quot;dataType&quot;: &quot;FloatVector&quot;,
+                &quot;elementTypeParams&quot;: {
+                    &quot;dim&quot;: &quot;5&quot;
+                }
             }
         ]
-    }'
-
-    # Output
-    #
-    # {
-    #     "code": 0,
-    #     "data": {},
-    # }
-
-    $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/get_load_state" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "collectionName": "customized_setup_1"
-    }'
-
-    # {
-    #     "code": 0,
-    #     "data": {
-    #         "loadProgress": 100,
-    #         "loadState": "LoadStateLoaded"
-    #     }
-    # }
-    ```
-
-    The collection created above is loaded automatically. To learn more about loading and releasing a collection, refer to [Load & Release Collection](manage-collections.md#Load--Release-Collection). 
-
-- __Create a collection and an index file separately.__
-
-    <div class="multipleCode">
-    <a href="#python">Python </a>
-    <a href="#java">Java</a>
-    <a href="#javascript">Node.js</a>
-    <a href="#shell">cURL</a>
-    </div>
-
-    ```python
-    # 3.6. Create a collection and index it separately
-    client.create_collection(
-        collection_name="customized_setup_2",
-        schema=schema,
-    )
-    
-    res = client.get_load_state(
-        collection_name="customized_setup_2"
-    )
-    
-    print(res)
-    
-    # Output
-    #
-    # {
-    #     "state": "<LoadState: NotLoad>"
-    # }
-    ```
-    
-    ```java
-    // 3.6 Create a collection and index it separately
-    CreateCollectionReq customizedSetupReq2 = CreateCollectionReq.builder()
-        .collectionName("customized_setup_2")
-        .collectionSchema(schema)
-        .build();
-
-    client.createCollection(customizedSetupReq2);
-    ```
-
-    ```javascript
-    // 3.4 Create a collection and index it seperately
-    res = await client.createCollection({
-        collection_name: "customized_setup_2",
-        fields: fields,
-    })
-
-    console.log(res.error_code)
-
-    // Output
-    // 
-    // Success
-    // 
-
-    res = await client.getLoadState({
-        collection_name: "customized_setup_2"
-    })
-
-    console.log(res.state)
-
-    // Output
-    // 
-    // LoadStateNotLoad
-    // 
-    ```
-
-    ```shell
-    $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/create" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "collectionName": "customized_setup_2",
-        "schema": {
-            "autoId": false,
-            "enabledDynamicField": false,
-            "fields": [
-                {
-                    "fieldName": "my_id",
-                    "dataType": "Int64",
-                    "isPrimary": true
-                },
-                {
-                    "fieldName": "my_vector",
-                    "dataType": "FloatVector",
-                    "elementTypeParams": {
-                        "dim": "5"
-                    }
-                }
-            ]
-            
+    },
+    &quot;indexParams&quot;: [
+        {
+            &quot;fieldName&quot;: &quot;my_vector&quot;,
+            &quot;metricType&quot;: &quot;COSINE&quot;,
+            &quot;indexName&quot;: &quot;my_vector&quot;,
+            &quot;params&quot;: {
+                &quot;index_type&quot;: &quot;IVF_FLAT&quot;,
+                &quot;nlist&quot;: &quot;1024&quot;
+            }
+        },
+        {
+            &quot;fieldName&quot;: &quot;my_id&quot;,
+            &quot;indexName&quot;: &quot;my_id&quot;,
+            &quot;params&quot;: {
+                &quot;index_type&quot;: &quot;STL_SORT&quot;
+            }            
         }
-    }'
+    ]
+}&#x27;</span>
 
-    # Output
-    #
-    # {
-    #     "code": 0,
-    #     "data": {},
-    # }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {},</span>
+<span class="hljs-comment"># }</span>
 
-    $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/get_load_state" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "collectionName": "customized_setup_2"
-    }'
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/get_load_state&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_1&quot;
+}&#x27;</span>
 
-    # {
-    #     "code": 0,
-    #     "data": {
-    #         "loadState": "LoadStateNotLoaded"
-    #     }
-    # }
-    ```
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;loadProgress&quot;: 100,</span>
+<span class="hljs-comment">#         &quot;loadState&quot;: &quot;LoadStateLoaded&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>The collection created above is loaded automatically. To learn more about loading and releasing a collection, refer to <a href="/docs/manage-collections.md#Load--Release-Collection">Load &amp; Release Collection</a>.</p></li>
+<li><p><strong>Create a collection and an index file separately.</strong></p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+<a href="#shell">cURL</a>
+</div></p>
+<pre><code class="language-python"><span class="hljs-comment"># 3.6. Create a collection and index it separately</span>
+client.create_collection(
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    schema=schema,
+)
 
-    The collection created above is not loaded automatically. You can create an index for the collection as follows. Creating an index for the collection in a separate manner does not automatically load the collection. For details, refer to [Load & Release Collection](manage-collections.md#Load--Release-Collection).
+res = client.get_load_state(
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
+)
 
-    <table class="language-python">
-    <thead>
-        <tr>
-        <th>Parameter</th>
-        <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-        <td><code>collection_name</code></td>
-        <td>The name of the collection.</td>
-        </tr>
-        <tr>
-        <td><code>schema</code></td>
-        <td>The schema of this collection.<br/>Setting this to <strong>None</strong> indicates this collection will be created with default settings.<br/>To set up a collection with a customized schema, you need to create a <strong>CollectionSchema</strong> object and reference it here. In this case, Milvus ignores all other schema-related settings carried in the request.</td>
-        </tr>
-        <tr>
-        <td><code>index_params</code></td>
-        <td>The parameters for building the index on the vector field in this collection. To set up a collection with a customized schema and automatically load the collection to memory, you need to create an IndexParams object and reference it here.<br/>You should at least add an index for the vector field in this collection. You can also skip this parameter if you prefer to set up the index parameters later on.</td>
-        </tr>
-    </tbody>
-    </table>
+<span class="hljs-built_in">print</span>(res)
 
-    <table class="language-java">
-    <thead>
-        <tr>
-        <th>Parameter</th>
-        <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-        <td><code>collectionName</code></td>
-        <td>The name of the collection.</td>
-        </tr>
-        <tr>
-        <td><code>collectionSchema</code></td>
-        <td>The schema of this collection.<br/>Leaving it empty indicates this collection will be created with default settings. To set up a collection with a customized schema, you need to create a <strong>CollectionSchema</strong> object and reference it here.</td>
-        </tr>
-        <tr>
-        <td><code>indexParams</code></td>
-        <td>The parameters for building the index on the vector field in this collection. To set up a collection with a customized schema and automatically load the collection to memory, create an <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/IndexParam.md">IndexParams</a> object with a list of IndexParam objects and reference it here.</td>
-        </tr>
-    </tbody>
-    </table>
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: NotLoad&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 3.6 Create a collection and index it separately</span>
+<span class="hljs-type">CreateCollectionReq</span> <span class="hljs-variable">customizedSetupReq2</span> <span class="hljs-operator">=</span> CreateCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
+    .collectionSchema(schema)
+    .build();
 
-    <table class="language-javascript">
-    <thead>
-        <tr>
-        <th>Parameter</th>
-        <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-        <td><code>collection_name</code></td>
-        <td>The name of the collection.</td>
-        </tr>
-        <tr>
-        <td><code>fields</code></td>
-        <td>The fields in the collection.</td>
-        </tr>
-        <tr>
-        <td><code>index_params</code></td>
-        <td>The index parameters for the collection to create.</td>
-        </tr>
-    </tbody>
-    </table>
+client.createCollection(customizedSetupReq2);
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 3.4 Create a collection and index it seperately</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    <span class="hljs-attr">fields</span>: fields,
+})
 
-    <table class="language-shell">
-    <thead>
-        <tr>
-        <th>Parameter</th>
-        <th>Description</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-        <td><code>collectionName</code></td>
-        <td>The name of the collection.</td>
-        </tr>
-        <tr>
-        <td><code>schema</code></td>
-        <td>The schema is responsible for organizing data in the target collection. A valid schema should have multiple fields, which must include a primary key, a vector field, and several scalar fields.</td>
-        </tr>
-        <tr>
-        <td><code>schema.autoID</code></td>
-        <td>Whether allows the primary field to automatically increment. Setting this to True makes the primary field automatically increment. In this case, the primary field should not be included in the data to insert to avoid errors. Set this parameter in the field with is_primary set to True.</td>
-        </tr>
-        <tr>
-        <td><code>schema.enableDynamicField</code></td>
-        <td>Whether allows to use the reserved $meta field to hold non-schema-defined fields in key-value pairs.</td>
-        </tr>
-        <tr>
-        <td><code>fields</code></td>
-        <td>A list of field objects.</td>
-        </tr>
-        <tr>
-        <td><code>fields.fieldName</code></td>
-        <td>The name of the field to create in the target collection.</td>
-        </tr>
-        <tr>
-        <td><code>fields.dataType</code></td>
-        <td>The data type of the field values.</td>
-        </tr>
-        <tr>
-        <td><code>fields.isPrimary</code></td>
-        <td>Whether the current field is the primary field. Setting this to True makes the current field the primary field.</td>
-        </tr>
-        <tr>
-        <td><code>fields.elementTypeParams</code></td>
-        <td>Extra field parameters.</td>
-        </tr>
-        <tr>
-        <td><code>fields.elementTypeParams.dim</code></td>
-        <td>An optional parameter for FloatVector or BinaryVector fields that determines the vector dimension.</td>
-        </tr>
-    </tbody>
-    </table>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-    The collection created above is not loaded automatically. You can create an index for the collection as follows. Creating an index for the collection in a separate manner does not automatically load the collection. For details, refer to [Load & Release Collection](manage-collections.md).
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-    <div class="multipleCode">
-    <a href="#python">Python </a>
-    <a href="#java">Java</a>
-    <a href="#javascript">Node.js</a>
-    <a href="#shell">cURL</a>
-    </div>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
+})
 
-    ```python
-    # 3.6 Create index
-    client.create_index(
-        collection_name="customized_setup_2",
-        index_params=index_params
-    )
-    
-    res = client.get_load_state(
-        collection_name="customized_setup_2"
-    )
-    
-    print(res)
-    
-    # Output
-    #
-    # {
-    #     "state": "<LoadState: NotLoad>"
-    # }
-    ```
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-    ```java
-    CreateIndexReq  createIndexReq = CreateIndexReq.builder()
-        .collectionName("customized_setup_2")
-        .indexParams(indexParams)
-        .build();
-
-    client.createIndex(createIndexReq);
-
-    // Thread.sleep(1000);
-
-    // 3.7 Get load state of the collection
-    GetLoadStateReq customSetupLoadStateReq2 = GetLoadStateReq.builder()
-        .collectionName("customized_setup_2")
-        .build();
-
-    res = client.getLoadState(customSetupLoadStateReq2);
-
-    System.out.println(res);
-
-    // Output:
-    // false
-    ```
-
-    ```javascript
-    // 3.5 Create index
-    res = await client.createIndex({
-        collection_name: "customized_setup_2",
-        field_name: "my_vector",
-        index_type: "IVF_FLAT",
-        metric_type: "IP",
-        params: { nlist: 1024}
-    })
-
-    res = await client.getLoadState({
-        collection_name: "customized_setup_2"
-    })
-
-    console.log(res.state)
-
-    // Output
-    // 
-    // LoadStateNotLoad
-    //
-    ```
-
-    ```shell
-    $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/indexes/create" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "collectionName": "customized_setup_2",
-        "indexParams": [
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateNotLoad</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/create&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;,
+    &quot;schema&quot;: {
+        &quot;autoId&quot;: false,
+        &quot;enabledDynamicField&quot;: false,
+        &quot;fields&quot;: [
             {
-                "metricType": "L2",
-                "fieldName": "my_vector",
-                "indexName": "my_vector",
-                "indexConfig": {
-                    "index_type": "IVF_FLAT",
-                    "nlist": "1024"
+                &quot;fieldName&quot;: &quot;my_id&quot;,
+                &quot;dataType&quot;: &quot;Int64&quot;,
+                &quot;isPrimary&quot;: true
+            },
+            {
+                &quot;fieldName&quot;: &quot;my_vector&quot;,
+                &quot;dataType&quot;: &quot;FloatVector&quot;,
+                &quot;elementTypeParams&quot;: {
+                    &quot;dim&quot;: &quot;5&quot;
                 }
             }
         ]
-    }'
+        
+    }
+}&#x27;</span>
 
-    # Output
-    #
-    # {
-    #     "code": 0,
-    #     "data": {},
-    # }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {},</span>
+<span class="hljs-comment"># }</span>
 
-    $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/get_load_state" \
-    -H "Content-Type: application/json" \
-    -d '{
-        "collectionName": "customized_setup_2"
-    }'
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/get_load_state&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
-    # {
-    #     "code": 0,
-    #     "data": {
-    #         "loadState": "LoadStateNotLoaded"
-    #     }
-    # }
-    ```
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;loadState&quot;: &quot;LoadStateNotLoaded&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>The collection created above is not loaded automatically. You can create an index for the collection as follows. Creating an index for the collection in a separate manner does not automatically load the collection. For details, refer to <a href="/docs/manage-collections.md#Load--Release-Collection">Load &amp; Release Collection</a>.</p>
+<p><table class="language-python">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>collection_name</code></td>
+<td>The name of the collection.</td>
+</tr>
+<tr>
+<td><code>schema</code></td>
+<td>The schema of this collection.<br/>Setting this to <strong>None</strong> indicates this collection will be created with default settings.<br/>To set up a collection with a customized schema, you need to create a <strong>CollectionSchema</strong> object and reference it here. In this case, Milvus ignores all other schema-related settings carried in the request.</td>
+</tr>
+<tr>
+<td><code>index_params</code></td>
+<td>The parameters for building the index on the vector field in this collection. To set up a collection with a customized schema and automatically load the collection to memory, you need to create an IndexParams object and reference it here.<br/>You should at least add an index for the vector field in this collection. You can also skip this parameter if you prefer to set up the index parameters later on.</td>
+</tr>
+</tbody>
+</table></p>
+<p><table class="language-java">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>collectionName</code></td>
+<td>The name of the collection.</td>
+</tr>
+<tr>
+<td><code>collectionSchema</code></td>
+<td>The schema of this collection.<br/>Leaving it empty indicates this collection will be created with default settings. To set up a collection with a customized schema, you need to create a <strong>CollectionSchema</strong> object and reference it here.</td>
+</tr>
+<tr>
+<td><code>indexParams</code></td>
+<td>The parameters for building the index on the vector field in this collection. To set up a collection with a customized schema and automatically load the collection to memory, create an <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/IndexParam.md">IndexParams</a> object with a list of IndexParam objects and reference it here.</td>
+</tr>
+</tbody>
+</table></p>
+<p><table class="language-javascript">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>collection_name</code></td>
+<td>The name of the collection.</td>
+</tr>
+<tr>
+<td><code>fields</code></td>
+<td>The fields in the collection.</td>
+</tr>
+<tr>
+<td><code>index_params</code></td>
+<td>The index parameters for the collection to create.</td>
+</tr>
+</tbody>
+</table></p>
+<p><table class="language-shell">
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>collectionName</code></td>
+<td>The name of the collection.</td>
+</tr>
+<tr>
+<td><code>schema</code></td>
+<td>The schema is responsible for organizing data in the target collection. A valid schema should have multiple fields, which must include a primary key, a vector field, and several scalar fields.</td>
+</tr>
+<tr>
+<td><code>schema.autoID</code></td>
+<td>Whether allows the primary field to automatically increment. Setting this to True makes the primary field automatically increment. In this case, the primary field should not be included in the data to insert to avoid errors. Set this parameter in the field with is_primary set to True.</td>
+</tr>
+<tr>
+<td><code>schema.enableDynamicField</code></td>
+<td>Whether allows to use the reserved $meta field to hold non-schema-defined fields in key-value pairs.</td>
+</tr>
+<tr>
+<td><code>fields</code></td>
+<td>A list of field objects.</td>
+</tr>
+<tr>
+<td><code>fields.fieldName</code></td>
+<td>The name of the field to create in the target collection.</td>
+</tr>
+<tr>
+<td><code>fields.dataType</code></td>
+<td>The data type of the field values.</td>
+</tr>
+<tr>
+<td><code>fields.isPrimary</code></td>
+<td>Whether the current field is the primary field. Setting this to True makes the current field the primary field.</td>
+</tr>
+<tr>
+<td><code>fields.elementTypeParams</code></td>
+<td>Extra field parameters.</td>
+</tr>
+<tr>
+<td><code>fields.elementTypeParams.dim</code></td>
+<td>An optional parameter for FloatVector or BinaryVector fields that determines the vector dimension.</td>
+</tr>
+</tbody>
+</table></p>
+<p>The collection created above is not loaded automatically. You can create an index for the collection as follows. Creating an index for the collection in a separate manner does not automatically load the collection. For details, refer to <a href="/docs/manage-collections.md">Load &amp; Release Collection</a>.</p>
+<p><div class="multipleCode">
+<a href="#python">Python </a>
+<a href="#java">Java</a>
+<a href="#javascript">Node.js</a>
+<a href="#shell">cURL</a>
+</div></p>
+<pre><code class="language-python"><span class="hljs-comment"># 3.6 Create index</span>
+client.create_index(
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    index_params=index_params
+)
 
+res = client.get_load_state(
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
+)
+
+<span class="hljs-built_in">print</span>(res)
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: NotLoad&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-type">CreateIndexReq</span>  <span class="hljs-variable">createIndexReq</span> <span class="hljs-operator">=</span> CreateIndexReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
+    .indexParams(indexParams)
+    .build();
+
+client.createIndex(createIndexReq);
+
+<span class="hljs-comment">// Thread.sleep(1000);</span>
+
+<span class="hljs-comment">// 3.7 Get load state of the collection</span>
+<span class="hljs-type">GetLoadStateReq</span> <span class="hljs-variable">customSetupLoadStateReq2</span> <span class="hljs-operator">=</span> GetLoadStateReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
+    .build();
+
+res = client.getLoadState(customSetupLoadStateReq2);
+
+System.out.println(res);
+
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// false</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 3.5 Create index</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createIndex</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    <span class="hljs-attr">field_name</span>: <span class="hljs-string">&quot;my_vector&quot;</span>,
+    <span class="hljs-attr">index_type</span>: <span class="hljs-string">&quot;IVF_FLAT&quot;</span>,
+    <span class="hljs-attr">metric_type</span>: <span class="hljs-string">&quot;IP&quot;</span>,
+    <span class="hljs-attr">params</span>: { <span class="hljs-attr">nlist</span>: <span class="hljs-number">1024</span>}
+})
+
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
+})
+
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
+
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateNotLoad</span>
+<span class="hljs-comment">//</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/indexes/create&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;,
+    &quot;indexParams&quot;: [
+        {
+            &quot;metricType&quot;: &quot;L2&quot;,
+            &quot;fieldName&quot;: &quot;my_vector&quot;,
+            &quot;indexName&quot;: &quot;my_vector&quot;,
+            &quot;indexConfig&quot;: {
+                &quot;index_type&quot;: &quot;IVF_FLAT&quot;,
+                &quot;nlist&quot;: &quot;1024&quot;
+            }
+        }
+    ]
+}&#x27;</span>
+
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {},</span>
+<span class="hljs-comment"># }</span>
+
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/get_load_state&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
+
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;loadState&quot;: &quot;LoadStateNotLoaded&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
   <table class="language-python">
   <thead>
     <tr>
@@ -1217,7 +1129,8 @@ Use [createCollection()](https://milvus.io/api-reference/node/v2.4.x/Collections
     </tr>
   </tbody>
 </table>
-
+</li>
+</ul>
 <table class="language-java">
   <thead>
     <tr>
@@ -1236,7 +1149,6 @@ Use [createCollection()](https://milvus.io/api-reference/node/v2.4.x/Collections
     </tr>
   </tbody>
 </table>
-
 <table class="language-javascript">
   <thead>
     <tr>
@@ -1267,7 +1179,6 @@ Use [createCollection()](https://milvus.io/api-reference/node/v2.4.x/Collections
     </tr>
   </tbody>
 </table>
-
 <table class="language-shell">
     <thead>
         <tr>
@@ -1306,93 +1217,90 @@ Use [createCollection()](https://milvus.io/api-reference/node/v2.4.x/Collections
         </tr>
     </tbody>
 </table>
-
-## View Collections
-
-<div class="language-python">
-
-To check the details of an existing collection, use [describe_collection()](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/describe_collection.md).
-
+<h2 id="View-Collections" class="common-anchor-header">View Collections
+    <button data-href="#View-Collections" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><div class="language-python">
+<p>To check the details of an existing collection, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/describe_collection.md">describe_collection()</a>.</p>
 </div>
-
 <div class="language-java">
-
-To check the details of an existing collection, use [describeCollection()](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/describeCollection.md).
-
+<p>To check the details of an existing collection, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/describeCollection.md">describeCollection()</a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To check the details of an existing collection, use [describeCollection()](https://milvus.io/api-reference/node/v2.4.x/Collections/describeCollection.md).
-
+<p>To check the details of an existing collection, use <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/describeCollection.md">describeCollection()</a>.</p>
 </div>
-
 <div class="language-shell">
-
-To view the definition of a collection, you can use the [`POST /v2/vectordb/collections/describe`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Describe.md) and the [`POST /v2/vectordb/collections/list`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/List.md) API endpoints.
-
+<p>To view the definition of a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Describe.md"><code>POST /v2/vectordb/collections/describe</code></a> and the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/List.md"><code>POST /v2/vectordb/collections/list</code></a> API endpoints.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 5. View Collections
+<pre><code class="language-python"><span class="hljs-comment"># 5. View Collections</span>
 res = client.describe_collection(
-    collection_name="customized_setup_2"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "collection_name": "customized_setup_2",
-#     "auto_id": false,
-#     "num_shards": 1,
-#     "description": "",
-#     "fields": [
-#         {
-#             "field_id": 100,
-#             "name": "my_id",
-#             "description": "",
-#             "type": 5,
-#             "params": {},
-#             "element_type": 0,
-#             "is_primary": true
-#         },
-#         {
-#             "field_id": 101,
-#             "name": "my_vector",
-#             "description": "",
-#             "type": 101,
-#             "params": {
-#                 "dim": 5
-#             },
-#             "element_type": 0
-#         }
-#     ],
-#     "aliases": [],
-#     "collection_id": 448143479230158446,
-#     "consistency_level": 2,
-#     "properties": {},
-#     "num_partitions": 1,
-#     "enable_dynamic_field": true
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;collection_name&quot;: &quot;customized_setup_2&quot;,</span>
+<span class="hljs-comment">#     &quot;auto_id&quot;: false,</span>
+<span class="hljs-comment">#     &quot;num_shards&quot;: 1,</span>
+<span class="hljs-comment">#     &quot;description&quot;: &quot;&quot;,</span>
+<span class="hljs-comment">#     &quot;fields&quot;: [</span>
+<span class="hljs-comment">#         {</span>
+<span class="hljs-comment">#             &quot;field_id&quot;: 100,</span>
+<span class="hljs-comment">#             &quot;name&quot;: &quot;my_id&quot;,</span>
+<span class="hljs-comment">#             &quot;description&quot;: &quot;&quot;,</span>
+<span class="hljs-comment">#             &quot;type&quot;: 5,</span>
+<span class="hljs-comment">#             &quot;params&quot;: {},</span>
+<span class="hljs-comment">#             &quot;element_type&quot;: 0,</span>
+<span class="hljs-comment">#             &quot;is_primary&quot;: true</span>
+<span class="hljs-comment">#         },</span>
+<span class="hljs-comment">#         {</span>
+<span class="hljs-comment">#             &quot;field_id&quot;: 101,</span>
+<span class="hljs-comment">#             &quot;name&quot;: &quot;my_vector&quot;,</span>
+<span class="hljs-comment">#             &quot;description&quot;: &quot;&quot;,</span>
+<span class="hljs-comment">#             &quot;type&quot;: 101,</span>
+<span class="hljs-comment">#             &quot;params&quot;: {</span>
+<span class="hljs-comment">#                 &quot;dim&quot;: 5</span>
+<span class="hljs-comment">#             },</span>
+<span class="hljs-comment">#             &quot;element_type&quot;: 0</span>
+<span class="hljs-comment">#         }</span>
+<span class="hljs-comment">#     ],</span>
+<span class="hljs-comment">#     &quot;aliases&quot;: [],</span>
+<span class="hljs-comment">#     &quot;collection_id&quot;: 448143479230158446,</span>
+<span class="hljs-comment">#     &quot;consistency_level&quot;: 2,</span>
+<span class="hljs-comment">#     &quot;properties&quot;: {},</span>
+<span class="hljs-comment">#     &quot;num_partitions&quot;: 1,</span>
+<span class="hljs-comment">#     &quot;enable_dynamic_field&quot;: true</span>
+<span class="hljs-comment"># }</span>
 
-```
-
-```java
-import io.milvus.v2.service.collection.request.DescribeCollectionReq;
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">import io.milvus.v2.service.collection.request.DescribeCollectionReq;
 import io.milvus.v2.service.collection.response.DescribeCollectionResp;
 
 // 4. View collections
 DescribeCollectionReq describeCollectionReq = DescribeCollectionReq.builder()
-    .collectionName("customized_setup_2")
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
     .build();
 
 DescribeCollectionResp describeCollectionRes = client.describeCollection(describeCollectionReq);
@@ -1401,613 +1309,556 @@ System.out.println(JSONObject.toJSON(describeCollectionRes));
 
 // Output:
 // {
-//     "createTime": 449005822816026627,
-//     "collectionSchema": {"fieldSchemaList": [
+//     <span class="hljs-string">&quot;createTime&quot;</span>: 449005822816026627,
+//     <span class="hljs-string">&quot;collectionSchema&quot;</span>: {<span class="hljs-string">&quot;fieldSchemaList&quot;</span>: [
 //         {
-//             "autoID": false,
-//             "dataType": "Int64",
-//             "name": "my_id",
-//             "description": "",
-//             "isPrimaryKey": true,
-//             "maxLength": 65535,
-//             "isPartitionKey": false
+//             <span class="hljs-string">&quot;autoID&quot;</span>: <span class="hljs-literal">false</span>,
+//             <span class="hljs-string">&quot;dataType&quot;</span>: <span class="hljs-string">&quot;Int64&quot;</span>,
+//             <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;my_id&quot;</span>,
+//             <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,
+//             <span class="hljs-string">&quot;isPrimaryKey&quot;</span>: <span class="hljs-literal">true</span>,
+//             <span class="hljs-string">&quot;maxLength&quot;</span>: 65535,
+//             <span class="hljs-string">&quot;isPartitionKey&quot;</span>: <span class="hljs-literal">false</span>
 //         },
 //         {
-//             "autoID": false,
-//             "dataType": "FloatVector",
-//             "name": "my_vector",
-//             "description": "",
-//             "isPrimaryKey": false,
-//             "dimension": 5,
-//             "maxLength": 65535,
-//             "isPartitionKey": false
+//             <span class="hljs-string">&quot;autoID&quot;</span>: <span class="hljs-literal">false</span>,
+//             <span class="hljs-string">&quot;dataType&quot;</span>: <span class="hljs-string">&quot;FloatVector&quot;</span>,
+//             <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;my_vector&quot;</span>,
+//             <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,
+//             <span class="hljs-string">&quot;isPrimaryKey&quot;</span>: <span class="hljs-literal">false</span>,
+//             <span class="hljs-string">&quot;dimension&quot;</span>: 5,
+//             <span class="hljs-string">&quot;maxLength&quot;</span>: 65535,
+//             <span class="hljs-string">&quot;isPartitionKey&quot;</span>: <span class="hljs-literal">false</span>
 //         }
 //     ]},
-//     "vectorFieldName": ["my_vector"],
-//     "autoID": false,
-//     "fieldNames": [
-//         "my_id",
-//         "my_vector"
+//     <span class="hljs-string">&quot;vectorFieldName&quot;</span>: [<span class="hljs-string">&quot;my_vector&quot;</span>],
+//     <span class="hljs-string">&quot;autoID&quot;</span>: <span class="hljs-literal">false</span>,
+//     <span class="hljs-string">&quot;fieldNames&quot;</span>: [
+//         <span class="hljs-string">&quot;my_id&quot;</span>,
+//         <span class="hljs-string">&quot;my_vector&quot;</span>
 //     ],
-//     "description": "",
-//     "numOfPartitions": 1,
-//     "primaryFieldName": "my_id",
-//     "enableDynamicField": true,
-//     "collectionName": "customized_setup_2"
+//     <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;&quot;</span>,
+//     <span class="hljs-string">&quot;numOfPartitions&quot;</span>: 1,
+//     <span class="hljs-string">&quot;primaryFieldName&quot;</span>: <span class="hljs-string">&quot;my_id&quot;</span>,
+//     <span class="hljs-string">&quot;enableDynamicField&quot;</span>: <span class="hljs-literal">true</span>,
+//     <span class="hljs-string">&quot;collectionName&quot;</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 // }
-```
-
-```javascript
-// 5. View Collections
-res = await client.describeCollection({
-    collection_name: "customized_setup_2"
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 5. View Collections</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">describeCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res)
 
-// Output
-// 
-// {
-//   virtual_channel_names: [ 'by-dev-rootcoord-dml_13_449007919953017716v0' ],
-//   physical_channel_names: [ 'by-dev-rootcoord-dml_13' ],
-//   aliases: [],
-//   start_positions: [],
-//   properties: [],
-//   status: {
-//     extra_info: {},
-//     error_code: 'Success',
-//     reason: '',
-//     code: 0,
-//     retriable: false,
-//     detail: ''
-//   },
-//   schema: {
-//     fields: [ [Object], [Object] ],
-//     properties: [],
-//     name: 'customized_setup_2',
-//     description: '',
-//     autoID: false,
-//     enable_dynamic_field: false
-//   },
-//   collectionID: '449007919953017716',
-//   created_timestamp: '449024569603784707',
-//   created_utc_timestamp: '1712892797866',
-//   shards_num: 1,
-//   consistency_level: 'Bounded',
-//   collection_name: 'customized_setup_2',
-//   db_name: 'default',
-//   num_partitions: '1'
-// }
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// {</span>
+<span class="hljs-comment">//   virtual_channel_names: [ &#x27;by-dev-rootcoord-dml_13_449007919953017716v0&#x27; ],</span>
+<span class="hljs-comment">//   physical_channel_names: [ &#x27;by-dev-rootcoord-dml_13&#x27; ],</span>
+<span class="hljs-comment">//   aliases: [],</span>
+<span class="hljs-comment">//   start_positions: [],</span>
+<span class="hljs-comment">//   properties: [],</span>
+<span class="hljs-comment">//   status: {</span>
+<span class="hljs-comment">//     extra_info: {},</span>
+<span class="hljs-comment">//     error_code: &#x27;Success&#x27;,</span>
+<span class="hljs-comment">//     reason: &#x27;&#x27;,</span>
+<span class="hljs-comment">//     code: 0,</span>
+<span class="hljs-comment">//     retriable: false,</span>
+<span class="hljs-comment">//     detail: &#x27;&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   schema: {</span>
+<span class="hljs-comment">//     fields: [ [Object], [Object] ],</span>
+<span class="hljs-comment">//     properties: [],</span>
+<span class="hljs-comment">//     name: &#x27;customized_setup_2&#x27;,</span>
+<span class="hljs-comment">//     description: &#x27;&#x27;,</span>
+<span class="hljs-comment">//     autoID: false,</span>
+<span class="hljs-comment">//     enable_dynamic_field: false</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   collectionID: &#x27;449007919953017716&#x27;,</span>
+<span class="hljs-comment">//   created_timestamp: &#x27;449024569603784707&#x27;,</span>
+<span class="hljs-comment">//   created_utc_timestamp: &#x27;1712892797866&#x27;,</span>
+<span class="hljs-comment">//   shards_num: 1,</span>
+<span class="hljs-comment">//   consistency_level: &#x27;Bounded&#x27;,</span>
+<span class="hljs-comment">//   collection_name: &#x27;customized_setup_2&#x27;,</span>
+<span class="hljs-comment">//   db_name: &#x27;default&#x27;,</span>
+<span class="hljs-comment">//   num_partitions: &#x27;1&#x27;</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/describe&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;dbName&quot;: &quot;default&quot;,
+    &quot;collectionName&quot;: &quot;test_collection&quot;
+}&#x27;</span>
 
-```shell
-curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/describe" \
--H "Content-Type: application/json" \
--d '{
-    "dbName": "default",
-    "collectionName": "test_collection"
-}'
-
-# {
-#     "code": 0,
-#     "data": {
-#         "aliases": [],
-#         "autoId": false,
-#         "collectionID": 448707763883002014,
-#         "collectionName": "test_collection",
-#         "consistencyLevel": "Bounded",
-#         "description": "",
-#         "enableDynamicField": true,
-#         "fields": [
-#             {
-#                 "autoId": false,
-#                 "description": "",
-#                 "id": 100,
-#                 "name": "id",
-#                 "partitionKey": false,
-#                 "primaryKey": true,
-#                 "type": "Int64"
-#             },
-#             {
-#                 "autoId": false,
-#                 "description": "",
-#                 "id": 101,
-#                 "name": "vector",
-#                 "params": [
-#                     {
-#                         "key": "dim",
-#                         "value": "5"
-#                     }
-#                 ],
-#                 "partitionKey": false,
-#                 "primaryKey": false,
-#                 "type": "FloatVector"
-#             }
-#         ],
-#         "indexes": [
-#             {
-#                 "fieldName": "vector",
-#                 "indexName": "vector",
-#                 "metricType": "COSINE"
-#             }
-#         ],
-#         "load": "LoadStateLoaded",
-#         "partitionsNum": 1,
-#         "properties": [],
-#         "shardsNum": 1
-#     }
-# }
-```
-
-To list all existing collections, you can do as follows:
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;aliases&quot;: [],</span>
+<span class="hljs-comment">#         &quot;autoId&quot;: false,</span>
+<span class="hljs-comment">#         &quot;collectionID&quot;: 448707763883002014,</span>
+<span class="hljs-comment">#         &quot;collectionName&quot;: &quot;test_collection&quot;,</span>
+<span class="hljs-comment">#         &quot;consistencyLevel&quot;: &quot;Bounded&quot;,</span>
+<span class="hljs-comment">#         &quot;description&quot;: &quot;&quot;,</span>
+<span class="hljs-comment">#         &quot;enableDynamicField&quot;: true,</span>
+<span class="hljs-comment">#         &quot;fields&quot;: [</span>
+<span class="hljs-comment">#             {</span>
+<span class="hljs-comment">#                 &quot;autoId&quot;: false,</span>
+<span class="hljs-comment">#                 &quot;description&quot;: &quot;&quot;,</span>
+<span class="hljs-comment">#                 &quot;id&quot;: 100,</span>
+<span class="hljs-comment">#                 &quot;name&quot;: &quot;id&quot;,</span>
+<span class="hljs-comment">#                 &quot;partitionKey&quot;: false,</span>
+<span class="hljs-comment">#                 &quot;primaryKey&quot;: true,</span>
+<span class="hljs-comment">#                 &quot;type&quot;: &quot;Int64&quot;</span>
+<span class="hljs-comment">#             },</span>
+<span class="hljs-comment">#             {</span>
+<span class="hljs-comment">#                 &quot;autoId&quot;: false,</span>
+<span class="hljs-comment">#                 &quot;description&quot;: &quot;&quot;,</span>
+<span class="hljs-comment">#                 &quot;id&quot;: 101,</span>
+<span class="hljs-comment">#                 &quot;name&quot;: &quot;vector&quot;,</span>
+<span class="hljs-comment">#                 &quot;params&quot;: [</span>
+<span class="hljs-comment">#                     {</span>
+<span class="hljs-comment">#                         &quot;key&quot;: &quot;dim&quot;,</span>
+<span class="hljs-comment">#                         &quot;value&quot;: &quot;5&quot;</span>
+<span class="hljs-comment">#                     }</span>
+<span class="hljs-comment">#                 ],</span>
+<span class="hljs-comment">#                 &quot;partitionKey&quot;: false,</span>
+<span class="hljs-comment">#                 &quot;primaryKey&quot;: false,</span>
+<span class="hljs-comment">#                 &quot;type&quot;: &quot;FloatVector&quot;</span>
+<span class="hljs-comment">#             }</span>
+<span class="hljs-comment">#         ],</span>
+<span class="hljs-comment">#         &quot;indexes&quot;: [</span>
+<span class="hljs-comment">#             {</span>
+<span class="hljs-comment">#                 &quot;fieldName&quot;: &quot;vector&quot;,</span>
+<span class="hljs-comment">#                 &quot;indexName&quot;: &quot;vector&quot;,</span>
+<span class="hljs-comment">#                 &quot;metricType&quot;: &quot;COSINE&quot;</span>
+<span class="hljs-comment">#             }</span>
+<span class="hljs-comment">#         ],</span>
+<span class="hljs-comment">#         &quot;load&quot;: &quot;LoadStateLoaded&quot;,</span>
+<span class="hljs-comment">#         &quot;partitionsNum&quot;: 1,</span>
+<span class="hljs-comment">#         &quot;properties&quot;: [],</span>
+<span class="hljs-comment">#         &quot;shardsNum&quot;: 1</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>To list all existing collections, you can do as follows:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 6. List all collection names
+<pre><code class="language-python"><span class="hljs-comment"># 6. List all collection names</span>
 res = client.list_collections()
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# [
-#     "customized_setup_2",
-#     "quick_setup",
-#     "customized_setup_1"
-# ]
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     &quot;customized_setup_2&quot;,</span>
+<span class="hljs-comment">#     &quot;quick_setup&quot;,</span>
+<span class="hljs-comment">#     &quot;customized_setup_1&quot;</span>
+<span class="hljs-comment"># ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.collection.response.ListCollectionsResp;
 
-```java
-import io.milvus.v2.service.collection.response.ListCollectionsResp;
-
-// 5. List all collection names
-ListCollectionsResp listCollectionsRes = client.listCollections();
+<span class="hljs-comment">// 5. List all collection names</span>
+<span class="hljs-type">ListCollectionsResp</span> <span class="hljs-variable">listCollectionsRes</span> <span class="hljs-operator">=</span> client.listCollections();
 
 System.out.println(listCollectionsRes.getCollectionNames());
 
-// Output:
-// [
-//     "customized_setup_2",
-//     "quick_setup",
-//     "customized_setup_1"
-// ]
-```
-
-```javascript
-// 5. List all collection names
-ListCollectionsResp listCollectionsRes = client.listCollections();
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//     &quot;customized_setup_2&quot;,</span>
+<span class="hljs-comment">//     &quot;quick_setup&quot;,</span>
+<span class="hljs-comment">//     &quot;customized_setup_1&quot;</span>
+<span class="hljs-comment">// ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 5. List all collection names</span>
+<span class="hljs-type">ListCollectionsResp</span> <span class="hljs-variable">listCollectionsRes</span> <span class="hljs-operator">=</span> client.listCollections();
 
 System.out.println(listCollectionsRes.getCollectionNames());
 
-// Output:
-// [
-//     "customized_setup_1",
-//     "quick_setup",
-//     "customized_setup_2"
-// ]
-```
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//     &quot;customized_setup_1&quot;,</span>
+<span class="hljs-comment">//     &quot;quick_setup&quot;,</span>
+<span class="hljs-comment">//     &quot;customized_setup_2&quot;</span>
+<span class="hljs-comment">// ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/list&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;dbName&quot;: &quot;default&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/list" \
--H "Content-Type: application/json" \
--d '{
-    "dbName": "default"
-}'
-
-# {
-#   "code": 0,
-#   "data": [
-#     "quick_setup",
-#     "customized_setup_1",
-#     "customized_setup_2"
-#   ]
-# }
-```
-
-## Load & Release Collection
-
-During the loading process of a collection, Milvus loads the collection's index file into memory. Conversely, when releasing a collection, Milvus unloads the index file from memory. Before conducting searches in a collection, ensure that the collection is loaded.
-
-### Load a collection
-
-<div class="language-python">
-
-To load a collection, use the [`load_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/load_collection.md) method, specifying the collection name. You can also set `replica_number` to determine how many in-memory replicas of data segments to create on query nodes when the collection is loaded.
-
-- Milvus Standalone: The maximum allowed value for `replica_number` is 1.
-- Milvus Cluster: The maximum value should not exceed the `queryNode.replicas` set in your Milvus configurations. For additional details, refer to [Query Node-related Configurations](https://milvus.io/docs/configure_querynode.md#Query-Node-related-Configurations).
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#   &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#   &quot;data&quot;: [</span>
+<span class="hljs-comment">#     &quot;quick_setup&quot;,</span>
+<span class="hljs-comment">#     &quot;customized_setup_1&quot;,</span>
+<span class="hljs-comment">#     &quot;customized_setup_2&quot;</span>
+<span class="hljs-comment">#   ]</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Load--Release-Collection" class="common-anchor-header">Load &amp; Release Collection
+    <button data-href="#Load--Release-Collection" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>During the loading process of a collection, Milvus loads the collection’s index file into memory. Conversely, when releasing a collection, Milvus unloads the index file from memory. Before conducting searches in a collection, ensure that the collection is loaded.</p>
+<h3 id="Load-a-collection" class="common-anchor-header">Load a collection</h3><div class="language-python">
+<p>To load a collection, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/load_collection.md"><code>load_collection()</code></a> method, specifying the collection name. You can also set <code>replica_number</code> to determine how many in-memory replicas of data segments to create on query nodes when the collection is loaded.</p>
+<ul>
+<li>Milvus Standalone: The maximum allowed value for <code>replica_number</code> is 1.</li>
+<li>Milvus Cluster: The maximum value should not exceed the <code>queryNode.replicas</code> set in your Milvus configurations. For additional details, refer to <a href="https://milvus.io/docs/configure_querynode.md#Query-Node-related-Configurations">Query Node-related Configurations</a>.</li>
+</ul>
 </div>
-
 <div class="language-java">
-
-To load a collection, use the [`loadCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/loadCollection.md) method, specifying the collection name.
-
+<p>To load a collection, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/loadCollection.md"><code>loadCollection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-javascript">
-
-To load a collection, use the [`loadCollection()`](https://milvus.io/api-reference/node/v2.4.x/Management/loadCollection.md) method, specifying the collection name.
-
+<p>To load a collection, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Management/loadCollection.md"><code>loadCollection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-shell">
-
-To load a collection, you can use the [`POST /v2/vectordb/collections/load`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Load.md) and the [`POST /v2/vectordb/collections/get_load_state`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/GetLoadState.md) API endpoints.
-
+<p>To load a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Load.md"><code>POST /v2/vectordb/collections/load</code></a> and the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/GetLoadState.md"><code>POST /v2/vectordb/collections/get_load_state</code></a> API endpoints.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 7. Load the collection
+<pre><code class="language-python"><span class="hljs-comment"># 7. Load the collection</span>
 client.load_collection(
-    collection_name="customized_setup_2",
-    replica_number=1 # Number of replicas to create on query nodes. Max value is 1 for Milvus Standalone, and no greater than `queryNode.replicas` for Milvus Cluster.
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    replica_number=<span class="hljs-number">1</span> <span class="hljs-comment"># Number of replicas to create on query nodes. Max value is 1 for Milvus Standalone, and no greater than `queryNode.replicas` for Milvus Cluster.</span>
 )
 
 res = client.get_load_state(
-    collection_name="customized_setup_2"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "state": "<LoadState: Loaded>"
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.LoadCollectionReq;
 
-```java
-import io.milvus.v2.service.collection.request.LoadCollectionReq;
-
-// 6. Load the collection
-LoadCollectionReq loadCollectionReq = LoadCollectionReq.builder()
-    .collectionName("customized_setup_2")
+<span class="hljs-comment">// 6. Load the collection</span>
+<span class="hljs-type">LoadCollectionReq</span> <span class="hljs-variable">loadCollectionReq</span> <span class="hljs-operator">=</span> LoadCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
     .build();
 
 client.loadCollection(loadCollectionReq);
 
-// Thread.sleep(5000);
+<span class="hljs-comment">// Thread.sleep(5000);</span>
 
-// 7. Get load state of the collection
-GetLoadStateReq loadStateReq = GetLoadStateReq.builder()
-    .collectionName("customized_setup_2")
+<span class="hljs-comment">// 7. Get load state of the collection</span>
+<span class="hljs-type">GetLoadStateReq</span> <span class="hljs-variable">loadStateReq</span> <span class="hljs-operator">=</span> GetLoadStateReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
     .build();
 
 res = client.getLoadState(loadStateReq);
 
 System.out.println(res);
 
-// Output:
-// true
-```
-
-```javascript
-// 7. Load the collection
-res = await client.loadCollection({
-    collection_name: "customized_setup_2"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 7. Load the collection</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">loadCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-await sleep(3000)
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">sleep</span>(<span class="hljs-number">3000</span>)
 
-res = await client.getLoadState({
-    collection_name: "customized_setup_2"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateLoaded
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/load&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/load" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_2"
-}'
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {},</span>
+<span class="hljs-comment"># }</span>
 
-# Output
-#
-# {
-#     "code": 0,
-#     "data": {},
-# }
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/get_load_state&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+  &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/get_load_state" \
--H "Content-Type: application/json" \
--d '{
-  "collectionName": "customized_setup_2"
-}'
-
-# {
-#     "code": 0,
-#     "data": {
-#         "loadProgress": 100,
-#         "loadState": "LoadStateLoaded"
-#     }
-# }
-```
-
-### Release a collection
-
-<div class="language-python">
-
-To release a collection, use the [`release_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/release_collection.md) method, specifying the collection name.
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;loadProgress&quot;: 100,</span>
+<span class="hljs-comment">#         &quot;loadState&quot;: &quot;LoadStateLoaded&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Release-a-collection" class="common-anchor-header">Release a collection</h3><div class="language-python">
+<p>To release a collection, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/release_collection.md"><code>release_collection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-java">
-
-To release a collection, use the [`releaseCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/releaseCollection.md) method, specifying the collection name.
-
+<p>To release a collection, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/releaseCollection.md"><code>releaseCollection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-javascript">
-
-To release a collection, use the [`releaseCollection()`](https://milvus.io/api-reference/node/v2.4.x/Management/releaseCollection.md) method, specifying the collection name.
-
+<p>To release a collection, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Management/releaseCollection.md"><code>releaseCollection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-shell">
-
-To release a collection, you can use the [`POST /v2/vectordb/collections/release`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Release.md) and the [`POST /v2/vectordb/collections/get_load_state`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/GetLoadState.md) API endpoints.
-
+<p>To release a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Release.md"><code>POST /v2/vectordb/collections/release</code></a> and the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/GetLoadState.md"><code>POST /v2/vectordb/collections/get_load_state</code></a> API endpoints.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 8. Release the collection
+<pre><code class="language-python"><span class="hljs-comment"># 8. Release the collection</span>
 client.release_collection(
-    collection_name="customized_setup_2"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
 )
 
 res = client.get_load_state(
-    collection_name="customized_setup_2"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "state": "<LoadState: NotLoad>"
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: NotLoad&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.ReleaseCollectionReq;
 
-```java
-import io.milvus.v2.service.collection.request.ReleaseCollectionReq;
-
-// 8. Release the collection
-ReleaseCollectionReq releaseCollectionReq = ReleaseCollectionReq.builder()
-    .collectionName("customized_setup_2")
+<span class="hljs-comment">// 8. Release the collection</span>
+<span class="hljs-type">ReleaseCollectionReq</span> <span class="hljs-variable">releaseCollectionReq</span> <span class="hljs-operator">=</span> ReleaseCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
     .build();
 
 client.releaseCollection(releaseCollectionReq);
 
-// Thread.sleep(1000);
+<span class="hljs-comment">// Thread.sleep(1000);</span>
 
 res = client.getLoadState(loadStateReq);
 
 System.out.println(res);
 
-// Output:
-// false
-```
-
-```javascript
-// 8. Release the collection
-res = await client.releaseCollection({
-    collection_name: "customized_setup_2"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// false</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 8. Release the collection</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">releaseCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-res = await client.getLoadState({
-    collection_name: "customized_setup_2"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateNotLoad
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateNotLoad</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/release&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/release" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_2"
-}'
-
-# Output
-#
-# {
-#     "code": 0,
-#     "data": {},
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {},</span>
+<span class="hljs-comment"># }</span>
 
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/get_load_state" \
--H "Content-Type: application/json" \
--d '{
-  "collectionName": "customized_setup_2"
-}'
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/get_load_state&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+  &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
 
-# {
-#     "code": 0,
-#     "data": {
-#         "loadState": "LoadStateNotLoad"
-#     }
-# }
-```
-
-## Set up aliases
-
-You can assign aliases for collections to make them more meaningful in a specific context. You can assign multiple aliases for a collection, but multiple collections cannot share an alias.
-
-### Create aliases
-
-<div class="language-python">
-
-To create aliases, use the [`create_alias()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_alias.md) method, specifying the collection name and the alias.
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;loadState&quot;: &quot;LoadStateNotLoad&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Set-up-aliases" class="common-anchor-header">Set up aliases
+    <button data-href="#Set-up-aliases" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>You can assign aliases for collections to make them more meaningful in a specific context. You can assign multiple aliases for a collection, but multiple collections cannot share an alias.</p>
+<h3 id="Create-aliases" class="common-anchor-header">Create aliases</h3><div class="language-python">
+<p>To create aliases, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_alias.md"><code>create_alias()</code></a> method, specifying the collection name and the alias.</p>
 </div>
-
 <div class="language-java">
-
-To create aliases, use the [`createAlias()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createAlias.md) method, specifying the collection name and the alias.
-
+<p>To create aliases, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createAlias.md"><code>createAlias()</code></a> method, specifying the collection name and the alias.</p>
 </div>
-
 <div class="language-javascript">
-
-To create aliases, use the [`createAlias()`](https://milvus.io/api-reference/node/v2.4.x/Collections/createAlias.md) method, specifying the collection name and the alias.
-
+<p>To create aliases, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/createAlias.md"><code>createAlias()</code></a> method, specifying the collection name and the alias.</p>
 </div>
-
 <div class="language-shell">
-
-To create aliases for a collection, you can use the [`POST /v2/vectordb/aliases/create`](https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Create.md) API endpoint.
-
+<p>To create aliases for a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Create.md"><code>POST /v2/vectordb/aliases/create</code></a> API endpoint.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 9.1. Create aliases
+<pre><code class="language-python"><span class="hljs-comment"># 9.1. Create aliases</span>
 client.create_alias(
-    collection_name="customized_setup_2",
-    alias="bob"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    <span class="hljs-built_in">alias</span>=<span class="hljs-string">&quot;bob&quot;</span>
 )
 
 client.create_alias(
-    collection_name="customized_setup_2",
-    alias="alice"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    <span class="hljs-built_in">alias</span>=<span class="hljs-string">&quot;alice&quot;</span>
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.utility.request.CreateAliasReq;
 
-```java
-import io.milvus.v2.service.utility.request.CreateAliasReq;
+<span class="hljs-comment">// 9. Manage aliases</span>
 
-// 9. Manage aliases
-
-// 9.1 Create alias
-CreateAliasReq createAliasReq = CreateAliasReq.builder()
-    .collectionName("customized_setup_2")
-    .alias("bob")
+<span class="hljs-comment">// 9.1 Create alias</span>
+<span class="hljs-type">CreateAliasReq</span> <span class="hljs-variable">createAliasReq</span> <span class="hljs-operator">=</span> CreateAliasReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
+    .alias(<span class="hljs-string">&quot;bob&quot;</span>)
     .build();
 
 client.createAlias(createAliasReq);
 
 createAliasReq = CreateAliasReq.builder()
-    .collectionName("customized_setup_2")
-    .alias("alice")
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
+    .alias(<span class="hljs-string">&quot;alice&quot;</span>)
     .build();
 
 client.createAlias(createAliasReq);
-```
-
-```javascript
-// 9. Manage aliases
-// 9.1 Create aliases
-res = await client.createAlias({
-    collection_name: "customized_setup_2",
-    alias: "bob"
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 9. Manage aliases</span>
+<span class="hljs-comment">// 9.1 Create aliases</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createAlias</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    <span class="hljs-attr">alias</span>: <span class="hljs-string">&quot;bob&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-res = await client.createAlias({
-    collection_name: "customized_setup_2",
-    alias: "alice"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createAlias</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    <span class="hljs-attr">alias</span>: <span class="hljs-string">&quot;alice&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/create&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;,
+    &quot;aliasName&quot;: &quot;bob&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/create" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_2",
-    "aliasName": "bob"
-}'
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
 
-# Output
-#
-# {
-#     "code": 0,
-#     "data": {}
-# }
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/create&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;,
+    &quot;aliasName&quot;: &quot;alice&quot;
+}&#x27;</span>
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/create" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_2",
-    "aliasName": "alice"
-}'
-
-# Output
-#
-# {
-#     "code": 0,
-#     "data": {}
-# }
-```
-
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
 <table class="language-python">
   <thead>
     <tr>
@@ -2026,7 +1877,6 @@ $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/create" \
     </tr>
   </tbody>
 </table>
-
 <table class="language-java">
   <thead>
     <tr>
@@ -2045,7 +1895,6 @@ $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/create" \
     </tr>
   </tbody>
 </table>
-
 <table class="language-javascript">
   <thead>
     <tr>
@@ -2064,7 +1913,6 @@ $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/create" \
     </tr>
   </tbody>
 </table>
-
 <table class="language-shell">
   <thead>
     <tr>
@@ -2083,730 +1931,627 @@ $ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/create" \
     </tr>
   </tbody>
 </table>
-
-### List aliases
-
-<div class="language-python">
-
-To list aliases, use the [`list_aliases()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/list_aliases.md) method, specifying the collection name.
-
+<h3 id="List-aliases" class="common-anchor-header">List aliases</h3><div class="language-python">
+<p>To list aliases, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/list_aliases.md"><code>list_aliases()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-java">
-
-To list aliases, use the [`listAliases()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/listAliases.md) method, specifying the collection name.
-
+<p>To list aliases, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/listAliases.md"><code>listAliases()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-javascript">
-
-To list aliases, use the [`listAliases()`](https://milvus.io/api-reference/node/v2.4.x/Collections/listAliases.md) method, specifying the collection name.
-
+<p>To list aliases, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/listAliases.md"><code>listAliases()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-shell">
-
-To list aliases for a collection, you can use the [`POST /v2/vectordb/aliases/list`](https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/List.md) API endpoint.
-
+<p>To list aliases for a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/List.md"><code>POST /v2/vectordb/aliases/list</code></a> API endpoint.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 9.2. List aliases
+<pre><code class="language-python"><span class="hljs-comment"># 9.2. List aliases</span>
 res = client.list_aliases(
-    collection_name="customized_setup_2"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "aliases": [
-#         "bob",
-#         "alice"
-#     ],
-#     "collection_name": "customized_setup_2",
-#     "db_name": "default"
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;aliases&quot;: [</span>
+<span class="hljs-comment">#         &quot;bob&quot;,</span>
+<span class="hljs-comment">#         &quot;alice&quot;</span>
+<span class="hljs-comment">#     ],</span>
+<span class="hljs-comment">#     &quot;collection_name&quot;: &quot;customized_setup_2&quot;,</span>
+<span class="hljs-comment">#     &quot;db_name&quot;: &quot;default&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.utility.request.ListAliasesReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.utility.response.ListAliasResp;
 
-```java
-import io.milvus.v2.service.utility.request.ListAliasesReq;
-import io.milvus.v2.service.utility.response.ListAliasResp;
-
-// 9.2 List alises
-ListAliasesReq listAliasesReq = ListAliasesReq.builder()
-    .collectionName("customized_setup_2")
+<span class="hljs-comment">// 9.2 List alises</span>
+<span class="hljs-type">ListAliasesReq</span> <span class="hljs-variable">listAliasesReq</span> <span class="hljs-operator">=</span> ListAliasesReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
     .build();
 
-ListAliasResp listAliasRes = client.listAliases(listAliasesReq);
+<span class="hljs-type">ListAliasResp</span> <span class="hljs-variable">listAliasRes</span> <span class="hljs-operator">=</span> client.listAliases(listAliasesReq);
 
 System.out.println(listAliasRes.getAlias());
 
-// Output:
-// [
-//     "bob",
-//     "alice"
-// ]
-```
-
-```javascript
-// 9.2 List aliases
-res = await client.listAliases({
-    collection_name: "customized_setup_2"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//     &quot;bob&quot;,</span>
+<span class="hljs-comment">//     &quot;alice&quot;</span>
+<span class="hljs-comment">// ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 9.2 List aliases</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">listAliases</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res.aliases)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">aliases</span>)
 
-// Output
-// 
-// [ 'bob', 'alice' ]
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ &#x27;bob&#x27;, &#x27;alice&#x27; ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/list&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/list" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_2"
-}'
-
-# {
-#     "code": 0,
-#     "data": [
-#         "bob",
-#         "alice"
-#     ]
-# }
-```
-
-### Describe aliases
-
-<div class="language-python">
-
-To describe aliases, use the [`describe_alias()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/describe_alias.md) method, specifying the alias.
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: [</span>
+<span class="hljs-comment">#         &quot;bob&quot;,</span>
+<span class="hljs-comment">#         &quot;alice&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Describe-aliases" class="common-anchor-header">Describe aliases</h3><div class="language-python">
+<p>To describe aliases, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/describe_alias.md"><code>describe_alias()</code></a> method, specifying the alias.</p>
 </div>
-
 <div class="language-java">
-
-To describe aliases, use the [`describeAlias()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/describeAlias.md) method, specifying the alias.
-
+<p>To describe aliases, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/describeAlias.md"><code>describeAlias()</code></a> method, specifying the alias.</p>
 </div>
-
 <div class="language-javascript">
-
-To describe aliases, use the [`describeAlias()`](https://milvus.io/api-reference/node/v2.4.x/Collections/describeAlias.md) method, specifying the alias.
-
+<p>To describe aliases, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/describeAlias.md"><code>describeAlias()</code></a> method, specifying the alias.</p>
 </div>
-
 <div class="language-shell">
-
-To describe aliases for a collection, you can use the [`POST /v2/vectordb/aliases/describe`](https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Describe.md) API endpoint.
-
+<p>To describe aliases for a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Describe.md"><code>POST /v2/vectordb/aliases/describe</code></a> API endpoint.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 9.3. Describe aliases
+<pre><code class="language-python"><span class="hljs-comment"># 9.3. Describe aliases</span>
 res = client.describe_alias(
-    alias="bob"
+    <span class="hljs-built_in">alias</span>=<span class="hljs-string">&quot;bob&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "alias": "bob",
-#     "collection_name": "customized_setup_2",
-#     "db_name": "default"
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;alias&quot;: &quot;bob&quot;,</span>
+<span class="hljs-comment">#     &quot;collection_name&quot;: &quot;customized_setup_2&quot;,</span>
+<span class="hljs-comment">#     &quot;db_name&quot;: &quot;default&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.<span class="hljs-property">milvus</span>.<span class="hljs-property">v2</span>.<span class="hljs-property">service</span>.<span class="hljs-property">utility</span>.<span class="hljs-property">request</span>.<span class="hljs-property">DescribeAliasReq</span>;
+<span class="hljs-keyword">import</span> io.<span class="hljs-property">milvus</span>.<span class="hljs-property">v2</span>.<span class="hljs-property">service</span>.<span class="hljs-property">utility</span>.<span class="hljs-property">response</span>.<span class="hljs-property">DescribeAliasResp</span>;
 
-```java
-import io.milvus.v2.service.utility.request.DescribeAliasReq;
-import io.milvus.v2.service.utility.response.DescribeAliasResp;
+<span class="hljs-comment">// 9.3 Describe alias</span>
+<span class="hljs-title class_">DescribeAliasReq</span> describeAliasReq = <span class="hljs-title class_">DescribeAliasReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">alias</span>(<span class="hljs-string">&quot;bob&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-// 9.3 Describe alias
-DescribeAliasReq describeAliasReq = DescribeAliasReq.builder()
-    .alias("bob")
-    .build();
+<span class="hljs-title class_">DescribeAliasResp</span> describeAliasRes = client.<span class="hljs-title function_">describeAlias</span>(describeAliasReq);
 
-DescribeAliasResp describeAliasRes = client.describeAlias(describeAliasReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(describeAliasRes));
 
-System.out.println(JSONObject.toJSON(describeAliasRes));
-
-// Output:
-// {
-//     "alias": "bob",
-//     "collectionName": "customized_setup_2"
-// }
-```
-
-```javascript
-// 9.3 Describe aliases
-res = await client.describeAlias({
-    collection_name: "customized_setup_2",
-    alias: "bob"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {</span>
+<span class="hljs-comment">//     &quot;alias&quot;: &quot;bob&quot;,</span>
+<span class="hljs-comment">//     &quot;collectionName&quot;: &quot;customized_setup_2&quot;</span>
+<span class="hljs-comment">// }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 9.3 Describe aliases</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">describeAlias</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>,
+    <span class="hljs-attr">alias</span>: <span class="hljs-string">&quot;bob&quot;</span>
 })
 
-console.log(res)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res)
 
-// Output
-// 
-// {
-//   status: {
-//     extra_info: {},
-//     error_code: 'Success',
-//     reason: '',
-//     code: 0,
-//     retriable: false,
-//     detail: ''
-//   },
-//   db_name: 'default',
-//   alias: 'bob',
-//   collection: 'customized_setup_2'
-// }
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// {</span>
+<span class="hljs-comment">//   status: {</span>
+<span class="hljs-comment">//     extra_info: {},</span>
+<span class="hljs-comment">//     error_code: &#x27;Success&#x27;,</span>
+<span class="hljs-comment">//     reason: &#x27;&#x27;,</span>
+<span class="hljs-comment">//     code: 0,</span>
+<span class="hljs-comment">//     retriable: false,</span>
+<span class="hljs-comment">//     detail: &#x27;&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   db_name: &#x27;default&#x27;,</span>
+<span class="hljs-comment">//   alias: &#x27;bob&#x27;,</span>
+<span class="hljs-comment">//   collection: &#x27;customized_setup_2&#x27;</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/describe&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;aliasName&quot;: &quot;bob&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/describe" \
--H "Content-Type: application/json" \
--d '{
-    "aliasName": "bob"
-}'
-
-# {
-#     "code": 0,
-#     "data": {
-#         "aliasName": "bob",
-#         "collectionName": "quick_setup",
-#         "dbName": "default"
-#     }
-# }
-```
-
-### Reassign aliases
-
-<div class="language-python">
-
-To reassign aliases to other collections, use the [`alter_alias()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/alter_alias.md) method, specifying the collection name and the alias.
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {</span>
+<span class="hljs-comment">#         &quot;aliasName&quot;: &quot;bob&quot;,</span>
+<span class="hljs-comment">#         &quot;collectionName&quot;: &quot;quick_setup&quot;,</span>
+<span class="hljs-comment">#         &quot;dbName&quot;: &quot;default&quot;</span>
+<span class="hljs-comment">#     }</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Reassign-aliases" class="common-anchor-header">Reassign aliases</h3><div class="language-python">
+<p>To reassign aliases to other collections, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/alter_alias.md"><code>alter_alias()</code></a> method, specifying the collection name and the alias.</p>
 </div>
-
 <div class="language-java">
-
-To reassign aliases to other collections, use the [`alterAlias()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/alterAlias.md) method, specifying the collection name and the alias.
-
+<p>To reassign aliases to other collections, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/alterAlias.md"><code>alterAlias()</code></a> method, specifying the collection name and the alias.</p>
 </div>
-
 <div class="language-javascript">
-
-To reassign aliases to other collections, use the [`alterAlias()`](https://milvus.io/api-reference/node/v2.4.x/Collections/alterAlias.md) method, specifying the collection name and the alias.
-
+<p>To reassign aliases to other collections, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/alterAlias.md"><code>alterAlias()</code></a> method, specifying the collection name and the alias.</p>
 </div>
-
 <div class="language-shell">
-
-To reassign aliases to other collections, you can use the [`POST /v2/vectordb/aliases/alter`](https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Alter.md) API endpoint.
-
+<p>To reassign aliases to other collections, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Alter.md"><code>POST /v2/vectordb/aliases/alter</code></a> API endpoint.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 9.4 Reassign aliases to other collections
+<pre><code class="language-python"><span class="hljs-comment"># 9.4 Reassign aliases to other collections</span>
 client.alter_alias(
-    collection_name="customized_setup_1",
-    alias="alice"
+    collection_name=<span class="hljs-string">&quot;customized_setup_1&quot;</span>,
+    alias=<span class="hljs-string">&quot;alice&quot;</span>
 )
 
 res = client.list_aliases(
-    collection_name="customized_setup_1"
+    collection_name=<span class="hljs-string">&quot;customized_setup_1&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "aliases": [
-#         "alice"
-#     ],
-#     "collection_name": "customized_setup_1",
-#     "db_name": "default"
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;aliases&quot;: [</span>
+<span class="hljs-comment">#         &quot;alice&quot;</span>
+<span class="hljs-comment">#     ],</span>
+<span class="hljs-comment">#     &quot;collection_name&quot;: &quot;customized_setup_1&quot;,</span>
+<span class="hljs-comment">#     &quot;db_name&quot;: &quot;default&quot;</span>
+<span class="hljs-comment"># }</span>
 
 res = client.list_aliases(
-    collection_name="customized_setup_2"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "aliases": [
-#         "bob"
-#     ],
-#     "collection_name": "customized_setup_2",
-#     "db_name": "default"
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;aliases&quot;: [</span>
+<span class="hljs-comment">#         &quot;bob&quot;</span>
+<span class="hljs-comment">#     ],</span>
+<span class="hljs-comment">#     &quot;collection_name&quot;: &quot;customized_setup_2&quot;,</span>
+<span class="hljs-comment">#     &quot;db_name&quot;: &quot;default&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.utility.request.AlterAliasReq;
 
-```java
-import io.milvus.v2.service.utility.request.AlterAliasReq;
-
-// 9.4 Reassign alias to other collections
+<span class="hljs-comment">// 9.4 Reassign alias to other collections</span>
 AlterAliasReq alterAliasReq = AlterAliasReq.builder()
-    .collectionName("customized_setup_1")
-    .alias("alice")
+    .collectionName(<span class="hljs-string">&quot;customized_setup_1&quot;</span>)
+    .alias(<span class="hljs-string">&quot;alice&quot;</span>)
     .build();
 
 client.alterAlias(alterAliasReq);
 
 listAliasesReq = ListAliasesReq.builder()
-    .collectionName("customized_setup_1")
+    .collectionName(<span class="hljs-string">&quot;customized_setup_1&quot;</span>)
     .build();
 
 listAliasRes = client.listAliases(listAliasesReq);
 
-System.out.println(listAliasRes.getAlias());
+System.out.<span class="hljs-built_in">println</span>(listAliasRes.getAlias());
 
-// Output:
-// ["alice"]
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [&quot;alice&quot;]</span>
 
 listAliasesReq = ListAliasesReq.builder()
-    .collectionName("customized_setup_2")
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
     .build();
 
 listAliasRes = client.listAliases(listAliasesReq);
 
-System.out.println(listAliasRes.getAlias());
+System.out.<span class="hljs-built_in">println</span>(listAliasRes.getAlias());
 
-// Output:
-// ["bob"]
-```
-
-```javascript
-// 9.4 Reassign aliases to other collections
-res = await client.alterAlias({
-    collection_name: "customized_setup_1",
-    alias: "alice"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [&quot;bob&quot;]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 9.4 Reassign aliases to other collections</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">alterAlias</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_1&quot;</span>,
+    <span class="hljs-attr">alias</span>: <span class="hljs-string">&quot;alice&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-res = await client.listAliases({
-    collection_name: "customized_setup_1"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">listAliases</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_1&quot;</span>
 })
 
-console.log(res.aliases)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">aliases</span>)
 
-// Output
-// 
-// [ 'alice' ]
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ &#x27;alice&#x27; ]</span>
+<span class="hljs-comment">// </span>
 
-res = await client.listAliases({
-    collection_name: "customized_setup_2"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">listAliases</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res.aliases)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">aliases</span>)
 
-// Output
-// 
-// [ 'bob' ]
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ &#x27;bob&#x27; ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/alter&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+     &quot;collectionName&quot;: &quot;customized_setup_1&quot;,
+     &quot;aliasName&quot;: &quot;alice&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/alter" \
--H "Content-Type: application/json" \
--d '{
-     "collectionName": "customized_setup_1",
-     "aliasName": "alice"
-}'
-
-# {
-#     "code": 0,
-#     "data": {}
-# }
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
 
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/list" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_1"
-}'
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/list&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_1&quot;
+}&#x27;</span>
 
 
-# {
-#     "code": 0,
-#     "data": [
-#         "alice"
-#     ]
-# }
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: [</span>
+<span class="hljs-comment">#         &quot;alice&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
 
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/list" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_2"
-}'
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/list&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
 
-# {
-#     "code": 0,
-#     "data": [
-#         "bob"
-#     ]
-# }
-```
-
-### Drop aliases
-
-<div class="language-python">
-
-To drop aliases, use the [`drop_alias()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/drop_alias.md) method, specifying the alias.
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: [</span>
+<span class="hljs-comment">#         &quot;bob&quot;</span>
+<span class="hljs-comment">#     ]</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Drop-aliases" class="common-anchor-header">Drop aliases</h3><div class="language-python">
+<p>To drop aliases, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/drop_alias.md"><code>drop_alias()</code></a> method, specifying the alias.</p>
 </div>
-
 <div class="language-java">
-
-To drop aliases, use the [`dropAlias()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/dropAlias.md) method, specifying the alias.
-
+<p>To drop aliases, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/dropAlias.md"><code>dropAlias()</code></a> method, specifying the alias.</p>
 </div>
-
 <div class="language-javascript">
-
-To drop aliases, use the [`dropAlias()`](https://milvus.io/api-reference/node/v2.4.x/Collections/dropAlias.md) method, specifying the alias.
-
+<p>To drop aliases, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/dropAlias.md"><code>dropAlias()</code></a> method, specifying the alias.</p>
 </div>
-
 <div class="language-shell">
-
-To drop aliases for a collection, you can use the [`POST /v2/vectordb/aliases/drop`](https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Drop.md) API endpoint.
-
+<p>To drop aliases for a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Alias%20(v2)/Drop.md"><code>POST /v2/vectordb/aliases/drop</code></a> API endpoint.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 9.5 Drop aliases
+<pre><code class="language-python"><span class="hljs-comment"># 9.5 Drop aliases</span>
 client.drop_alias(
-    alias="bob"
+    <span class="hljs-built_in">alias</span>=<span class="hljs-string">&quot;bob&quot;</span>
 )
 
 client.drop_alias(
-    alias="alice"
+    <span class="hljs-built_in">alias</span>=<span class="hljs-string">&quot;alice&quot;</span>
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.utility.request.DropAliasReq;
 
-```java
-import io.milvus.v2.service.utility.request.DropAliasReq;
-
-// 9.5 Drop alias
-DropAliasReq dropAliasReq = DropAliasReq.builder()
-    .alias("bob")
+<span class="hljs-comment">// 9.5 Drop alias</span>
+<span class="hljs-type">DropAliasReq</span> <span class="hljs-variable">dropAliasReq</span> <span class="hljs-operator">=</span> DropAliasReq.builder()
+    .alias(<span class="hljs-string">&quot;bob&quot;</span>)
     .build();
 
 client.dropAlias(dropAliasReq);
 
 dropAliasReq = DropAliasReq.builder()
-    .alias("alice")
+    .alias(<span class="hljs-string">&quot;alice&quot;</span>)
     .build();
 
 client.dropAlias(dropAliasReq);
-```
-
-```javascript
-// 9.5 Drop aliases
-res = await client.dropAlias({
-    alias: "bob"
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 9.5 Drop aliases</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">dropAlias</span>({
+    <span class="hljs-attr">alias</span>: <span class="hljs-string">&quot;bob&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-res = await client.dropAlias({
-    alias: "alice"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">dropAlias</span>({
+    <span class="hljs-attr">alias</span>: <span class="hljs-string">&quot;alice&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
-```
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/drop" \
--H "Content-Type: application/json" \
--d '{
-    "aliasName": "bob"
-}'
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/drop&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;aliasName&quot;: &quot;bob&quot;
+}&#x27;</span>
 
-# {
-#     "code": 0,
-#     "data": {}
-# }
-
-
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/aliases/drop" \
--H "Content-Type: application/json" \
--d '{
-    "aliasName": "alice"
-}'
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
 
 
-# {
-#     "code": 0,
-#     "data": {}
-# }
-```
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/aliases/drop&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;aliasName&quot;: &quot;alice&quot;
+}&#x27;</span>
 
-## Set Properties
 
-You can set properties for a collection, such as `ttl.seconds` and `mmap.enabled`. For more information, refer to [set_properties()](https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Collection/set_properties.md).
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Set-Properties" class="common-anchor-header">Set Properties
+    <button data-href="#Set-Properties" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>You can set properties for a collection, such as <code>ttl.seconds</code> and <code>mmap.enabled</code>. For more information, refer to <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Collection/set_properties.md">set_properties()</a>.</p>
 <div class="alert note">
-
-The code snippets in this section use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Connections/connect.md">PyMilvus ORM module</a> to interact with Milvus. Code snippets with the new <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/About.md">MilvusClient SDK</a> will be available soon.
-
+<p>The code snippets in this section use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Connections/connect.md">PyMilvus ORM module</a> to interact with Milvus. Code snippets with the new <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/About.md">MilvusClient SDK</a> will be available soon.</p>
 </div>
+<h3 id="Set-TTL" class="common-anchor-header">Set TTL</h3><p>Set the Time-To-Live (TTL) for the data in the collection, which specifies how long the data should be retained before it is automatically deleted.</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> Collection, connections
 
-### Set TTL
+<span class="hljs-comment"># Connect to Milvus server</span>
+connections.connect(host=<span class="hljs-string">&quot;localhost&quot;</span>, port=<span class="hljs-string">&quot;19530&quot;</span>) <span class="hljs-comment"># Change to your Milvus server IP and port</span>
 
-Set the Time-To-Live (TTL) for the data in the collection, which specifies how long the data should be retained before it is automatically deleted.
+<span class="hljs-comment"># Get existing collection</span>
+collection = Collection(<span class="hljs-string">&quot;quick_setup&quot;</span>)
 
-```python
-from pymilvus import Collection, connections
-
-# Connect to Milvus server
-connections.connect(host="localhost", port="19530") # Change to your Milvus server IP and port
-
-# Get existing collection
-collection = Collection("quick_setup")
-
-# Set the TTL for the data in the collection
+<span class="hljs-comment"># Set the TTL for the data in the collection</span>
 collection.set_properties(
     properties={
-        "collection.ttl.seconds": 60
+        <span class="hljs-string">&quot;collection.ttl.seconds&quot;</span>: <span class="hljs-number">60</span>
     }
 )
-```
-
-### Set MMAP
-
-Configure the memory mapping (MMAP) property for the collection, which determines whether data is mapped into memory to improve query performance. For more information, refer to [Configure memory mapping
-](https://milvus.io/docs/mmap.md#Configure-memory-mapping).
-
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Set-MMAP" class="common-anchor-header">Set MMAP</h3><p>Configure the memory mapping (MMAP) property for the collection, which determines whether data is mapped into memory to improve query performance. For more information, refer to <a href="https://milvus.io/docs/mmap.md#Configure-memory-mapping">Configure memory mapping
+</a>.</p>
 <div class="alert note">
-
-Before setting the MMAP property, release the collection first. Otherwise, an error will occur.
-
+<p>Before setting the MMAP property, release the collection first. Otherwise, an error will occur.</p>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> Collection, connections
 
-```python
-from pymilvus import Collection, connections
+<span class="hljs-comment"># Connect to Milvus server</span>
+connections.connect(host=<span class="hljs-string">&quot;localhost&quot;</span>, port=<span class="hljs-string">&quot;19530&quot;</span>) <span class="hljs-comment"># Change to your Milvus server IP and port</span>
 
-# Connect to Milvus server
-connections.connect(host="localhost", port="19530") # Change to your Milvus server IP and port
+<span class="hljs-comment"># Get existing collection</span>
+collection = Collection(<span class="hljs-string">&quot;quick_setup&quot;</span>)
 
-# Get existing collection
-collection = Collection("quick_setup")
-
-# Before setting memory mapping property, we need to release the collection first.
+<span class="hljs-comment"># Before setting memory mapping property, we need to release the collection first.</span>
 collection.release()
 
-# Set memory mapping property to True or Flase
+<span class="hljs-comment"># Set memory mapping property to True or Flase</span>
 collection.set_properties(
     properties={
-        "mmap.enabled": True
+        <span class="hljs-string">&quot;mmap.enabled&quot;</span>: <span class="hljs-literal">True</span>
     }
 )
-```
-
-## Drop a Collection
-
-If a collection is no longer needed, you can drop the collection.
-
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Drop-a-Collection" class="common-anchor-header">Drop a Collection
+    <button data-href="#Drop-a-Collection" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>If a collection is no longer needed, you can drop the collection.</p>
 <div class="language-python">
-
-To drop a collection, use the [`drop_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/drop_collection.md) method, specifying the collection name.
-
+<p>To drop a collection, use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/drop_collection.md"><code>drop_collection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-java">
-
-To drop a collection, use the [`dropCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/dropCollection.md) method, specifying the collection name.
-
+<p>To drop a collection, use the <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/dropCollection.md"><code>dropCollection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-javascript">
-
-To drop a collection, use the [`dropCollection()`](https://milvus.io/api-reference/node/v2.4.x/Collections/dropCollection.md) method, specifying the collection name.
-
+<p>To drop a collection, use the <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/dropCollection.md"><code>dropCollection()</code></a> method, specifying the collection name.</p>
 </div>
-
 <div class="language-shell">
-
-To drop a collection, you can use the [`POST /v2/vectordb/collections/drop`](https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Drop.md) API endpoint.
-
+<p>To drop a collection, you can use the <a href="https://milvus.io/api-reference/restful/v2.4.x/v2/Collection%20(v2)/Drop.md"><code>POST /v2/vectordb/collections/drop</code></a> API endpoint.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
     <a href="#shell">cURL</a>
 </div>
-
-```python
-# 10. Drop the collections
+<pre><code class="language-python"><span class="hljs-comment"># 10. Drop the collections</span>
 client.drop_collection(
-    collection_name="quick_setup"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>
 )
 
 client.drop_collection(
-    collection_name="customized_setup_1"
+    collection_name=<span class="hljs-string">&quot;customized_setup_1&quot;</span>
 )
 
 client.drop_collection(
-    collection_name="customized_setup_2"
+    collection_name=<span class="hljs-string">&quot;customized_setup_2&quot;</span>
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.DropCollectionReq;
 
-```java
-import io.milvus.v2.service.collection.request.DropCollectionReq;
+<span class="hljs-comment">// 10. Drop collections</span>
 
-// 10. Drop collections
-
-DropCollectionReq dropQuickSetupParam = DropCollectionReq.builder()
-    .collectionName("quick_setup")
+<span class="hljs-type">DropCollectionReq</span> <span class="hljs-variable">dropQuickSetupParam</span> <span class="hljs-operator">=</span> DropCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .build();
 
 client.dropCollection(dropQuickSetupParam);
 
-DropCollectionReq dropCustomizedSetupParam = DropCollectionReq.builder()
-    .collectionName("customized_setup_1")
+<span class="hljs-type">DropCollectionReq</span> <span class="hljs-variable">dropCustomizedSetupParam</span> <span class="hljs-operator">=</span> DropCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup_1&quot;</span>)
     .build();
 
 client.dropCollection(dropCustomizedSetupParam);
 
 dropCustomizedSetupParam = DropCollectionReq.builder()
-    .collectionName("customized_setup_2")
+    .collectionName(<span class="hljs-string">&quot;customized_setup_2&quot;</span>)
     .build();
 
 client.dropCollection(dropCustomizedSetupParam);
-```
-
-```javascript
-// 10. Drop the collection
-res = await client.dropCollection({
-    collection_name: "customized_setup_2"
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 10. Drop the collection</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">dropCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_2&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-res = await client.dropCollection({
-    collection_name: "customized_setup_1"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">dropCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup_1&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
 
-res = await client.dropCollection({
-    collection_name: "quick_setup"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">dropCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-shell">$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/drop&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;quick_setup&quot;
+}&#x27;</span>
 
-```shell
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/drop" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "quick_setup"
-}'
-
-# {
-#     "code": 0,
-#     "data": {}
-# }
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
 
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/drop" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_1"
-}'
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/drop&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_1&quot;
+}&#x27;</span>
 
 
-# {
-#     "code": 0,
-#     "data": {}
-# }
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
 
 
-$ curl -X POST "http://${MILVUS_URI}/v2/vectordb/collections/drop" \
--H "Content-Type: application/json" \
--d '{
-    "collectionName": "customized_setup_2"
-}'
+$ curl -X POST <span class="hljs-string">&quot;http://<span class="hljs-variable">${MILVUS_URI}</span>/v2/vectordb/collections/drop&quot;</span> \
+-H <span class="hljs-string">&quot;Content-Type: application/json&quot;</span> \
+-d <span class="hljs-string">&#x27;{
+    &quot;collectionName&quot;: &quot;customized_setup_2&quot;
+}&#x27;</span>
 
 
-# {
-#     "code": 0,
-#     "data": {}
-# }
-```
-
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;code&quot;: 0,</span>
+<span class="hljs-comment">#     &quot;data&quot;: {}</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>

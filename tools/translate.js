@@ -4,7 +4,8 @@ import {
 	translate,
 	mkdir,
 	renderDocHTML,
-} from "./utils.mjs";
+	separateYamlAndContent,
+} from "./utils.js";
 
 const targetDirectory = "./site/en";
 const sourceLang = "en";
@@ -30,7 +31,8 @@ async function bootstrap() {
 
 	for (let path of updatedFiles) {
 		const content = fs.readFileSync(path, "utf8");
-		const htmlContent = renderDocHTML(content);
+		const { frontMatter, body } = separateYamlAndContent(content);
+		const htmlContent = renderDocHTML(body);
 
 		for (let targetLang of targetLangs) {
 			const translateContent = await translate({
@@ -39,7 +41,9 @@ async function bootstrap() {
 			});
 			const targetFilePath = path.replace(sourceLang, targetLang);
 			mkdir(targetFilePath);
-			fs.writeFileSync(targetFilePath, translateContent, "utf8");
+
+			const wholeContent = `---\n${frontMatter}\n---\n\n${translateContent}`;
+			fs.writeFileSync(targetFilePath, wholeContent, "utf8");
 			console.info(
 				`-> ${targetLang.toUpperCase()}: file translated successfully:`,
 				targetFilePath

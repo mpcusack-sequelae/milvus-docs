@@ -5,41 +5,57 @@ related_key: minio, s3, storage, etcd, pulsar
 summary: Learn how to configure object storage with Milvus Operator.
 ---
 
-# Configure Object Storage with Milvus Operator
-
-Milvus uses MinIO or S3 as object storage to persist large-scale files, such as index files and binary logs. This topic introduces how to configure object storage dependencies when you install Milvus with Milvus Operator. For more details, refer to [Configure Object Storage with Milvus Operator](https://github.com/zilliztech/milvus-operator/blob/main/docs/administration/manage-dependencies/object-storage.md) in the Milvus Operator repository.
-
-This topic assumes that you have deployed Milvus Operator.
-
+<h1 id="Configure-Object-Storage-with-Milvus-Operator" class="common-anchor-header">Configure Object Storage with Milvus Operator
+    <button data-href="#Configure-Object-Storage-with-Milvus-Operator" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>Milvus uses MinIO or S3 as object storage to persist large-scale files, such as index files and binary logs. This topic introduces how to configure object storage dependencies when you install Milvus with Milvus Operator. For more details, refer to <a href="https://github.com/zilliztech/milvus-operator/blob/main/docs/administration/manage-dependencies/object-storage.md">Configure Object Storage with Milvus Operator</a> in the Milvus Operator repository.</p>
+<p>This topic assumes that you have deployed Milvus Operator.</p>
 <div class="alert note">See <a href="https://milvus.io/docs/v2.2.x/install_cluster-milvusoperator.md">Deploy Milvus Operator</a> for more information. </div>
-
-You need to specify a configuration file for using Milvus Operator to start a Milvus cluster.
-
-```YAML
-kubectl apply -f https://raw.githubusercontent.com/zilliztech/milvus-operator/main/config/samples/milvus_cluster_default.yaml
-```
-
-You only need to edit the code template in `milvus_cluster_default.yaml` to configure third-party dependencies. The following sections introduce how to configure object storage, etcd, and Pulsar respectively.
-
-## Configure object storage
-
-A Milvus cluster uses MinIO or S3 as object storage to persist large-scale files, such as index files and binary logs. Add required fields under `spec.dependencies.storage` to configure object storage, possible options are `external` and `inCluster`.
-
-### Internal object storage
-
-By default, Milvus Operator deploys an in-cluster MinIO for Milvus. The following is an example configuration to demonstrate how to use this MinIO as an internal object storage.
-
-```YAML
-apiVersion: milvus.io/v1beta1
+<p>You need to specify a configuration file for using Milvus Operator to start a Milvus cluster.</p>
+<pre><code class="language-YAML">kubectl apply -f <span class="hljs-attr">https</span>:<span class="hljs-comment">//raw.githubusercontent.com/zilliztech/milvus-operator/main/config/samples/milvus_cluster_default.yaml</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>You only need to edit the code template in <code>milvus_cluster_default.yaml</code> to configure third-party dependencies. The following sections introduce how to configure object storage, etcd, and Pulsar respectively.</p>
+<h2 id="Configure-object-storage" class="common-anchor-header">Configure object storage
+    <button data-href="#Configure-object-storage" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>A Milvus cluster uses MinIO or S3 as object storage to persist large-scale files, such as index files and binary logs. Add required fields under <code>spec.dependencies.storage</code> to configure object storage, possible options are <code>external</code> and <code>inCluster</code>.</p>
+<h3 id="Internal-object-storage" class="common-anchor-header">Internal object storage</h3><p>By default, Milvus Operator deploys an in-cluster MinIO for Milvus. The following is an example configuration to demonstrate how to use this MinIO as an internal object storage.</p>
+<pre><code class="language-YAML">apiVersion: milvus.io/v1beta1
 kind: Milvus
 metadata:
   name: my-release
   labels:
     app: milvus
 spec:
-  # Omit other fields ...
+  <span class="hljs-comment"># Omit other fields ...</span>
   dependencies:
-    # Omit other fields ...
+    <span class="hljs-comment"># Omit other fields ...</span>
     storage:
       inCluster:
         values:
@@ -47,193 +63,172 @@ spec:
           resources:
             requests:
               memory: 100Mi
-        deletionPolicy: Delete # Delete | Retain, default: Retain
-        pvcDeletion: true # default: false
-```
-
-After the above configuration applies, the in-cluster MinIO will run in standalone mode with a memory limit of up to 100Mi. Note that 
-
-- The `deletionPolicy` field specifies the deletion policy of the in-cluster MinIO. It defaults to `Delete` and has `Retain` as the alternative option.
-
-  - `Delete` indicates that the in-cluster object storage is deleted when you stop your Milvus instance. 
-  - `Retain` indicates that the in-cluster object storage is retained as the dependency service for later startups of your Milvus instance.
-
-- The `pvcDeletion` field specifies whether to delete the PVC(Persistent Volume Claim) when the in-cluster MinIO is deleted.
-
-The fields under `inCluster.values` are the same as those in Milvus Helm Chart, and you can find them [here](https://github.com/milvus-io/milvus-helm/blob/master/charts/minio/values.yaml).
-
-### External object storage
-
-Using `external` in the template YAML file indicates using an external object storage service. To use an external object storage, you need to properly set fields under `spec.dependencies.storage` and `spec.config.minio` in the Milvus CRD.
-
-#### Use Amazon Web Service (AWS) S3 as external object storage
-
-- Configure AWS S3 Access by AK/SK
-
-  An S3 bucket can usually be accessed by a pair of an access key and an access secret key. You can create a `Secret` object to store them in your Kubernetes as follows:
-
-  ```YAML
-  # # change the <parameters> to match your environment
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: my-release-s3-secret
-  type: Opaque
-  stringData:
-    accesskey: <my-access-key>
-    secretkey: <my-secret-key>
-  ```
-
-  Then you can configure an AWS S3 bucket as the external object storage:
-
-  ```YAML
-  # # change the <parameters> to match your environment
-  apiVersion: milvus.io/v1beta1
-  kind: Milvus
-  metadata:
-    name: my-release
-    labels:
-      app: milvus
-  spec:
-    # Omit other fields ...
-    config:
-      minio:
-        # your bucket name
-        bucketName: <my-bucket>
-        # Optional, config the prefix of the bucket milvus will use
-        rootPath: milvus/my-release
-        useSSL: true
-    dependencies:
-      storage:
-        # enable external object storage
-        external: true
-        type: S3 # MinIO | S3
-        # the endpoint of AWS S3
-        endpoint: s3.amazonaws.com:443
-        # the secret storing the access key and secret key
-        secretRef: "my-release-s3-secret"
-  ```
-
-- Configure AWS S3 Access by AssumeRole
-
-  Alternatively, you can make Milvus access your AWS S3 bucket using [AssumeRole](https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html), so that only temporary credentials are involved instead of your actual AK/SK. 
-
-  If this is what you prefer, you need to prepare a role on your AWS console and get its ARN, which is usually in the form of `arn:aws:iam::<your account id>:role/<role-name>`.
-
-  Then create a `ServiceAccount` object to store it in your Kubernetes as follows:
-
-  ```YAML
-  apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: my-release-sa
-    annotations:
-      eks.amazonaws.com/role-arn: <my-role-arn>
-  ```
-
-  Once all set, reference the above `ServiceAccount` in the template YAML file, and set `spec.config.minio.useIAM` to `true` to enable AssumeRole. 
-
-  ```YAML
-  apiVersion: milvus.io/v1beta1
-  kind: Milvus
-  metadata:
-    name: my-release
-    labels:
-      app: milvus
-  spec:
-    # Omit other fields ...
-    components:
-      # use the above ServiceAccount
-      serviceAccountName: my-release-sa
-    config:
-      minio:
-        # enable AssumeRole
-        useIAM: true
-        # Omit other fields ...
-    dependencies:
-      storage:
-        # Omit other fields ...
-        # Note: you must use regional endpoint here, otherwise the minio client that milvus uses will fail to connect
-        endpoint: s3.<my-bucket-region>.amazonaws.com:443
-        secretRef: "" # we don't need to specify the secret here
-  ```
-
-#### Use Google Cloud Storage (GCS) as external object storage
-
-AWS S3 object storage is not the only choice. You can also use the object storage service from other public cloud providers, such as Google Cloud. 
-
-- Configure GCS Access by AK/SK
-
-  The configuration is mostly similar to that of using AWS S3. You still need to create a `Secret` object to store your credentials in your Kubernetes. 
-  
-  ```YAML
-  # # change the <parameters> to match your environment
-  apiVersion: v1
-  kind: Secret
-  metadata:
-    name: my-release-gcp-secret
-  type: Opaque
-  stringData:
-    accesskey: <my-access-key>
-    secretkey: <my-secret-key>
-  ```
-
-  Then, you only need to change `endpoint` to `storage.googleapis.com:443` and set `spec.config.minio.cloudProvider` to `gcp` as follows:
-
-  ```YAML
-  # # change the <parameters> to match your environment
-  apiVersion: milvus.io/v1beta1
-  kind: Milvus
-  metadata:
-    name: my-release
-    labels:
-      app: milvus
-  spec:
-    # Omit other fields ...
-    config:
-      minio:
-        cloudProvider: gcp
-    dependencies:
-      storage:
-        # Omit other fields ...
-        endpoint: storage.googleapis.com:443
-  ```
-
-- Configure GCS Access by AssumeRole
-
-  Similar to AWS S3, you can also use [Workload Identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) to access GCS with temporary credentials if you are using GKE as your Kubernetes cluster.
-
-  The annotation of the `ServiceAccount` is different from that of AWS EKS. You need to specify the GCP service account name instead of the role ARN.
-
-  ```YAML
-  apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: my-release-sa
-    annotations:
-      iam.gke.io/gcp-service-account: <my-gcp-service-account-name>
-  ```
-
-  Then, you can configure your Milvus instance to use the above `ServiceAccount` and enable AssumeRole by setting `spec.config.minio.useIAM` to `true` as follows:
-
-  ```YAML
+        deletionPolicy: Delete <span class="hljs-comment"># Delete | Retain, default: Retain</span>
+        pvcDeletion: true <span class="hljs-comment"># default: false</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>After the above configuration applies, the in-cluster MinIO will run in standalone mode with a memory limit of up to 100Mi. Note that</p>
+<ul>
+<li><p>The <code>deletionPolicy</code> field specifies the deletion policy of the in-cluster MinIO. It defaults to <code>Delete</code> and has <code>Retain</code> as the alternative option.</p>
+<ul>
+<li><code>Delete</code> indicates that the in-cluster object storage is deleted when you stop your Milvus instance.</li>
+<li><code>Retain</code> indicates that the in-cluster object storage is retained as the dependency service for later startups of your Milvus instance.</li>
+</ul></li>
+<li><p>The <code>pvcDeletion</code> field specifies whether to delete the PVC(Persistent Volume Claim) when the in-cluster MinIO is deleted.</p></li>
+</ul>
+<p>The fields under <code>inCluster.values</code> are the same as those in Milvus Helm Chart, and you can find them <a href="https://github.com/milvus-io/milvus-helm/blob/master/charts/minio/values.yaml">here</a>.</p>
+<h3 id="External-object-storage" class="common-anchor-header">External object storage</h3><p>Using <code>external</code> in the template YAML file indicates using an external object storage service. To use an external object storage, you need to properly set fields under <code>spec.dependencies.storage</code> and <code>spec.config.minio</code> in the Milvus CRD.</p>
+<h4 id="Use-Amazon-Web-Service-AWS-S3-as-external-object-storage" class="common-anchor-header">Use Amazon Web Service (AWS) S3 as external object storage</h4><ul>
+<li><p>Configure AWS S3 Access by AK/SK</p>
+<p>An S3 bucket can usually be accessed by a pair of an access key and an access secret key. You can create a <code>Secret</code> object to store them in your Kubernetes as follows:</p>
+<pre><code class="language-YAML"><span class="hljs-comment"># # change the &lt;parameters&gt; to match your environment</span>
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-release-s3-secret
+<span class="hljs-built_in">type</span>: Opaque
+stringData:
+  accesskey: &lt;my-access-key&gt;
+  secretkey: &lt;my-secret-key&gt;
+<button class="copy-code-btn"></button></code></pre>
+<p>Then you can configure an AWS S3 bucket as the external object storage:</p>
+<pre><code class="language-YAML"><span class="hljs-comment"># # change the &lt;parameters&gt; to match your environment</span>
+apiVersion: milvus.io/v1beta1
+kind: Milvus
+metadata:
+  name: my-release
   labels:
-      app: milvus
-  spec:
-    # Omit other fields ...
-    components:
-      # use the above ServiceAccount
-      serviceAccountName: my-release-sa
-    config:
-      minio:
-        cloudProvider: gcp
-        # enable AssumeRole
-        useIAM: true
-        # Omit other fields ...  
-  ```
-
-## What's next
-
-Learn how to configure other Milvus dependencies with Milvus Operator:
-- [Configure Meta Storage with Milvus Operator](meta_storage_operator.md)
-- [Configure Message Storage with Milvus Operator](message_storage_operator.md)
+    app: milvus
+spec:
+  <span class="hljs-comment"># Omit other fields ...</span>
+  config:
+    minio:
+      <span class="hljs-comment"># your bucket name</span>
+      bucketName: &lt;my-bucket&gt;
+      <span class="hljs-comment"># Optional, config the prefix of the bucket milvus will use</span>
+      rootPath: milvus/my-release
+      useSSL: true
+  dependencies:
+    storage:
+      <span class="hljs-comment"># enable external object storage</span>
+      external: true
+      <span class="hljs-built_in">type</span>: S3 <span class="hljs-comment"># MinIO | S3</span>
+      <span class="hljs-comment"># the endpoint of AWS S3</span>
+      endpoint: s3.amazonaws.com:<span class="hljs-number">443</span>
+      <span class="hljs-comment"># the secret storing the access key and secret key</span>
+      secretRef: <span class="hljs-string">&quot;my-release-s3-secret&quot;</span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Configure AWS S3 Access by AssumeRole</p>
+<p>Alternatively, you can make Milvus access your AWS S3 bucket using <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">AssumeRole</a>, so that only temporary credentials are involved instead of your actual AK/SK.</p>
+<p>If this is what you prefer, you need to prepare a role on your AWS console and get its ARN, which is usually in the form of <code>arn:aws:iam::&lt;your account id&gt;:role/&lt;role-name&gt;</code>.</p>
+<p>Then create a <code>ServiceAccount</code> object to store it in your Kubernetes as follows:</p>
+<pre><code class="language-YAML">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-release-sa
+  annotations:
+    eks.amazonaws.com/role-arn: &lt;my-role-arn&gt;
+<button class="copy-code-btn"></button></code></pre>
+<p>Once all set, reference the above <code>ServiceAccount</code> in the template YAML file, and set <code>spec.config.minio.useIAM</code> to <code>true</code> to enable AssumeRole.</p>
+<pre><code class="language-YAML">apiVersion: milvus.io/v1beta1
+kind: Milvus
+metadata:
+  name: my-release
+  labels:
+    app: milvus
+spec:
+  <span class="hljs-comment"># Omit other fields ...</span>
+  components:
+    <span class="hljs-comment"># use the above ServiceAccount</span>
+    serviceAccountName: my-release-sa
+  config:
+    minio:
+      <span class="hljs-comment"># enable AssumeRole</span>
+      useIAM: true
+      <span class="hljs-comment"># Omit other fields ...</span>
+  dependencies:
+    storage:
+      <span class="hljs-comment"># Omit other fields ...</span>
+      <span class="hljs-comment"># Note: you must use regional endpoint here, otherwise the minio client that milvus uses will fail to connect</span>
+      endpoint: s3.&lt;my-bucket-region&gt;.amazonaws.com:<span class="hljs-number">443</span>
+      secretRef: <span class="hljs-string">&quot;&quot;</span> <span class="hljs-comment"># we don&#x27;t need to specify the secret here</span>
+<button class="copy-code-btn"></button></code></pre></li>
+</ul>
+<h4 id="Use-Google-Cloud-Storage-GCS-as-external-object-storage" class="common-anchor-header">Use Google Cloud Storage (GCS) as external object storage</h4><p>AWS S3 object storage is not the only choice. You can also use the object storage service from other public cloud providers, such as Google Cloud.</p>
+<ul>
+<li><p>Configure GCS Access by AK/SK</p>
+<p>The configuration is mostly similar to that of using AWS S3. You still need to create a <code>Secret</code> object to store your credentials in your Kubernetes.</p>
+<pre><code class="language-YAML"><span class="hljs-comment"># # change the &lt;parameters&gt; to match your environment</span>
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-release-gcp-secret
+<span class="hljs-built_in">type</span>: Opaque
+stringData:
+  accesskey: &lt;my-access-key&gt;
+  secretkey: &lt;my-secret-key&gt;
+<button class="copy-code-btn"></button></code></pre>
+<p>Then, you only need to change <code>endpoint</code> to <code>storage.googleapis.com:443</code> and set <code>spec.config.minio.cloudProvider</code> to <code>gcp</code> as follows:</p>
+<pre><code class="language-YAML"><span class="hljs-comment"># # change the &lt;parameters&gt; to match your environment</span>
+apiVersion: milvus.io/v1beta1
+kind: Milvus
+metadata:
+  name: my-release
+  labels:
+    app: milvus
+spec:
+  <span class="hljs-comment"># Omit other fields ...</span>
+  config:
+    minio:
+      cloudProvider: gcp
+  dependencies:
+    storage:
+      <span class="hljs-comment"># Omit other fields ...</span>
+      endpoint: storage.googleapis.com:<span class="hljs-number">443</span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Configure GCS Access by AssumeRole</p>
+<p>Similar to AWS S3, you can also use <a href="https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity">Workload Identity</a> to access GCS with temporary credentials if you are using GKE as your Kubernetes cluster.</p>
+<p>The annotation of the <code>ServiceAccount</code> is different from that of AWS EKS. You need to specify the GCP service account name instead of the role ARN.</p>
+<pre><code class="language-YAML">apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: my-release-sa
+  annotations:
+    iam.gke.io/gcp-service-account: &lt;my-gcp-service-account-name&gt;
+<button class="copy-code-btn"></button></code></pre>
+<p>Then, you can configure your Milvus instance to use the above <code>ServiceAccount</code> and enable AssumeRole by setting <code>spec.config.minio.useIAM</code> to <code>true</code> as follows:</p>
+<pre><code class="language-YAML">labels:
+    app: milvus
+spec:
+  <span class="hljs-comment"># Omit other fields ...</span>
+  components:
+    <span class="hljs-comment"># use the above ServiceAccount</span>
+    serviceAccountName: my-release-sa
+  config:
+    minio:
+      cloudProvider: gcp
+      <span class="hljs-comment"># enable AssumeRole</span>
+      useIAM: true
+      <span class="hljs-comment"># Omit other fields ...  </span>
+<button class="copy-code-btn"></button></code></pre></li>
+</ul>
+<h2 id="Whats-next" class="common-anchor-header">What’s next
+    <button data-href="#Whats-next" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Learn how to configure other Milvus dependencies with Milvus Operator:</p>
+<ul>
+<li><a href="/docs/meta_storage_operator.md">Configure Meta Storage with Milvus Operator</a></li>
+<li><a href="/docs/message_storage_operator.md">Configure Message Storage with Milvus Operator</a></li>
+</ul>

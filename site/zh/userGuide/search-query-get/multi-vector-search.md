@@ -5,243 +5,290 @@ summary: This guide demonstrates how to perform hybrid search in Milvus and unde
 title: Hybrid Search
 ---
 
-# Hybrid Search
-
-Since Milvus 2.4, we introduced multi-vector support and a hybrid search framework, which means users can bring in several vector fields (up to 10) into a single collection. These vectors in different columns represent diverse facets of data, originating from different embedding models or undergoing distinct processing methods. The results of hybrid searches are integrated using reranking strategies, such as Reciprocal Rank Fusion (RRF) and Weighted Scoring. To learn more about reranking strategies, refer to [Reranking](reranking.md).
-
-This feature is particularly useful in comprehensive search scenarios, such as identifying the most similar person in a vector library based on various attributes like pictures, voice, fingerprints, etc.
-
-In this tutorial, you will learn how to:
-
-- Create multiple `AnnSearchRequest` instances for similarity searches on different vector fields;
-
-- Configure a reranking strategy to combine and rerank search results from multiple `AnnSearchRequest` instances;
-
-- Use the [`hybrid_search()`](https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Collection/hybrid_search.md) method to perform a hybrid search.
-
+<h1 id="Hybrid-Search" class="common-anchor-header">Hybrid Search
+    <button data-href="#Hybrid-Search" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>Since Milvus 2.4, we introduced multi-vector support and a hybrid search framework, which means users can bring in several vector fields (up to 10) into a single collection. These vectors in different columns represent diverse facets of data, originating from different embedding models or undergoing distinct processing methods. The results of hybrid searches are integrated using reranking strategies, such as Reciprocal Rank Fusion (RRF) and Weighted Scoring. To learn more about reranking strategies, refer to <a href="/docs/reranking.md">Reranking</a>.</p>
+<p>This feature is particularly useful in comprehensive search scenarios, such as identifying the most similar person in a vector library based on various attributes like pictures, voice, fingerprints, etc.</p>
+<p>In this tutorial, you will learn how to:</p>
+<ul>
+<li><p>Create multiple <code>AnnSearchRequest</code> instances for similarity searches on different vector fields;</p></li>
+<li><p>Configure a reranking strategy to combine and rerank search results from multiple <code>AnnSearchRequest</code> instances;</p></li>
+<li><p>Use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Collection/hybrid_search.md"><code>hybrid_search()</code></a> method to perform a hybrid search.</p></li>
+</ul>
 <div class="alert note">
-
-The code snippets on this page use the [PyMilvus ORM module](https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Connections/connect.md) to interact with Milvus. Code snippets with the new [MilvusClient SDK](https://milvus.io/api-reference/pymilvus/v2.4.x/About.md) will be available soon.
-
+<p>The code snippets on this page use the <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/ORM/Connections/connect.md">PyMilvus ORM module</a> to interact with Milvus. Code snippets with the new <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/About.md">MilvusClient SDK</a> will be available soon.</p>
 </div>
+<h2 id="Preparations" class="common-anchor-header">Preparations
+    <button data-href="#Preparations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Before starting a hybrid search, ensure you have a collection with multiple vector fields. Currently, Milvus introduces a default of four vector fields per collection, which can be extended to a maximum of ten by modifying the <a href="https://milvus.io/docs/configure_proxy.md#proxymaxVectorFieldNum">proxy.maxVectorFieldNum</a> configuration.</p>
+<p>Below is an example of creating a collection named <code>test_collection</code> with two vector fields, <code>filmVector</code> and <code>posterVector</code>, and inserting random entities into it.</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> connections, Collection, FieldSchema, CollectionSchema, DataType
+<span class="hljs-keyword">import</span> random
 
-## Preparations
-
-Before starting a hybrid search, ensure you have a collection with multiple vector fields. Currently, Milvus introduces a default of four vector fields per collection, which can be extended to a maximum of ten by modifying the [proxy.maxVectorFieldNum](https://milvus.io/docs/configure_proxy.md#proxymaxVectorFieldNum) configuration.
-
-Below is an example of creating a collection named `test_collection` with two vector fields, `filmVector` and `posterVector`, and inserting random entities into it.
-
-```python
-from pymilvus import connections, Collection, FieldSchema, CollectionSchema, DataType
-import random
-
-# Connect to Milvus
+<span class="hljs-comment"># Connect to Milvus</span>
 connections.connect(
-    host="10.102.7.3", # Replace with your Milvus server IP
-    port="19530"
+    host=<span class="hljs-string">&quot;10.102.7.3&quot;</span>, <span class="hljs-comment"># Replace with your Milvus server IP</span>
+    port=<span class="hljs-string">&quot;19530&quot;</span>
 )
 
-# Create schema
+<span class="hljs-comment"># Create schema</span>
 fields = [
-    FieldSchema(name="film_id", dtype=DataType.INT64, is_primary=True),
-    FieldSchema(name="filmVector", dtype=DataType.FLOAT_VECTOR, dim=5), # Vector field for film vectors
-    FieldSchema(name="posterVector", dtype=DataType.FLOAT_VECTOR, dim=5)] # Vector field for poster vectors
+    FieldSchema(name=<span class="hljs-string">&quot;film_id&quot;</span>, dtype=DataType.INT64, is_primary=<span class="hljs-literal">True</span>),
+    FieldSchema(name=<span class="hljs-string">&quot;filmVector&quot;</span>, dtype=DataType.FLOAT_VECTOR, dim=<span class="hljs-number">5</span>), <span class="hljs-comment"># Vector field for film vectors</span>
+    FieldSchema(name=<span class="hljs-string">&quot;posterVector&quot;</span>, dtype=DataType.FLOAT_VECTOR, dim=<span class="hljs-number">5</span>)] <span class="hljs-comment"># Vector field for poster vectors</span>
 
-schema = CollectionSchema(fields=fields,enable_dynamic_field=False)
+schema = CollectionSchema(fields=fields,enable_dynamic_field=<span class="hljs-literal">False</span>)
 
-# Create collection
-collection = Collection(name="test_collection", schema=schema)
+<span class="hljs-comment"># Create collection</span>
+collection = Collection(name=<span class="hljs-string">&quot;test_collection&quot;</span>, schema=schema)
 
-# Create index for each vector field
+<span class="hljs-comment"># Create index for each vector field</span>
 index_params = {
-    "metric_type": "L2",
-    "index_type": "IVF_FLAT",
-    "params": {"nlist": 128},
+    <span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;L2&quot;</span>,
+    <span class="hljs-string">&quot;index_type&quot;</span>: <span class="hljs-string">&quot;IVF_FLAT&quot;</span>,
+    <span class="hljs-string">&quot;params&quot;</span>: {<span class="hljs-string">&quot;nlist&quot;</span>: <span class="hljs-number">128</span>},
 }
 
-collection.create_index("filmVector", index_params)
-collection.create_index("posterVector", index_params)
+collection.create_index(<span class="hljs-string">&quot;filmVector&quot;</span>, index_params)
+collection.create_index(<span class="hljs-string">&quot;posterVector&quot;</span>, index_params)
 
-# Generate random entities to insert
+<span class="hljs-comment"># Generate random entities to insert</span>
 entities = []
 
-for _ in range(1000):
-    # generate random values for each field in the schema
-    film_id = random.randint(1, 1000)
-    film_vector = [ random.random() for _ in range(5) ]
-    poster_vector = [ random.random() for _ in range(5) ]
+<span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):
+    <span class="hljs-comment"># generate random values for each field in the schema</span>
+    film_id = random.randint(<span class="hljs-number">1</span>, <span class="hljs-number">1000</span>)
+    film_vector = [ random.random() <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ]
+    poster_vector = [ random.random() <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">5</span>) ]
 
-    # create a dictionary for each entity
+    <span class="hljs-comment"># create a dictionary for each entity</span>
     entity = {
-        "film_id": film_id,
-        "filmVector": film_vector,
-        "posterVector": poster_vector
+        <span class="hljs-string">&quot;film_id&quot;</span>: film_id,
+        <span class="hljs-string">&quot;filmVector&quot;</span>: film_vector,
+        <span class="hljs-string">&quot;posterVector&quot;</span>: poster_vector
     }
 
-    # add the entity to the list
+    <span class="hljs-comment"># add the entity to the list</span>
     entities.append(entity)
     
 collection.insert(entities)
-```
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Step-1-Create-Multiple-AnnSearchRequest-Instances" class="common-anchor-header">Step 1: Create Multiple AnnSearchRequest Instances
+    <button data-href="#Step-1-Create-Multiple-AnnSearchRequest-Instances" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>A hybrid search uses the <code>hybrid_search()</code> API to perform multiple ANN search requests in a single call. Each <code>AnnSearchRequest</code> represents a single search request on a specific vector field.</p>
+<p>The following example creates two <code>AnnSearchRequest</code> instances to perform individual similarity searches on two vector fields.</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> AnnSearchRequest
 
-## Step 1: Create Multiple AnnSearchRequest Instances
-
-A hybrid search uses the `hybrid_search()` API to perform multiple ANN search requests in a single call. Each `AnnSearchRequest` represents a single search request on a specific vector field.
-
-The following example creates two `AnnSearchRequest` instances to perform individual similarity searches on two vector fields.
-
-```python
-from pymilvus import AnnSearchRequest
-
-# Create ANN search request 1 for filmVector
-query_filmVector = [[0.8896863042430693, 0.370613100114602, 0.23779315077113428, 0.38227915951132996, 0.5997064603128835]]
+<span class="hljs-comment"># Create ANN search request 1 for filmVector</span>
+query_filmVector = [[<span class="hljs-number">0.8896863042430693</span>, <span class="hljs-number">0.370613100114602</span>, <span class="hljs-number">0.23779315077113428</span>, <span class="hljs-number">0.38227915951132996</span>, <span class="hljs-number">0.5997064603128835</span>]]
 
 search_param_1 = {
-    "data": query_filmVector, # Query vector
-    "anns_field": "filmVector", # Vector field name
-    "param": {
-        "metric_type": "L2", # This parameter value must be identical to the one used in the collection schema
-        "params": {"nprobe": 10}
+    <span class="hljs-string">&quot;data&quot;</span>: query_filmVector, <span class="hljs-comment"># Query vector</span>
+    <span class="hljs-string">&quot;anns_field&quot;</span>: <span class="hljs-string">&quot;filmVector&quot;</span>, <span class="hljs-comment"># Vector field name</span>
+    <span class="hljs-string">&quot;param&quot;</span>: {
+        <span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;L2&quot;</span>, <span class="hljs-comment"># This parameter value must be identical to the one used in the collection schema</span>
+        <span class="hljs-string">&quot;params&quot;</span>: {<span class="hljs-string">&quot;nprobe&quot;</span>: <span class="hljs-number">10</span>}
     },
-    "limit": 2 # Number of search results to return in this AnnSearchRequest
+    <span class="hljs-string">&quot;limit&quot;</span>: <span class="hljs-number">2</span> <span class="hljs-comment"># Number of search results to return in this AnnSearchRequest</span>
 }
 request_1 = AnnSearchRequest(**search_param_1)
 
-# Create ANN search request 2 for posterVector
-query_posterVector = [[0.02550758562349764, 0.006085637357292062, 0.5325251250159071, 0.7676432650114147, 0.5521074424751443]]
+<span class="hljs-comment"># Create ANN search request 2 for posterVector</span>
+query_posterVector = [[<span class="hljs-number">0.02550758562349764</span>, <span class="hljs-number">0.006085637357292062</span>, <span class="hljs-number">0.5325251250159071</span>, <span class="hljs-number">0.7676432650114147</span>, <span class="hljs-number">0.5521074424751443</span>]]
 search_param_2 = {
-    "data": query_posterVector, # Query vector
-    "anns_field": "posterVector", # Vector field name
-    "param": {
-        "metric_type": "L2", # This parameter value must be identical to the one used in the collection schema
-        "params": {"nprobe": 10}
+    <span class="hljs-string">&quot;data&quot;</span>: query_posterVector, <span class="hljs-comment"># Query vector</span>
+    <span class="hljs-string">&quot;anns_field&quot;</span>: <span class="hljs-string">&quot;posterVector&quot;</span>, <span class="hljs-comment"># Vector field name</span>
+    <span class="hljs-string">&quot;param&quot;</span>: {
+        <span class="hljs-string">&quot;metric_type&quot;</span>: <span class="hljs-string">&quot;L2&quot;</span>, <span class="hljs-comment"># This parameter value must be identical to the one used in the collection schema</span>
+        <span class="hljs-string">&quot;params&quot;</span>: {<span class="hljs-string">&quot;nprobe&quot;</span>: <span class="hljs-number">10</span>}
     },
-    "limit": 2 # Number of search results to return in this AnnSearchRequest
+    <span class="hljs-string">&quot;limit&quot;</span>: <span class="hljs-number">2</span> <span class="hljs-comment"># Number of search results to return in this AnnSearchRequest</span>
 }
 request_2 = AnnSearchRequest(**search_param_2)
 
-# Store these two requests as a list in `reqs`
+<span class="hljs-comment"># Store these two requests as a list in `reqs`</span>
 reqs = [request_1, request_2]
-```
+<button class="copy-code-btn"></button></code></pre>
+<p>Parameters:</p>
+<ul>
+<li><p><code>AnnSearchRequest</code> (<em>object</em>)</p>
+<p>A class representing an ANN search request. Each hybrid search can contain 1 to 1,024 <code>ANNSearchRequest</code> objects at a time.</p></li>
+<li><p><code>data</code> (<em>list</em>)</p>
+<p>The query vector to search in a single <code>AnnSearchRequest</code>. Currently, this parameter accepts a list containing only a single query vector, for example, <code>[[0.5791814851218929, 0.5792985702614121, 0.8480776460143558, 0.16098005945243, 0.2842979317256803]]</code>. In the future, this parameter will be expanded to accept multiple query vectors.</p></li>
+<li><p><code>anns_field</code> (<em>string</em>)</p>
+<p>The name of the vector field to use in a single <code>AnnSearchRequest</code>.</p></li>
+<li><p><code>param</code> (<em>dict</em>)</p>
+<p>A dictionary of search parameters for a single <code>AnnSearchRequest</code>. These search parameters are identical to those for a single-vector search. For more information, refer to <a href="https://milvus.io/docs/single-vector-search.md#Search-parameters">Search parameters</a>.</p></li>
+<li><p><code>limit</code> (<em>int</em>)</p>
+<p>The maximum number of search results to include in a single <code>ANNSearchRequest</code>.</p>
+<p>This parameter only affects the number of search results to return within an individual <code>ANNSearchRequest</code>, and it does not decide the final results to return for a <code>hybrid_search</code> call. In a hybrid search, the final results are determined by combining and reranking the results from multiple <code>ANNSearchRequest</code> instances.</p></li>
+</ul>
+<h2 id="Step-2-Configure-a-Reranking-Strategy" class="common-anchor-header">Step 2: Configure a Reranking Strategy
+    <button data-href="#Step-2-Configure-a-Reranking-Strategy" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>After creating <code>AnnSearchRequest</code> instances, configure a reranking strategy to combine and rerank the results. Currently, there are two options: <code>WeightedRanker</code> and <code>RRFRanker</code>. For more information about reranking strategies, refer to <a href="/docs/reranking.md">Reranking</a>.</p>
+<ul>
+<li><p>Use weighted scoring</p>
+<p>The <code>WeightedRanker</code> is used to assign importance to the results from each vector field search with specified weights. If you prioritize some vector fields over others, <code>WeightedRanker(value1, value2, ..., valueN)</code> can reflect this in the combined search results.</p>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> WeightedRanker
+<span class="hljs-comment"># Use WeightedRanker to combine results with specified weights</span>
+<span class="hljs-comment"># Assign weights of 0.8 to text search and 0.2 to image search</span>
+rerank = WeightedRanker(<span class="hljs-number">0.8</span>, <span class="hljs-number">0.2</span>)  
+<button class="copy-code-btn"></button></code></pre>
+<p>When using <code>WeightedRanker</code>, note that:</p>
+<ul>
+<li>Each weight value ranges from 0 (least important) to 1 (most important), influencing the final aggregated score.</li>
+<li>The total number of weight values provided in <code>WeightedRanker</code> should equal the number of <code>AnnSearchRequest</code> instances you have created.</li>
+</ul></li>
+<li><p>Use Reciprocal Rank Fusion (RFF)</p>
+<pre><code class="language-python"><span class="hljs-comment"># Alternatively, use RRFRanker for reciprocal rank fusion reranking</span>
+<span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> RRFRanker
 
-Parameters:
-
-- `AnnSearchRequest` (_object_)
-
-    A class representing an ANN search request. Each hybrid search can contain 1 to 1,024 `ANNSearchRequest` objects at a time.
-
-- `data` (_list_)
-
-    The query vector to search in a single `AnnSearchRequest`. Currently, this parameter accepts a list containing only a single query vector, for example, `[[0.5791814851218929, 0.5792985702614121, 0.8480776460143558, 0.16098005945243, 0.2842979317256803]]`. In the future, this parameter will be expanded to accept multiple query vectors.
-
-- `anns_field` (_string_)
-
-    The name of the vector field to use in a single `AnnSearchRequest`.
-
-- `param` (_dict_)
-
-    A dictionary of search parameters for a single `AnnSearchRequest`. These search parameters are identical to those for a single-vector search. For more information, refer to [Search parameters](https://milvus.io/docs/single-vector-search.md#Search-parameters).
-
-- `limit` (_int_)
-
-    The maximum number of search results to include in a single `ANNSearchRequest`.
-
-    This parameter only affects the number of search results to return within an individual `ANNSearchRequest`, and it does not decide the final results to return for a `hybrid_search` call. In a hybrid search, the final results are determined by combining and reranking the results from multiple `ANNSearchRequest` instances.
-
-## Step 2: Configure a Reranking Strategy
-
-After creating `AnnSearchRequest` instances, configure a reranking strategy to combine and rerank the results. Currently, there are two options: `WeightedRanker` and `RRFRanker`. For more information about reranking strategies, refer to [Reranking](reranking.md).
-
-- Use weighted scoring
-
-    The `WeightedRanker` is used to assign importance to the results from each vector field search with specified weights. If you prioritize some vector fields over others, `WeightedRanker(value1, value2, ..., valueN)` can reflect this in the combined search results.
-
-    ```python
-    from pymilvus import WeightedRanker
-    # Use WeightedRanker to combine results with specified weights
-    # Assign weights of 0.8 to text search and 0.2 to image search
-    rerank = WeightedRanker(0.8, 0.2)  
-    ```
-
-    When using `WeightedRanker`, note that:
-
-  - Each weight value ranges from 0 (least important) to 1 (most important), influencing the final aggregated score.
-  - The total number of weight values provided in `WeightedRanker` should equal the number of `AnnSearchRequest` instances you have created.
-
-- Use Reciprocal Rank Fusion (RFF)
-
-    ```python
-    # Alternatively, use RRFRanker for reciprocal rank fusion reranking
-    from pymilvus import RRFRanker
-    
-    rerank = RRFRanker()
-    ```
-
-## Step 3: Perform a Hybrid Search
-
-With the `AnnSearchRequest` instances and reranking strategy set, use the `hybrid_search()` method to perform the hybrid search.
-
-```python
-# Before conducting hybrid search, load the collection into memory.
+rerank = RRFRanker()
+<button class="copy-code-btn"></button></code></pre></li>
+</ul>
+<h2 id="Step-3-Perform-a-Hybrid-Search" class="common-anchor-header">Step 3: Perform a Hybrid Search
+    <button data-href="#Step-3-Perform-a-Hybrid-Search" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>With the <code>AnnSearchRequest</code> instances and reranking strategy set, use the <code>hybrid_search()</code> method to perform the hybrid search.</p>
+<pre><code class="language-python"><span class="hljs-comment"># Before conducting hybrid search, load the collection into memory.</span>
 collection.load()
 
 res = collection.hybrid_search(
-    reqs, # List of AnnSearchRequests created in step 1
-    rerank, # Reranking strategy specified in step 2
-    limit=2 # Number of final search results to return
+    reqs, <span class="hljs-comment"># List of AnnSearchRequests created in step 1</span>
+    rerank, <span class="hljs-comment"># Reranking strategy specified in step 2</span>
+    limit=<span class="hljs-number">2</span> <span class="hljs-comment"># Number of final search results to return</span>
 )
 
-print(res)
-```
-
-Parameters:
-
-- `reqs` (_list_)
-
-  A list of search requests, where each request is an `ANNSearchRequest` object. Each request can correspond to a different vector field and a different set of search parameters.
-
-- `rerank` (_object_)
-
-  The reranking strategy to use for hybrid search. Possible values: `WeightedRanker(value1, value2, ..., valueN)` and `RRFRanker()`.
-
-    For more information about reranking strategies, refer to [Reranking](reranking.md).
-
-- `limit` (_int_)
-
-    The maximum number of final results to return in the hybrid search.
-
-The output is similar to the following:
-
-```python
-["['id: 844, distance: 0.006047376897186041, entity: {}', 'id: 876, distance: 0.006422005593776703, entity: {}']"]
-```
-
-## Limits
-
-- Typically, each collection has a default allowance of up to 4 vector fields. However, you have the option to adjust the `proxy.maxVectorFieldNum` configuration to expand the maximum number of vector fields in a collection, with a maximum limit of 10 vector fields per collection. See [Proxy-related Configurations](https://milvus.io/docs/configure_proxy.md#Proxy-related-Configurations) for more.
-
-- Partially indexed or loaded vector fields in a collection will result in an error.
-
-- Currently, each `AnnSearchRequest` in a hybrid search can carry one query vector only.
-
-## FAQ
-
-- **In which scenario is hybrid search recommended?**
-
-    Hybrid search is ideal for complex situations demanding high accuracy, especially when an entity can be represented by multiple, diverse vectors. This applies to cases where the same data, such as a sentence, is processed through different embedding models or when multimodal information (like images, fingerprints, and voiceprints of an individual) is converted into various vector formats. By assigning weights to these vectors, their combined influence can significantly enrich recall and improve the effectiveness of search results.
-
-- **How does a weighted ranker normalize distances between different vector fields?**
-
-    A weighted ranker normalizes the distances between vector fields using assigned weights to each field. It calculates the importance of each vector field according to its weight, prioritizing those with higher weights. It's advised to use the same metric type across ANN search requests to ensure consistency. This method ensures that vectors deemed more significant have a greater influence on the overall ranking.
-
-- **Is it possible to use alternative rankers like Cohere Ranker or BGE Ranker?**
-
-    Currently, only the provided rankers are supported. Plans to include additional rankers are underway for future updates.
-
-- **Is it possible to conduct multiple hybrid search operations at the same time?**
-
-    Yes, simultaneous execution of multiple hybrid search operations is supported.
-
-- **Can I use the same vector field in multiple AnnSearchRequest objects to perform hybrid searches?**
-
-    Technically, it is possible to use the same vector field in multiple AnnSearchRequest objects for hybrid searches. It is not necessary to have multiple vector fields for a hybrid search.
+<span class="hljs-built_in">print</span>(res)
+<button class="copy-code-btn"></button></code></pre>
+<p>Parameters:</p>
+<ul>
+<li><p><code>reqs</code> (<em>list</em>)</p>
+<p>A list of search requests, where each request is an <code>ANNSearchRequest</code> object. Each request can correspond to a different vector field and a different set of search parameters.</p></li>
+<li><p><code>rerank</code> (<em>object</em>)</p>
+<p>The reranking strategy to use for hybrid search. Possible values: <code>WeightedRanker(value1, value2, ..., valueN)</code> and <code>RRFRanker()</code>.</p>
+<p>For more information about reranking strategies, refer to <a href="/docs/reranking.md">Reranking</a>.</p></li>
+<li><p><code>limit</code> (<em>int</em>)</p>
+<p>The maximum number of final results to return in the hybrid search.</p></li>
+</ul>
+<p>The output is similar to the following:</p>
+<pre><code class="language-python">[<span class="hljs-string">&quot;[&#x27;id: 844, distance: 0.006047376897186041, entity: {}&#x27;, &#x27;id: 876, distance: 0.006422005593776703, entity: {}&#x27;]&quot;</span>]
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Limits" class="common-anchor-header">Limits
+    <button data-href="#Limits" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li><p>Typically, each collection has a default allowance of up to 4 vector fields. However, you have the option to adjust the <code>proxy.maxVectorFieldNum</code> configuration to expand the maximum number of vector fields in a collection, with a maximum limit of 10 vector fields per collection. See <a href="https://milvus.io/docs/configure_proxy.md#Proxy-related-Configurations">Proxy-related Configurations</a> for more.</p></li>
+<li><p>Partially indexed or loaded vector fields in a collection will result in an error.</p></li>
+<li><p>Currently, each <code>AnnSearchRequest</code> in a hybrid search can carry one query vector only.</p></li>
+</ul>
+<h2 id="FAQ" class="common-anchor-header">FAQ
+    <button data-href="#FAQ" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li><p><strong>In which scenario is hybrid search recommended?</strong></p>
+<p>Hybrid search is ideal for complex situations demanding high accuracy, especially when an entity can be represented by multiple, diverse vectors. This applies to cases where the same data, such as a sentence, is processed through different embedding models or when multimodal information (like images, fingerprints, and voiceprints of an individual) is converted into various vector formats. By assigning weights to these vectors, their combined influence can significantly enrich recall and improve the effectiveness of search results.</p></li>
+<li><p><strong>How does a weighted ranker normalize distances between different vector fields?</strong></p>
+<p>A weighted ranker normalizes the distances between vector fields using assigned weights to each field. It calculates the importance of each vector field according to its weight, prioritizing those with higher weights. It’s advised to use the same metric type across ANN search requests to ensure consistency. This method ensures that vectors deemed more significant have a greater influence on the overall ranking.</p></li>
+<li><p><strong>Is it possible to use alternative rankers like Cohere Ranker or BGE Ranker?</strong></p>
+<p>Currently, only the provided rankers are supported. Plans to include additional rankers are underway for future updates.</p></li>
+<li><p><strong>Is it possible to conduct multiple hybrid search operations at the same time?</strong></p>
+<p>Yes, simultaneous execution of multiple hybrid search operations is supported.</p></li>
+<li><p><strong>Can I use the same vector field in multiple AnnSearchRequest objects to perform hybrid searches?</strong></p>
+<p>Technically, it is possible to use the same vector field in multiple AnnSearchRequest objects for hybrid searches. It is not necessary to have multiple vector fields for a hybrid search.</p></li>
+</ul>

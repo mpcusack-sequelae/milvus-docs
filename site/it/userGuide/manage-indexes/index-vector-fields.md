@@ -5,24 +5,47 @@ summary: This guide walks you through the basic operations on creating and manag
 title: Index Vector Fields
 ---
 
-# Index Vector Fields
-
-This guide walks you through the basic operations on creating and managing indexes on vector fields in a collection. 
-
-## Overview
-
-Leveraging the metadata stored in an index file, Milvus organizes your data in a specialized structure, facilitating rapid retrieval of requested information during searches or queries.
-
-Milvus provides several index types and metrics to sort field values for efficient similarity searches. The following table lists the supported index types and metrics for different vector field types. For details, refer to [In-memory Index](index.md) and [Similarity Metrics](metric.md).
-
+<h1 id="Index-Vector-Fields" class="common-anchor-header">Index Vector Fields
+    <button data-href="#Index-Vector-Fields" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This guide walks you through the basic operations on creating and managing indexes on vector fields in a collection.</p>
+<h2 id="Overview" class="common-anchor-header">Overview
+    <button data-href="#Overview" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Leveraging the metadata stored in an index file, Milvus organizes your data in a specialized structure, facilitating rapid retrieval of requested information during searches or queries.</p>
+<p>Milvus provides several index types and metrics to sort field values for efficient similarity searches. The following table lists the supported index types and metrics for different vector field types. For details, refer to <a href="/docs/index.md">In-memory Index</a> and <a href="/docs/metric.md">Similarity Metrics</a>.</p>
 <div class="filter">
   <a href="#floating">Floating point embeddings</a>
   <a href="#binary">Binary embeddings</a>
   <a href="#sparse">Sparse embeddings</a>
 </div>
-
 <div class="filter-floating table-wrapper" markdown="block">
-
 <table class="tg">
 <thead>
   <tr>
@@ -37,11 +60,8 @@ Milvus provides several index types and metrics to sort field values for efficie
   </tr>
 </tbody>
 </table>
-
 </div>
-
 <div class="filter-binary table-wrapper" markdown="block">
-
 <table class="tg">
 <thead>
   <tr>
@@ -56,11 +76,8 @@ Milvus provides several index types and metrics to sort field values for efficie
   </tr>
 </tbody>
 </table>
-
 </div>
-
 <div class="filter-sparse table-wrapper" markdown="block">
-
 <table class="tg">
 <thead>
   <tr>
@@ -75,230 +92,221 @@ Milvus provides several index types and metrics to sort field values for efficie
   </tr>
 </tbody>
 </table>
-
 </div>
-
-It is recommended to create indexes for both the vector field and scalar fields that are frequently accessed.
-
-## Preparations
-
-As explained in [Manage Collections](manage-collections.md), Milvus automatically generates an index and loads it into memory when creating a collection if any of the following conditions are specified in the collection creation request:
-
-- The dimensionality of the vector field and the metric type, or
-
-- The schema and the index parameters.
-
-The code snippet below repurposes the existing code to establish a connection to a Milvus instance and create a collection without specifying its index parameters. In this case, the collection lacks an index and remains unloaded.
-
+<p>It is recommended to create indexes for both the vector field and scalar fields that are frequently accessed.</p>
+<h2 id="Preparations" class="common-anchor-header">Preparations
+    <button data-href="#Preparations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>As explained in <a href="/docs/manage-collections.md">Manage Collections</a>, Milvus automatically generates an index and loads it into memory when creating a collection if any of the following conditions are specified in the collection creation request:</p>
+<ul>
+<li><p>The dimensionality of the vector field and the metric type, or</p></li>
+<li><p>The schema and the index parameters.</p></li>
+</ul>
+<p>The code snippet below repurposes the existing code to establish a connection to a Milvus instance and create a collection without specifying its index parameters. In this case, the collection lacks an index and remains unloaded.</p>
 <div class="language-python">
-
-To prepare for indexing, use [`MilvusClient`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md) to connect to the Milvus server and set up a collection by using [`create_schema()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_schema.md), [`add_field()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/CollectionSchema/add_field.md), and [`create_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md).
-
+<p>To prepare for indexing, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md"><code>MilvusClient</code></a> to connect to the Milvus server and set up a collection by using <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_schema.md"><code>create_schema()</code></a>, <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/CollectionSchema/add_field.md"><code>add_field()</code></a>, and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md"><code>create_collection()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To prepare for indexing, use [`MilvusClientV2`](https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md) to connect to the Milvus server and set up a collection by using [`createSchema()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createSchema.md), [`addField()`](https://milvus.io/api-reference/java/v2.4.x/v2/CollectionSchema/addField.md), and [`createCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md).
-
+<p>To prepare for indexing, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md"><code>MilvusClientV2</code></a> to connect to the Milvus server and set up a collection by using <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createSchema.md"><code>createSchema()</code></a>, <a href="https://milvus.io/api-reference/java/v2.4.x/v2/CollectionSchema/addField.md"><code>addField()</code></a>, and <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md"><code>createCollection()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To prepare for indexing, use [`MilvusClient`](https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md) to connect to the Milvus server and set up a collection by using [`createCollection()`](https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md).
-
+<p>To prepare for indexing, use <a href="https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md"><code>MilvusClient</code></a> to connect to the Milvus server and set up a collection by using <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md"><code>createCollection()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> MilvusClient, DataType
 
-```python
-from pymilvus import MilvusClient, DataType
-
-# 1. Set up a Milvus client
+<span class="hljs-comment"># 1. Set up a Milvus client</span>
 client = MilvusClient(
-    uri="http://localhost:19530"
+    uri=<span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 )
 
-# 2. Create schema
-# 2.1. Create schema
+<span class="hljs-comment"># 2. Create schema</span>
+<span class="hljs-comment"># 2.1. Create schema</span>
 schema = MilvusClient.create_schema(
-    auto_id=False,
-    enable_dynamic_field=True,
+    auto_id=<span class="hljs-literal">False</span>,
+    enable_dynamic_field=<span class="hljs-literal">True</span>,
 )
 
-# 2.2. Add fields to schema
-schema.add_field(field_name="id", datatype=DataType.INT64, is_primary=True)
-schema.add_field(field_name="vector", datatype=DataType.FLOAT_VECTOR, dim=5)
+<span class="hljs-comment"># 2.2. Add fields to schema</span>
+schema.add_field(field_name=<span class="hljs-string">&quot;id&quot;</span>, datatype=DataType.INT64, is_primary=<span class="hljs-literal">True</span>)
+schema.add_field(field_name=<span class="hljs-string">&quot;vector&quot;</span>, datatype=DataType.FLOAT_VECTOR, dim=<span class="hljs-number">5</span>)
 
-# 3. Create collection
+<span class="hljs-comment"># 3. Create collection</span>
 client.create_collection(
-    collection_name="customized_setup", 
+    collection_name=<span class="hljs-string">&quot;customized_setup&quot;</span>, 
     schema=schema, 
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.client.ConnectConfig;
+<span class="hljs-keyword">import</span> io.milvus.v2.client.MilvusClientV2;
+<span class="hljs-keyword">import</span> io.milvus.v2.common.DataType;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.CreateCollectionReq;
 
-```java
-import io.milvus.v2.client.ConnectConfig;
-import io.milvus.v2.client.MilvusClientV2;
-import io.milvus.v2.common.DataType;
-import io.milvus.v2.service.collection.request.CreateCollectionReq;
+<span class="hljs-type">String</span> <span class="hljs-variable">CLUSTER_ENDPOINT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;http://localhost:19530&quot;</span>;
 
-String CLUSTER_ENDPOINT = "http://localhost:19530";
-
-// 1. Connect to Milvus server
-ConnectConfig connectConfig = ConnectConfig.builder()
+<span class="hljs-comment">// 1. Connect to Milvus server</span>
+<span class="hljs-type">ConnectConfig</span> <span class="hljs-variable">connectConfig</span> <span class="hljs-operator">=</span> ConnectConfig.builder()
     .uri(CLUSTER_ENDPOINT)
     .build();
 
-MilvusClientV2 client = new MilvusClientV2(connectConfig);
+<span class="hljs-type">MilvusClientV2</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClientV2</span>(connectConfig);
 
-// 2. Create a collection
+<span class="hljs-comment">// 2. Create a collection</span>
 
-// 2.1 Create schema
-CreateCollectionReq.CollectionSchema schema = client.createSchema();
+<span class="hljs-comment">// 2.1 Create schema</span>
+CreateCollectionReq.<span class="hljs-type">CollectionSchema</span> <span class="hljs-variable">schema</span> <span class="hljs-operator">=</span> client.createSchema();
 
-// 2.2 Add fields to schema
-schema.addField(AddFieldReq.builder().fieldName("id").dataType(DataType.Int64).isPrimaryKey(true).autoID(false).build());
-schema.addField(AddFieldReq.builder().fieldName("vector").dataType(DataType.FloatVector).dimension(5).build());
+<span class="hljs-comment">// 2.2 Add fields to schema</span>
+schema.addField(AddFieldReq.builder().fieldName(<span class="hljs-string">&quot;id&quot;</span>).dataType(DataType.Int64).isPrimaryKey(<span class="hljs-literal">true</span>).autoID(<span class="hljs-literal">false</span>).build());
+schema.addField(AddFieldReq.builder().fieldName(<span class="hljs-string">&quot;vector&quot;</span>).dataType(DataType.FloatVector).dimension(<span class="hljs-number">5</span>).build());
 
-// 3 Create a collection without schema and index parameters
-CreateCollectionReq customizedSetupReq = CreateCollectionReq.builder()
-.collectionName("customized_setup")
+<span class="hljs-comment">// 3 Create a collection without schema and index parameters</span>
+<span class="hljs-type">CreateCollectionReq</span> <span class="hljs-variable">customizedSetupReq</span> <span class="hljs-operator">=</span> CreateCollectionReq.builder()
+.collectionName(<span class="hljs-string">&quot;customized_setup&quot;</span>)
 .collectionSchema(schema)
 .build();
 
 client.createCollection(customizedSetupReq);
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Set up a Milvus Client</span>
+client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClient</span>({address, token});
 
-```javascript
-// 1. Set up a Milvus Client
-client = new MilvusClient({address, token});
-
-// 2. Define fields for the collection
-const fields = [
+<span class="hljs-comment">// 2. Define fields for the collection</span>
+<span class="hljs-keyword">const</span> fields = [
     {
-        name: "id",
-        data_type: DataType.Int64,
-        is_primary_key: true,
-        autoID: false
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;id&quot;</span>,
+        <span class="hljs-attr">data_type</span>: <span class="hljs-title class_">DataType</span>.<span class="hljs-property">Int64</span>,
+        <span class="hljs-attr">is_primary_key</span>: <span class="hljs-literal">true</span>,
+        <span class="hljs-attr">autoID</span>: <span class="hljs-literal">false</span>
     },
     {
-        name: "vector",
-        data_type: DataType.FloatVector,
-        dim: 5
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&quot;vector&quot;</span>,
+        <span class="hljs-attr">data_type</span>: <span class="hljs-title class_">DataType</span>.<span class="hljs-property">FloatVector</span>,
+        <span class="hljs-attr">dim</span>: <span class="hljs-number">5</span>
     },
 ]
 
-// 3. Create a collection
-res = await client.createCollection({
-    collection_name: "customized_setup",
-    fields: fields,
+<span class="hljs-comment">// 3. Create a collection</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup&quot;</span>,
+    <span class="hljs-attr">fields</span>: fields,
 })
 
-console.log(res.error_code)  
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)  
 
-// Output
-// 
-// Success
-// 
-```
-
-## Index a Collection
-
-<div class="language-python">
-
-To create an index for a collection or index a collection, use [`prepare_index_params()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/prepare_index_params.md) to prepare index parameters and [`create_index()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/create_index.md) to create the index.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Index-a-Collection" class="common-anchor-header">Index a Collection
+    <button data-href="#Index-a-Collection" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><div class="language-python">
+<p>To create an index for a collection or index a collection, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/prepare_index_params.md"><code>prepare_index_params()</code></a> to prepare index parameters and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/create_index.md"><code>create_index()</code></a> to create the index.</p>
 </div>
-
 <div class="language-java">
-
-To create an index for a collection or index a collection, use [`IndexParam`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/IndexParam.md) to prepare index parameters and [`createIndex()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/createIndex.md) to create the index.
-
+<p>To create an index for a collection or index a collection, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/IndexParam.md"><code>IndexParam</code></a> to prepare index parameters and <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/createIndex.md"><code>createIndex()</code></a> to create the index.</p>
 </div>
-
 <div class="language-javascript">
-
-To create an index for a collection or index a collection, use [`createIndex()`](https://milvus.io/api-reference/node/v2.4.x/Management/createIndex.md).
-
+<p>To create an index for a collection or index a collection, use <a href="https://milvus.io/api-reference/node/v2.4.x/Management/createIndex.md"><code>createIndex()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 4.1. Set up the index parameters
+<pre><code class="language-python"><span class="hljs-comment"># 4.1. Set up the index parameters</span>
 index_params = MilvusClient.prepare_index_params()
 
-# 4.2. Add an index on the vector field.
+<span class="hljs-comment"># 4.2. Add an index on the vector field.</span>
 index_params.add_index(
-    field_name="vector",
-    metric_type="COSINE",
-    index_type="IVF_FLAT",
-    index_name="vector_index",
-    params={ "nlist": 128 }
+    field_name=<span class="hljs-string">&quot;vector&quot;</span>,
+    metric_type=<span class="hljs-string">&quot;COSINE&quot;</span>,
+    index_type=<span class="hljs-string">&quot;IVF_FLAT&quot;</span>,
+    index_name=<span class="hljs-string">&quot;vector_index&quot;</span>,
+    params={ <span class="hljs-string">&quot;nlist&quot;</span>: <span class="hljs-number">128</span> }
 )
 
-# 4.3. Create an index file
+<span class="hljs-comment"># 4.3. Create an index file</span>
 client.create_index(
-    collection_name="customized_setup",
+    collection_name=<span class="hljs-string">&quot;customized_setup&quot;</span>,
     index_params=index_params
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.common.IndexParam;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.index.request.CreateIndexReq;
 
-```java
-import io.milvus.v2.common.IndexParam;
-import io.milvus.v2.service.index.request.CreateIndexReq;
+<span class="hljs-comment">// 4 Prepare index parameters</span>
 
-// 4 Prepare index parameters
-
-// 4.2 Add an index for the vector field "vector"
-IndexParam indexParamForVectorField = IndexParam.builder()
-    .fieldName("vector")
-    .indexName("vector_index")
+<span class="hljs-comment">// 4.2 Add an index for the vector field &quot;vector&quot;</span>
+<span class="hljs-type">IndexParam</span> <span class="hljs-variable">indexParamForVectorField</span> <span class="hljs-operator">=</span> IndexParam.builder()
+    .fieldName(<span class="hljs-string">&quot;vector&quot;</span>)
+    .indexName(<span class="hljs-string">&quot;vector_index&quot;</span>)
     .indexType(IndexParam.IndexType.IVF_FLAT)
     .metricType(IndexParam.MetricType.COSINE)
-    .extraParams(Map.of("nlist", 128))
+    .extraParams(Map.of(<span class="hljs-string">&quot;nlist&quot;</span>, <span class="hljs-number">128</span>))
     .build();
 
-List<IndexParam> indexParams = new ArrayList<>();
+List&lt;IndexParam&gt; indexParams = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();
 indexParams.add(indexParamForVectorField);
 
-// 4.3 Crate an index file
-CreateIndexReq createIndexReq = CreateIndexReq.builder()
-    .collectionName("customized_setup")
+<span class="hljs-comment">// 4.3 Crate an index file</span>
+<span class="hljs-type">CreateIndexReq</span> <span class="hljs-variable">createIndexReq</span> <span class="hljs-operator">=</span> CreateIndexReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup&quot;</span>)
     .indexParams(indexParams)
     .build();
 
 client.createIndex(createIndexReq);
-```
-
-```javascript
-// 4. Set up index for the collection
-// 4.1. Set up the index parameters
-res = await client.createIndex({
-    collection_name: "customized_setup",
-    field_name: "vector",
-    index_type: "AUTOINDEX",
-    metric_type: "COSINE",   
-    index_name: "vector_index",
-    params: { "nlist": 128 }
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 4. Set up index for the collection</span>
+<span class="hljs-comment">// 4.1. Set up the index parameters</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createIndex</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup&quot;</span>,
+    <span class="hljs-attr">field_name</span>: <span class="hljs-string">&quot;vector&quot;</span>,
+    <span class="hljs-attr">index_type</span>: <span class="hljs-string">&quot;AUTOINDEX&quot;</span>,
+    <span class="hljs-attr">metric_type</span>: <span class="hljs-string">&quot;COSINE&quot;</span>,   
+    <span class="hljs-attr">index_name</span>: <span class="hljs-string">&quot;vector_index&quot;</span>,
+    <span class="hljs-attr">params</span>: { <span class="hljs-string">&quot;nlist&quot;</span>: <span class="hljs-number">128</span> }
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
-```
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
 <table class="language-python">
   <thead>
     <tr>
@@ -337,7 +345,6 @@ console.log(res.error_code)
     </tr>
   </tbody>
 </table>
-
 <table class="language-java">
   <thead>
     <tr>
@@ -368,7 +375,6 @@ console.log(res.error_code)
     </tr>
   </tbody>
 </table>
-
 <table class="language-javascript">
   <thead>
     <tr>
@@ -403,214 +409,200 @@ console.log(res.error_code)
     </tr>
   </tbody>
 </table>
-
 <div class="admonition note">
-
 <p><strong>notes</strong></p>
-
 <p>Currently, you can create only one index file for each field in a collection.</p>
-
 </div>
-
-## Check Index Details
-
-Once you have created an index, you can check its details.
-
+<h2 id="Check-Index-Details" class="common-anchor-header">Check Index Details
+    <button data-href="#Check-Index-Details" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Once you have created an index, you can check its details.</p>
 <div class="language-python">
-
-To check the index details, use [`list_indexes()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/list_indexes.md) to list the index names and [`describe_index()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/describe_index.md) to get the index details.
-
+<p>To check the index details, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/list_indexes.md"><code>list_indexes()</code></a> to list the index names and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/describe_index.md"><code>describe_index()</code></a> to get the index details.</p>
 </div>
-
 <div class="language-java">
-
-To check the index details, use [`describeIndex()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/describeIndex.md) to get the index details.
-
+<p>To check the index details, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/describeIndex.md"><code>describeIndex()</code></a> to get the index details.</p>
 </div>
-
 <div class="language-javascript">
-
-To check the index details, use [`describeIndex()`](https://milvus.io/api-reference/node/v2.4.x/Management/describeIndex.md) to get the index details.
-
+<p>To check the index details, use <a href="https://milvus.io/api-reference/node/v2.4.x/Management/describeIndex.md"><code>describeIndex()</code></a> to get the index details.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 5. Describe index
+<pre><code class="language-python"><span class="hljs-comment"># 5. Describe index</span>
 res = client.list_indexes(
-    collection_name="customized_setup"
+    collection_name=<span class="hljs-string">&quot;customized_setup&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# [
-#     "vector_index",
-# ]
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [</span>
+<span class="hljs-comment">#     &quot;vector_index&quot;,</span>
+<span class="hljs-comment"># ]</span>
 
 res = client.describe_index(
-    collection_name="customized_setup",
-    index_name="vector_index"
+    collection_name=<span class="hljs-string">&quot;customized_setup&quot;</span>,
+    index_name=<span class="hljs-string">&quot;vector_index&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "index_type": ,
-#     "metric_type": "COSINE",
-#     "field_name": "vector",
-#     "index_name": "vector_index"
-# }
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;index_type&quot;: ,</span>
+<span class="hljs-comment">#     &quot;metric_type&quot;: &quot;COSINE&quot;,</span>
+<span class="hljs-comment">#     &quot;field_name&quot;: &quot;vector&quot;,</span>
+<span class="hljs-comment">#     &quot;index_name&quot;: &quot;vector_index&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.<span class="hljs-property">milvus</span>.<span class="hljs-property">v2</span>.<span class="hljs-property">service</span>.<span class="hljs-property">index</span>.<span class="hljs-property">request</span>.<span class="hljs-property">DescribeIndexReq</span>;
+<span class="hljs-keyword">import</span> io.<span class="hljs-property">milvus</span>.<span class="hljs-property">v2</span>.<span class="hljs-property">service</span>.<span class="hljs-property">index</span>.<span class="hljs-property">response</span>.<span class="hljs-property">DescribeIndexResp</span>;
 
-```java
-import io.milvus.v2.service.index.request.DescribeIndexReq;
-import io.milvus.v2.service.index.response.DescribeIndexResp;
+<span class="hljs-comment">// 5. Describe index</span>
+<span class="hljs-comment">// 5.1 List the index names</span>
+<span class="hljs-title class_">ListIndexesReq</span> listIndexesReq = <span class="hljs-title class_">ListIndexesReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;customized_setup&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-// 5. Describe index
-// 5.1 List the index names
-ListIndexesReq listIndexesReq = ListIndexesReq.builder()
-    .collectionName("customized_setup")
-    .build();
+<span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">String</span>&gt; indexNames = client.<span class="hljs-title function_">listIndexes</span>(listIndexesReq);
 
-List<String> indexNames = client.listIndexes(listIndexesReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(indexNames);
 
-System.out.println(indexNames);
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//     &quot;vector_index&quot;</span>
+<span class="hljs-comment">// ]</span>
 
-// Output:
-// [
-//     "vector_index"
-// ]
+<span class="hljs-comment">// 5.2 Describe an index</span>
+<span class="hljs-title class_">DescribeIndexReq</span> describeIndexReq = <span class="hljs-title class_">DescribeIndexReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;customized_setup&quot;</span>)
+    .<span class="hljs-title function_">indexName</span>(<span class="hljs-string">&quot;vector_index&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-// 5.2 Describe an index
-DescribeIndexReq describeIndexReq = DescribeIndexReq.builder()
-    .collectionName("customized_setup")
-    .indexName("vector_index")
-    .build();
+<span class="hljs-title class_">DescribeIndexResp</span> describeIndexResp = client.<span class="hljs-title function_">describeIndex</span>(describeIndexReq);
 
-DescribeIndexResp describeIndexResp = client.describeIndex(describeIndexReq);
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>.<span class="hljs-title function_">toJSON</span>(describeIndexResp));
 
-System.out.println(JSONObject.toJSON(describeIndexResp));
-
-// Output:
-// {
-//     "metricType": "COSINE",
-//     "indexType": "AUTOINDEX",
-//     "fieldName": "vector",
-//     "indexName": "vector_index"
-// }
-```
-
-```javascript
-// 5. Describe the index
-res = await client.describeIndex({
-    collection_name: "customized_setup",
-    index_name: "vector_index"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// {</span>
+<span class="hljs-comment">//     &quot;metricType&quot;: &quot;COSINE&quot;,</span>
+<span class="hljs-comment">//     &quot;indexType&quot;: &quot;AUTOINDEX&quot;,</span>
+<span class="hljs-comment">//     &quot;fieldName&quot;: &quot;vector&quot;,</span>
+<span class="hljs-comment">//     &quot;indexName&quot;: &quot;vector_index&quot;</span>
+<span class="hljs-comment">// }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 5. Describe the index</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">describeIndex</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup&quot;</span>,
+    <span class="hljs-attr">index_name</span>: <span class="hljs-string">&quot;vector_index&quot;</span>
 })
 
-console.log(JSON.stringify(res.index_descriptions, null, 2))
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(res.<span class="hljs-property">index_descriptions</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">2</span>))
 
-// Output
-// 
-// [
-//   {
-//     "params": [
-//       {
-//         "key": "index_type",
-//         "value": "AUTOINDEX"
-//       },
-//       {
-//         "key": "metric_type",
-//         "value": "COSINE"
-//       }
-//     ],
-//     "index_name": "vector_index",
-//     "indexID": "449007919953063141",
-//     "field_name": "vector",
-//     "indexed_rows": "0",
-//     "total_rows": "0",
-//     "state": "Finished",
-//     "index_state_fail_reason": "",
-//     "pending_index_rows": "0"
-//   }
-// ]
-// 
-```
-
-You can check the index file created on a specific field, and collect the statistics on the number of rows indexed using this index file.
-
-## Drop an Index
-
-You can simply drop an index if it is no longer needed.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   {</span>
+<span class="hljs-comment">//     &quot;params&quot;: [</span>
+<span class="hljs-comment">//       {</span>
+<span class="hljs-comment">//         &quot;key&quot;: &quot;index_type&quot;,</span>
+<span class="hljs-comment">//         &quot;value&quot;: &quot;AUTOINDEX&quot;</span>
+<span class="hljs-comment">//       },</span>
+<span class="hljs-comment">//       {</span>
+<span class="hljs-comment">//         &quot;key&quot;: &quot;metric_type&quot;,</span>
+<span class="hljs-comment">//         &quot;value&quot;: &quot;COSINE&quot;</span>
+<span class="hljs-comment">//       }</span>
+<span class="hljs-comment">//     ],</span>
+<span class="hljs-comment">//     &quot;index_name&quot;: &quot;vector_index&quot;,</span>
+<span class="hljs-comment">//     &quot;indexID&quot;: &quot;449007919953063141&quot;,</span>
+<span class="hljs-comment">//     &quot;field_name&quot;: &quot;vector&quot;,</span>
+<span class="hljs-comment">//     &quot;indexed_rows&quot;: &quot;0&quot;,</span>
+<span class="hljs-comment">//     &quot;total_rows&quot;: &quot;0&quot;,</span>
+<span class="hljs-comment">//     &quot;state&quot;: &quot;Finished&quot;,</span>
+<span class="hljs-comment">//     &quot;index_state_fail_reason&quot;: &quot;&quot;,</span>
+<span class="hljs-comment">//     &quot;pending_index_rows&quot;: &quot;0&quot;</span>
+<span class="hljs-comment">//   }</span>
+<span class="hljs-comment">// ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<p>You can check the index file created on a specific field, and collect the statistics on the number of rows indexed using this index file.</p>
+<h2 id="Drop-an-Index" class="common-anchor-header">Drop an Index
+    <button data-href="#Drop-an-Index" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>You can simply drop an index if it is no longer needed.</p>
 <div class="alert note">
-
-Before dropping an index, make sure it has been released first.
-
+<p>Before dropping an index, make sure it has been released first.</p>
 </div>
-
 <div class="language-python">
-
-To drop an index, use [`drop_index()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/drop_index.md).
-
+<p>To drop an index, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/drop_index.md"><code>drop_index()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To drop an index, use [`dropIndex()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/dropIndex.md).
-
+<p>To drop an index, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/dropIndex.md"><code>dropIndex()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To drop an index, use [`dropIndex()`](https://milvus.io/api-reference/node/v2.4.x/Management/dropIndex.md).
-
+<p>To drop an index, use <a href="https://milvus.io/api-reference/node/v2.4.x/Management/dropIndex.md"><code>dropIndex()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 6. Drop index
+<pre><code class="language-python"><span class="hljs-comment"># 6. Drop index</span>
 client.drop_index(
-    collection_name="customized_setup",
-    index_name="vector_index"
+    collection_name=<span class="hljs-string">&quot;customized_setup&quot;</span>,
+    index_name=<span class="hljs-string">&quot;vector_index&quot;</span>
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// 6. Drop index</span>
 
-```java
-// 6. Drop index
-
-DropIndexReq dropIndexReq = DropIndexReq.builder()
-    .collectionName("customized_setup")
-    .indexName("vector_index")
+<span class="hljs-type">DropIndexReq</span> <span class="hljs-variable">dropIndexReq</span> <span class="hljs-operator">=</span> DropIndexReq.builder()
+    .collectionName(<span class="hljs-string">&quot;customized_setup&quot;</span>)
+    .indexName(<span class="hljs-string">&quot;vector_index&quot;</span>)
     .build();
 
 client.dropIndex(dropIndexReq);
-```
-
-```javascript
-// 6. Drop the index
-res = await client.dropIndex({
-    collection_name: "customized_setup",
-    index_name: "vector_index"
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 6. Drop the index</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">dropIndex</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;customized_setup&quot;</span>,
+    <span class="hljs-attr">index_name</span>: <span class="hljs-string">&quot;vector_index&quot;</span>
 })
 
-console.log(res.error_code)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">error_code</span>)
 
-// Output
-// 
-// Success
-// 
-```
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// Success</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>

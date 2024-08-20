@@ -8,38 +8,54 @@ summary: Learn how to upgrade Milvus cluster with Helm Chart.
 title: Upgrade Milvus Cluster with Helm Chart
 ---
 
-{{tab}}
-
-# Upgrade Milvus Cluster with Helm Chart
-
-This guide describes how to upgrade your Milvus cluster with Milvus Helm charts. 
-
-## Check Milvus Helm Chart
-
-Run the following commands to check new Milvus versions. 
-
-```
-$ helm repo update
+<p>{{tab}}</p>
+<h1 id="Upgrade-Milvus-Cluster-with-Helm-Chart" class="common-anchor-header">Upgrade Milvus Cluster with Helm Chart
+    <button data-href="#Upgrade-Milvus-Cluster-with-Helm-Chart" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This guide describes how to upgrade your Milvus cluster with Milvus Helm charts.</p>
+<h2 id="Check-Milvus-Helm-Chart" class="common-anchor-header">Check Milvus Helm Chart
+    <button data-href="#Check-Milvus-Helm-Chart" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Run the following commands to check new Milvus versions.</p>
+<pre><code>$ helm repo update
 $ helm search repo zilliztech/milvus --versions
-```
-
+<button class="copy-code-btn"></button></code></pre>
 <div class="alert note">
-
-The Milvus Helm Charts repo at `https://milvus-io.github.io/milvus-helm/` has been archived and you can get further updates from `https://zilliztech.github.io/milvus-helm/` as follows:
-
-```shell
-helm repo add zilliztech https://zilliztech.github.io/milvus-helm
+<p>The Milvus Helm Charts repo at <code>https://milvus-io.github.io/milvus-helm/</code> has been archived and you can get further updates from <code>https://zilliztech.github.io/milvus-helm/</code> as follows:</p>
+<pre><code class="language-shell">helm repo add zilliztech https://zilliztech.github.io/milvus-helm
 helm repo update
-# upgrade existing helm release
+<span class="hljs-comment"># upgrade existing helm release</span>
 helm upgrade my-release zilliztech/milvus
-```
-
-The archived repo is still available for the charts up to 4.0.31. For later releases, use the new repo instead.
-
+<button class="copy-code-btn"></button></code></pre>
+<p>The archived repo is still available for the charts up to 4.0.31. For later releases, use the new repo instead.</p>
 </div>
-
-```                                       
-NAME                    CHART VERSION   APP VERSION             DESCRIPTION                                       
+<pre><code>NAME                    CHART VERSION   APP VERSION             DESCRIPTION                                       
 zilliztech/milvus       4.1.34          2.4.5                   Milvus is an open-source vector database built ...
 zilliztech/milvus       4.1.33          2.4.4                   Milvus is an open-source vector database built ...
 zilliztech/milvus       4.1.32          2.4.3                   Milvus is an open-source vector database built ...
@@ -71,186 +87,179 @@ zilliztech/milvus       4.1.3           2.3.1                   Milvus is an ope
 zilliztech/milvus       4.1.2           2.3.1                   Milvus is an open-source vector database built ...
 zilliztech/milvus       4.1.1           2.3.0                   Milvus is an open-source vector database built ...
 zilliztech/milvus       4.1.0           2.3.0                   Milvus is an open-source vector database built ...
-```
-
-You can choose the upgrade path for your Milvus as follows:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>You can choose the upgrade path for your Milvus as follows:</p>
 <div style="display: none;">- [Conduct a rolling upgrade](#conduct-a-rolling-upgrade) from Milvus v2.2.3 and later releases to v{{var.milvus_release_version}}.</div>
-
-- [Upgrade Milvus using Helm](#Upgrade-Milvus-using-Helm) for an upgrade from a minor release before v2.2.3 to v{{var.milvus_release_version}}.
-
-- [Migrate the metadata](#Migrate-the-metadata) before the upgrade from Milvus v2.1.x to v{{var.milvus_release_version}}.
-
+<ul>
+<li><p><a href="#Upgrade-Milvus-using-Helm">Upgrade Milvus using Helm</a> for an upgrade from a minor release before v2.2.3 to v{{var.milvus_release_version}}.</p></li>
+<li><p><a href="#Migrate-the-metadata">Migrate the metadata</a> before the upgrade from Milvus v2.1.x to v{{var.milvus_release_version}}.</p></li>
+</ul>
 <div style="display: none;">
-    
-## Conduct a rolling upgrade
-
-Since Milvus 2.2.3, you can configure Milvus coordinators to work in active-standby mode and enable the rolling upgrade feature for them, so that Milvus can respond to incoming requests during the coordinator upgrades. In previous releases, coordinators are to be removed and then created during an upgrade, which may introduce certain downtime of the service.
-
-Rolling upgrades requires coordinators to work in active-standby mode. You can use [the script](https://raw.githubusercontent.com/milvus-io/milvus/master/deployments/upgrade/rollingUpdate.sh) we provide to configure the coordinators to work in active-standby mode and start the rolling upgrade.
-
-Based on the rolling update capabilities provided by Kubernetes, the above script enforces an ordered update of the deployments according to their dependencies. In addition, Milvus implements a mechanism to ensure that its components remain compatible with those depending on them during the upgrade, significantly reducing potential service downtime.
-
-The script applies only to the upgrade of Milvus installed with Helm. The following table lists the command flags available in the scripts.
-
-| Parameters   | Description                                               | Default value                    | Required                |
-| ------------ | ----------------------------------------------------------| -------------------------------- | ----------------------- |
-| `i`          | Milvus instance name                                      | `None`                           | True                    |
-| `n`          | Namespace that Milvus is installed in                     | `default`                        | False                   |
-| `t`          | Target Milvus version                                     | `None`                           | True                    |
-| `w`          | New Milvus image tag                                      | `milvusdb/milvus:v2.2.3`         | True                    |
-| `o`          | Operation                                                 | `update`                         | False                   |
-
-Once you have ensured that all deployments in your Milvus instance are in their normal status. You can run the following command to upgrade the Milvus instance to {{var.milvus_release_version}}.
-
-```shell
-sh rollingUpdate.sh -n default -i my-release -o update -t {{var.milvus_release_version}} -w 'milvusdb/milvus:v{{var.milvus_release_tag}}'
-```
-
+<h2 id="Conduct-a-rolling-upgrade" class="common-anchor-header">Conduct a rolling upgrade
+    <button data-href="#Conduct-a-rolling-upgrade" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Since Milvus 2.2.3, you can configure Milvus coordinators to work in active-standby mode and enable the rolling upgrade feature for them, so that Milvus can respond to incoming requests during the coordinator upgrades. In previous releases, coordinators are to be removed and then created during an upgrade, which may introduce certain downtime of the service.</p>
+<p>Rolling upgrades requires coordinators to work in active-standby mode. You can use <a href="https://raw.githubusercontent.com/milvus-io/milvus/master/deployments/upgrade/rollingUpdate.sh">the script</a> we provide to configure the coordinators to work in active-standby mode and start the rolling upgrade.</p>
+<p>Based on the rolling update capabilities provided by Kubernetes, the above script enforces an ordered update of the deployments according to their dependencies. In addition, Milvus implements a mechanism to ensure that its components remain compatible with those depending on them during the upgrade, significantly reducing potential service downtime.</p>
+<p>The script applies only to the upgrade of Milvus installed with Helm. The following table lists the command flags available in the scripts.</p>
+<table>
+<thead>
+<tr><th>Parameters</th><th>Description</th><th>Default value</th><th>Required</th></tr>
+</thead>
+<tbody>
+<tr><td><code>i</code></td><td>Milvus instance name</td><td><code>None</code></td><td>True</td></tr>
+<tr><td><code>n</code></td><td>Namespace that Milvus is installed in</td><td><code>default</code></td><td>False</td></tr>
+<tr><td><code>t</code></td><td>Target Milvus version</td><td><code>None</code></td><td>True</td></tr>
+<tr><td><code>w</code></td><td>New Milvus image tag</td><td><code>milvusdb/milvus:v2.2.3</code></td><td>True</td></tr>
+<tr><td><code>o</code></td><td>Operation</td><td><code>update</code></td><td>False</td></tr>
+</tbody>
+</table>
+<p>Once you have ensured that all deployments in your Milvus instance are in their normal status. You can run the following command to upgrade the Milvus instance to {{var.milvus_release_version}}.</p>
+<pre><code class="language-shell">sh rollingUpdate.<span class="hljs-property">sh</span> -n <span class="hljs-keyword">default</span> -i my-release -o update -t {{<span class="hljs-keyword">var</span>.<span class="hljs-property">milvus_release_version</span>}} -w <span class="hljs-string">&#x27;milvusdb/milvus:v{{var.milvus_release_tag}}&#x27;</span>
+<button class="copy-code-btn"></button></code></pre>
 <div class="alert note">
-
-1. The script hard-codes the upgrade order of the deployments and cannot be changed.
-2. The script uses `kubectl patch` to update the deployments and `kubectl rollout status` to watch their status.
-3. The script uses `kubectl patch` to update the `app.kubernetes.io/version` label of the deployments to the one specified after the `-t` flag in the command.
-
+<ol>
+<li>The script hard-codes the upgrade order of the deployments and cannot be changed.</li>
+<li>The script uses <code>kubectl patch</code> to update the deployments and <code>kubectl rollout status</code> to watch their status.</li>
+<li>The script uses <code>kubectl patch</code> to update the <code>app.kubernetes.io/version</code> label of the deployments to the one specified after the <code>-t</code> flag in the command.</li>
+</ol>
 </div>
-    
 </div>
-
-## Upgrade Milvus using Helm
-
-To upgrade Milvus from a minor release before v2.2.3 to the latest, run the following commands:
-
-```shell
-helm repo update
-helm upgrade my-release zilliztech/milvus --reuse-values --version={{var.milvus_helm_chart_version}} # use the helm chart version here
-```
-
-Use the Helm chart version in the preceding command. For details on how to obtain the Helm chart version, refer to [Check the Milvus version](#Check-the-Milvus-version).
-
-## Migrate the metadata
-
-Since Milvus 2.2.0, the metadata is incompatible with that in previous releases. The following example snippets assume an upgrade from Milvus 2.1.4 to Milvus 2.2.0.
-
-### 1. Check the Milvus version
-
-Run `$ helm list` to check your Milvus app version. You can see the `APP VERSION` is 2.1.4. 
-
-```
-NAME             	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART        	APP VERSION    
-new-release      	default  	1       	2022-11-21 15:41:25.51539 +0800 CST    	deployed	milvus-3.2.18	2.1.4 
-```
-
-### 2. Check the running pods
-
-Run `$ kubectl get pods` to check the running pods. You can see the following output.
-
-```
-NAME                                             READY   STATUS      RESTARTS   AGE
-my-release-etcd-0                               1/1     Running     0          21m
-my-release-etcd-1                               1/1     Running     0          21m
-my-release-etcd-2                               1/1     Running     0          21m
-my-release-milvus-datacoord-664c58798d-fl75s    1/1     Running     0          21m
-my-release-milvus-datanode-5f75686c55-xfg2r     1/1     Running     0          21m
-my-release-milvus-indexcoord-5f98b97589-2l48r   1/1     Running     0          21m
-my-release-milvus-indexnode-857b4ddf98-vmd75    1/1     Running     0          21m
-my-release-milvus-proxy-6c548f787f-scspp        1/1     Running     0          21m
-my-release-milvus-querycoord-c454f44cd-dwmwq    1/1     Running     0          21m
-my-release-milvus-querynode-76bb4946d-lbrz6     1/1     Running     0          21m
-my-release-milvus-rootcoord-7764c5b686-62msm    1/1     Running     0          21m
-my-release-minio-0                              1/1     Running     0          21m
-my-release-minio-1                              1/1     Running     0          21m
-my-release-minio-2                              1/1     Running     0          21m
-my-release-minio-3                              1/1     Running     0          21m
-my-release-pulsar-bookie-0                      1/1     Running     0          21m
-my-release-pulsar-bookie-1                      1/1     Running     0          21m
-my-release-pulsar-bookie-2                      1/1     Running     0          21m
-my-release-pulsar-bookie-init-tjxpj             0/1     Completed   0          21m
-my-release-pulsar-broker-0                      1/1     Running     0          21m
-my-release-pulsar-proxy-0                       1/1     Running     0          21m
-my-release-pulsar-pulsar-init-c8vvc             0/1     Completed   0          21m
-my-release-pulsar-recovery-0                    1/1     Running     0          21m
-my-release-pulsar-zookeeper-0                   1/1     Running     0          21m
-my-release-pulsar-zookeeper-1                   1/1     Running     0          20m
-my-release-pulsar-zookeeper-2                   1/1     Running     0          20m
-```
-
-### 3. Check the image tag
-
-Check the image tag for the pod `my-release-milvus-proxy-6c548f787f-scspp`. You can see the release of your Milvus cluster is v2.1.4.
-
-```shell
-$ kubectl get pods my-release-milvus-proxy-6c548f787f-scspp -o=jsonpath='{$.spec.containers[0].image}'
-# milvusdb/milvus:v2.1.4
-```
-
-### 4. Migrate the metadata
-
-A major change in Milvus 2.2 is the metadata structure of segment indexes. Therefore, you need to use Helm to migrate the metadata while upgrading Milvus from v2.1.x to v2.2.0. Here is [a script](https://github.com/milvus-io/milvus/blob/master/deployments/migrate-meta/migrate.sh) for you to safely migrate your metadata.
-
-This script only applies to Milvus installed on a K8s cluster. Roll back to the previous version with the rollback operation first if an error occurs during the process.
-
-The following table lists the operations you can do for meta migration.
-
-| Parameters   | Description                                                      | Default value                    | Required                |
-| ------------ | ---------------------------------------------------------------- | ---------------------------- | ----------------------- |
-| `i`          | The Milvus instance name.                                 | `None`                         | True                    |
-| `n`          | The namespace that Milvus is installed in.                | `default`                      | False                   |
-| `s`          | The source Milvus version.                                | `None`                         | True                    |
-| `t`          | The target Milvus version.                               | `None`                         | True                    |
-| `r`          | The root path of Milvus meta.                             | `by-dev`                       | False                   |
-| `w`          | The new Milvus image tag.                                 | `milvusdb/milvus:v2.2.0`       | False                   |
-| `m`          | The meta migration image tag.                             | `milvusdb/meta-migration:v2.2.0`       | False                   |
-| `o`          | The meta migration operation.                             | `migrate`                      | False                   |
-| `d`          | Whether to delete migration pod after the migration is completed.          | `false`                        | False                   |
-| `c`          | The storage class for meta migration pvc.                 | `default storage class`          | False                   |
-| `e`          | The etcd enpoint used by milvus.              | `etcd svc installed with milvus` | False                   |
-
-#### 1. Migrate the metadata
-
-1. Download the [migration script](https://github.com/milvus-io/milvus/blob/master/deployments/migrate-meta/migrate.sh).
-2. Stop the Milvus components. Any live session in the Milvus etcd can cause a migration failure.
-3. Create a backup for the Milvus metadata.
-4. Migrate the Milvus metadata.
-5. Start Milvus components with a new image.
-
-#### 2. Upgrade Milvus from v2.1.x to {{var.milvus_release_version}}
-
-The following commands assume that you upgrade Milvus from v2.1.4 to {{var.milvus_release_version}}. Change them to the versions that fit your needs.
-
-1. Specify Milvus instance name, source Milvus version, and target Milvus version.
-
-    ```
-    ./migrate.sh -i my-release -s 2.1.4 -t {{var.milvus_release_version}}
-    ```
-
-2. Specify the namespace with `-n` if your Milvus is not installed in the default K8s namespace.
-
-    ```
-    ./migrate.sh -i my-release -n milvus -s 2.1.4 -t {{var.milvus_release_version}}
-    ```
-
-3. Specify the root path with `-r` if your Milvus is installed with the custom `rootpath`.
-
-    ```
-    ./migrate.sh -i my-release -n milvus -s 2.1.4 -t {{var.milvus_release_version}} -r by-dev
-    ```
-
-4. Specify the image tag with `-w` if your Milvus is installed with a custom `image`.
-
-    ```
-    ./migrate.sh -i my-release -n milvus -s 2.1.4 -t {{var.milvus_release_version}} -r by-dev -w milvusdb/milvus:v{{var.milvus_release_tag}}
-    ```
-
-5. Set `-d true` if you want to automatically remove the migration pod after the migration is completed.
-
-    ```
-    ./migrate.sh -i my-release -n milvus -s 2.1.4 -t {{var.milvus_release_version}} -w milvusdb/milvus:v{{var.milvus_release_tag}} -d true
-    ```
-
-6. Rollback and migrate again if the migration fails.
-
-    ```
-    ./migrate.sh -i my-release -n milvus -s 2.1.4 -t {{var.milvus_release_version}} -r by-dev -o rollback -w milvusdb/milvus:v2.1.1
-    ./migrate.sh -i my-release -n milvus -s 2.1.4 -t {{var.milvus_release_version}} -r by-dev -o migrate -w milvusdb/milvus:v{{var.milvus_release_tag}}
-    ```
+<h2 id="Upgrade-Milvus-using-Helm" class="common-anchor-header">Upgrade Milvus using Helm
+    <button data-href="#Upgrade-Milvus-using-Helm" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To upgrade Milvus from a minor release before v2.2.3 to the latest, run the following commands:</p>
+<pre><code class="language-shell">helm repo update
+helm upgrade my-release zilliztech/milvus --reuse-values --version={{var.milvus_helm_chart_version}} <span class="hljs-comment"># use the helm chart version here</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>Use the Helm chart version in the preceding command. For details on how to obtain the Helm chart version, refer to <a href="#Check-the-Milvus-version">Check the Milvus version</a>.</p>
+<h2 id="Migrate-the-metadata" class="common-anchor-header">Migrate the metadata
+    <button data-href="#Migrate-the-metadata" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Since Milvus 2.2.0, the metadata is incompatible with that in previous releases. The following example snippets assume an upgrade from Milvus 2.1.4 to Milvus 2.2.0.</p>
+<h3 id="1-Check-the-Milvus-version" class="common-anchor-header">1. Check the Milvus version</h3><p>Run <code>$ helm list</code> to check your Milvus app version. You can see the <code>APP VERSION</code> is 2.1.4.</p>
+<pre><code><span class="hljs-variable constant_">NAME</span>                <span class="hljs-variable constant_">NAMESPACE</span>   <span class="hljs-variable constant_">REVISION</span>    <span class="hljs-variable constant_">UPDATED</span>                                 <span class="hljs-variable constant_">STATUS</span>      <span class="hljs-variable constant_">CHART</span>           <span class="hljs-variable constant_">APP</span> <span class="hljs-variable constant_">VERSION</span>    
+<span class="hljs-keyword">new</span>-release         <span class="hljs-keyword">default</span>     <span class="hljs-number">1</span>           <span class="hljs-number">2022</span>-<span class="hljs-number">11</span>-<span class="hljs-number">21</span> <span class="hljs-number">15</span>:<span class="hljs-number">41</span>:<span class="hljs-number">25.51539</span> +<span class="hljs-number">0800</span> <span class="hljs-variable constant_">CST</span>     deployed    milvus-<span class="hljs-number">3.2</span><span class="hljs-number">.18</span>   <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> 
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="2-Check-the-running-pods" class="common-anchor-header">2. Check the running pods</h3><p>Run <code>$ kubectl get pods</code> to check the running pods. You can see the following output.</p>
+<pre><code>NAME                                             READY   STATUS      RESTARTS   AGE
+my-release-etcd<span class="hljs-number">-0</span>                               <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-etcd<span class="hljs-number">-1</span>                               <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-etcd<span class="hljs-number">-2</span>                               <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-datacoord<span class="hljs-number">-664</span>c58798d-fl75s    <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-datanode<span class="hljs-number">-5f</span>75686c55-xfg2r     <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-indexcoord<span class="hljs-number">-5f</span>98b97589<span class="hljs-number">-2l</span>48r   <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-indexnode<span class="hljs-number">-857b</span>4ddf98-vmd75    <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-proxy<span class="hljs-number">-6</span>c548f787f-scspp        <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-querycoord-c454f44cd-dwmwq    <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-querynode<span class="hljs-number">-76b</span>b4946d-lbrz6     <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-milvus-rootcoord<span class="hljs-number">-7764</span>c5b686<span class="hljs-number">-62</span>msm    <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-minio<span class="hljs-number">-0</span>                              <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-minio<span class="hljs-number">-1</span>                              <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-minio<span class="hljs-number">-2</span>                              <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-minio<span class="hljs-number">-3</span>                              <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-bookie<span class="hljs-number">-0</span>                      <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-bookie<span class="hljs-number">-1</span>                      <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-bookie<span class="hljs-number">-2</span>                      <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-bookie-<span class="hljs-keyword">init</span>-tjxpj             <span class="hljs-number">0</span>/<span class="hljs-number">1</span>     Completed   <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-broker<span class="hljs-number">-0</span>                      <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-proxy<span class="hljs-number">-0</span>                       <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-pulsar-<span class="hljs-keyword">init</span>-c8vvc             <span class="hljs-number">0</span>/<span class="hljs-number">1</span>     Completed   <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-recovery<span class="hljs-number">-0</span>                    <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-zookeeper<span class="hljs-number">-0</span>                   <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">21</span>m
+my-release-pulsar-zookeeper<span class="hljs-number">-1</span>                   <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">20</span>m
+my-release-pulsar-zookeeper<span class="hljs-number">-2</span>                   <span class="hljs-number">1</span>/<span class="hljs-number">1</span>     Running     <span class="hljs-number">0</span>          <span class="hljs-number">20</span>m
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="3-Check-the-image-tag" class="common-anchor-header">3. Check the image tag</h3><p>Check the image tag for the pod <code>my-release-milvus-proxy-6c548f787f-scspp</code>. You can see the release of your Milvus cluster is v2.1.4.</p>
+<pre><code class="language-shell">$ kubectl <span class="hljs-keyword">get</span> pods my-release-milvus-proxy<span class="hljs-number">-6</span>c548f787f-scspp -o=jsonpath=<span class="hljs-string">&#x27;{$.spec.containers[0].image}&#x27;</span>
+<span class="hljs-meta"># milvusdb/milvus:v2.1.4</span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="4-Migrate-the-metadata" class="common-anchor-header">4. Migrate the metadata</h3><p>A major change in Milvus 2.2 is the metadata structure of segment indexes. Therefore, you need to use Helm to migrate the metadata while upgrading Milvus from v2.1.x to v2.2.0. Here is <a href="https://github.com/milvus-io/milvus/blob/master/deployments/migrate-meta/migrate.sh">a script</a> for you to safely migrate your metadata.</p>
+<p>This script only applies to Milvus installed on a K8s cluster. Roll back to the previous version with the rollback operation first if an error occurs during the process.</p>
+<p>The following table lists the operations you can do for meta migration.</p>
+<table>
+<thead>
+<tr><th>Parameters</th><th>Description</th><th>Default value</th><th>Required</th></tr>
+</thead>
+<tbody>
+<tr><td><code>i</code></td><td>The Milvus instance name.</td><td><code>None</code></td><td>True</td></tr>
+<tr><td><code>n</code></td><td>The namespace that Milvus is installed in.</td><td><code>default</code></td><td>False</td></tr>
+<tr><td><code>s</code></td><td>The source Milvus version.</td><td><code>None</code></td><td>True</td></tr>
+<tr><td><code>t</code></td><td>The target Milvus version.</td><td><code>None</code></td><td>True</td></tr>
+<tr><td><code>r</code></td><td>The root path of Milvus meta.</td><td><code>by-dev</code></td><td>False</td></tr>
+<tr><td><code>w</code></td><td>The new Milvus image tag.</td><td><code>milvusdb/milvus:v2.2.0</code></td><td>False</td></tr>
+<tr><td><code>m</code></td><td>The meta migration image tag.</td><td><code>milvusdb/meta-migration:v2.2.0</code></td><td>False</td></tr>
+<tr><td><code>o</code></td><td>The meta migration operation.</td><td><code>migrate</code></td><td>False</td></tr>
+<tr><td><code>d</code></td><td>Whether to delete migration pod after the migration is completed.</td><td><code>false</code></td><td>False</td></tr>
+<tr><td><code>c</code></td><td>The storage class for meta migration pvc.</td><td><code>default storage class</code></td><td>False</td></tr>
+<tr><td><code>e</code></td><td>The etcd enpoint used by milvus.</td><td><code>etcd svc installed with milvus</code></td><td>False</td></tr>
+</tbody>
+</table>
+<h4 id="1-Migrate-the-metadata" class="common-anchor-header">1. Migrate the metadata</h4><ol>
+<li>Download the <a href="https://github.com/milvus-io/milvus/blob/master/deployments/migrate-meta/migrate.sh">migration script</a>.</li>
+<li>Stop the Milvus components. Any live session in the Milvus etcd can cause a migration failure.</li>
+<li>Create a backup for the Milvus metadata.</li>
+<li>Migrate the Milvus metadata.</li>
+<li>Start Milvus components with a new image.</li>
+</ol>
+<h4 id="2-Upgrade-Milvus-from-v21x-to-varmilvusreleaseversion" class="common-anchor-header">2. Upgrade Milvus from v2.1.x to {{var.milvus_release_version}}</h4><p>The following commands assume that you upgrade Milvus from v2.1.4 to {{var.milvus_release_version}}. Change them to the versions that fit your needs.</p>
+<ol>
+<li><p>Specify Milvus instance name, source Milvus version, and target Milvus version.</p>
+<pre><code>./migrate.<span class="hljs-property">sh</span> -i my-release -s <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> -t {{<span class="hljs-keyword">var</span>.<span class="hljs-property">milvus_release_version</span>}}
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Specify the namespace with <code>-n</code> if your Milvus is not installed in the default K8s namespace.</p>
+<pre><code>./migrate.<span class="hljs-property">sh</span> -i my-release -n milvus -s <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> -t {{<span class="hljs-keyword">var</span>.<span class="hljs-property">milvus_release_version</span>}}
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Specify the root path with <code>-r</code> if your Milvus is installed with the custom <code>rootpath</code>.</p>
+<pre><code>./migrate.sh -i my-release -n milvus -s <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> -t {{<span class="hljs-keyword">var</span>.milvus_release_version}} -r <span class="hljs-keyword">by</span>-dev
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Specify the image tag with <code>-w</code> if your Milvus is installed with a custom <code>image</code>.</p>
+<pre><code>./migrate.sh -i my-release -n milvus -s <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> -t {{<span class="hljs-keyword">var</span>.milvus_release_version}} -r <span class="hljs-keyword">by</span>-dev -w milvusdb/milvus:v{{<span class="hljs-keyword">var</span>.milvus_release_tag}}
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Set <code>-d true</code> if you want to automatically remove the migration pod after the migration is completed.</p>
+<pre><code>./migrate.<span class="hljs-property">sh</span> -i my-release -n milvus -s <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> -t {{<span class="hljs-keyword">var</span>.<span class="hljs-property">milvus_release_version</span>}} -w milvusdb/<span class="hljs-attr">milvus</span>:v{{<span class="hljs-keyword">var</span>.<span class="hljs-property">milvus_release_tag</span>}} -d <span class="hljs-literal">true</span>
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Rollback and migrate again if the migration fails.</p>
+<pre><code>./migrate.sh -i my-release -n milvus -s <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> -t {{<span class="hljs-keyword">var</span>.milvus_release_version}} -r <span class="hljs-keyword">by</span>-dev -o rollback -w milvusdb/milvus:v2<span class="hljs-number">.1</span><span class="hljs-number">.1</span>
+./migrate.sh -i my-release -n milvus -s <span class="hljs-number">2.1</span><span class="hljs-number">.4</span> -t {{<span class="hljs-keyword">var</span>.milvus_release_version}} -r <span class="hljs-keyword">by</span>-dev -o migrate -w milvusdb/milvus:v{{<span class="hljs-keyword">var</span>.milvus_release_tag}}
+<button class="copy-code-btn"></button></code></pre></li>
+</ol>

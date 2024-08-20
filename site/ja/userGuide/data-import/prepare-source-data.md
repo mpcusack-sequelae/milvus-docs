@@ -5,433 +5,420 @@ title: Prepare Source Data
 summary: This page discusses something you should consider before you start bulk-inserting data into your collection.
 ---
 
-# Prepare Source Data
-
-This page discusses something you should consider before you start bulk-inserting data into your collection.
-
-## Before you start
-
-The target collection requires mapping the source data to its schema. The diagram below shows how acceptable source data is mapped to the schema of a target collection.
-
-![Map data to schema](../../../../assets/map-data-to-schema.png)
-
-You should carefully examine your data and design the schema of the target collection accordingly.
-
-Taking the JSON data in the above diagram as an example, there are two entities in the rows list, each row having six fields. The collection schema selectively includes four: **id**, **vector**, **scalar_1**, and **scalar_2**.
-
-There are two more things to consider when designing the schema:
-
-- **Whether to enable AutoID**
-
-    The **id** field serves as the primary field of the collection. To make the primary field automatically increment, you can enable **AutoID** in the schema. In this case, you should exclude the **id** field from each row in the source data.
-
-- **Whether to enable dynamic fields**
-
-    The target collection can also store fields not included in its pre-defined schema if the schema enables dynamic fields. The **$meta** field is a reserved JSON field to hold dynamic fields and their values in key-value pairs. In the above diagram, the fields **dynamic_field_1** and **dynamic_field_2** and the values will be saved as key-value pairs in the **$meta** field.
-
-The following code shows how to set up the schema for the collection illustrated in the above diagram.
-
+<h1 id="Prepare-Source-Data" class="common-anchor-header">Prepare Source Data
+    <button data-href="#Prepare-Source-Data" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This page discusses something you should consider before you start bulk-inserting data into your collection.</p>
+<h2 id="Before-you-start" class="common-anchor-header">Before you start
+    <button data-href="#Before-you-start" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>The target collection requires mapping the source data to its schema. The diagram below shows how acceptable source data is mapped to the schema of a target collection.</p>
+<p>
+  <span class="img-wrapper">
+    <img src="/docs/v2.4.x/assets/map-data-to-schema.png" alt="Map data to schema" class="doc-image" id="map-data-to-schema" />
+    <span>Map data to schema</span>
+  </span>
+</p>
+<p>You should carefully examine your data and design the schema of the target collection accordingly.</p>
+<p>Taking the JSON data in the above diagram as an example, there are two entities in the rows list, each row having six fields. The collection schema selectively includes four: <strong>id</strong>, <strong>vector</strong>, <strong>scalar_1</strong>, and <strong>scalar_2</strong>.</p>
+<p>There are two more things to consider when designing the schema:</p>
+<ul>
+<li><p><strong>Whether to enable AutoID</strong></p>
+<p>The <strong>id</strong> field serves as the primary field of the collection. To make the primary field automatically increment, you can enable <strong>AutoID</strong> in the schema. In this case, you should exclude the <strong>id</strong> field from each row in the source data.</p></li>
+<li><p><strong>Whether to enable dynamic fields</strong></p>
+<p>The target collection can also store fields not included in its pre-defined schema if the schema enables dynamic fields. The <strong>$meta</strong> field is a reserved JSON field to hold dynamic fields and their values in key-value pairs. In the above diagram, the fields <strong>dynamic_field_1</strong> and <strong>dynamic_field_2</strong> and the values will be saved as key-value pairs in the <strong>$meta</strong> field.</p></li>
+</ul>
+<p>The following code shows how to set up the schema for the collection illustrated in the above diagram.</p>
 <div class="language-python">
-
-To obtain more information, refer to [`create_schema()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_schema.md) and [`add_field()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/CollectionSchema/add_field.md) in the SDK reference.
-
+<p>To obtain more information, refer to <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_schema.md"><code>create_schema()</code></a> and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/CollectionSchema/add_field.md"><code>add_field()</code></a> in the SDK reference.</p>
 </div>
-
 <div class="language-java">
-
-To obtain more information, refer to [`CollectionSchema`](https://milvus.io/api-reference/java/v2.4.x/v2/CollectionSchema/CollectionSchema.md) in the SDK reference.
-
+<p>To obtain more information, refer to <a href="https://milvus.io/api-reference/java/v2.4.x/v2/CollectionSchema/CollectionSchema.md"><code>CollectionSchema</code></a> in the SDK reference.</p>
 </div>
-
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> MilvusClient, DataType
 
-```python
-from pymilvus import MilvusClient, DataType
-
-# You need to work out a collection schema out of your dataset.
+<span class="hljs-comment"># You need to work out a collection schema out of your dataset.</span>
 schema = MilvusClient.create_schema(
-    auto_id=False,
-    enable_dynamic_field=True
+    auto_id=<span class="hljs-literal">False</span>,
+    enable_dynamic_field=<span class="hljs-literal">True</span>
 )
 
-schema.add_field(field_name="id", datatype=DataType.INT64, is_primary=True)
-schema.add_field(field_name="vector", datatype=DataType.FLOAT_VECTOR, dim=768)
-schema.add_field(field_name="scalar_1", datatype=DataType.VARCHAR, max_length=512)
-schema.add_field(field_name="scalar_2", datatype=DataType.INT64)
+schema.add_field(field_name=<span class="hljs-string">&quot;id&quot;</span>, datatype=DataType.INT64, is_primary=<span class="hljs-literal">True</span>)
+schema.add_field(field_name=<span class="hljs-string">&quot;vector&quot;</span>, datatype=DataType.FLOAT_VECTOR, dim=<span class="hljs-number">768</span>)
+schema.add_field(field_name=<span class="hljs-string">&quot;scalar_1&quot;</span>, datatype=DataType.VARCHAR, max_length=<span class="hljs-number">512</span>)
+schema.add_field(field_name=<span class="hljs-string">&quot;scalar_2&quot;</span>, datatype=DataType.INT64)
 
 schema.verify()
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.grpc.DataType;
+<span class="hljs-keyword">import</span> io.milvus.param.collection.CollectionSchemaParam;
+<span class="hljs-keyword">import</span> io.milvus.param.collection.FieldType;
 
-```java
-import io.milvus.grpc.DataType;
-import io.milvus.param.collection.CollectionSchemaParam;
-import io.milvus.param.collection.FieldType;
-
-// Define schema for the target collection
-FieldType id = FieldType.newBuilder()
-        .withName("id")
+<span class="hljs-comment">// Define schema for the target collection</span>
+<span class="hljs-type">FieldType</span> <span class="hljs-variable">id</span> <span class="hljs-operator">=</span> FieldType.newBuilder()
+        .withName(<span class="hljs-string">&quot;id&quot;</span>)
         .withDataType(DataType.Int64)
-        .withPrimaryKey(true)
-        .withAutoID(false)
+        .withPrimaryKey(<span class="hljs-literal">true</span>)
+        .withAutoID(<span class="hljs-literal">false</span>)
         .build();
 
-FieldType vector = FieldType.newBuilder()
-        .withName("vector")
+<span class="hljs-type">FieldType</span> <span class="hljs-variable">vector</span> <span class="hljs-operator">=</span> FieldType.newBuilder()
+        .withName(<span class="hljs-string">&quot;vector&quot;</span>)
         .withDataType(DataType.FloatVector)
-        .withDimension(768)
+        .withDimension(<span class="hljs-number">768</span>)
         .build();
 
-FieldType scalar1 = FieldType.newBuilder()
-        .withName("scalar_1")
+<span class="hljs-type">FieldType</span> <span class="hljs-variable">scalar1</span> <span class="hljs-operator">=</span> FieldType.newBuilder()
+        .withName(<span class="hljs-string">&quot;scalar_1&quot;</span>)
         .withDataType(DataType.VarChar)
-        .withMaxLength(512)
+        .withMaxLength(<span class="hljs-number">512</span>)
         .build();
 
-FieldType scalar2 = FieldType.newBuilder()
-        .withName("scalar_2")
+<span class="hljs-type">FieldType</span> <span class="hljs-variable">scalar2</span> <span class="hljs-operator">=</span> FieldType.newBuilder()
+        .withName(<span class="hljs-string">&quot;scalar_2&quot;</span>)
         .withDataType(DataType.Int64)
         .build();
 
-CollectionSchemaParam schema = CollectionSchemaParam.newBuilder()
-        .withEnableDynamicField(true)
+<span class="hljs-type">CollectionSchemaParam</span> <span class="hljs-variable">schema</span> <span class="hljs-operator">=</span> CollectionSchemaParam.newBuilder()
+        .withEnableDynamicField(<span class="hljs-literal">true</span>)
         .addFieldType(id)
         .addFieldType(vector)
         .addFieldType(scalar1)
         .addFieldType(scalar2)
         .build();
-```
-
-## Set up BulkWriter
-
-**BulkWriter** is a tool designed to convert raw datasets into a format suitable for importing via the RESTful Import API. It offers two types of writers:
-
-- **LocalBulkWriter**: Reads the designated dataset and transforms it into an easy-to-use format.
-- **RemoteBulkWriter**: Performs the same task as the LocalBulkWriter but additionally transfers the converted data files to a specified remote object storage bucket.
-
-**RemoteBulkWriter** differs from **LocalBulkWriter** in that **RemoteBulkWriter** transfers the converted data files to a target object storage bucket.
-
-### Set up LocalBulkWriter
-
-A **LocalBulkWriter** appends rows from the source dataset and commits them to a local file of the specified format.
-
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Set-up-BulkWriter" class="common-anchor-header">Set up BulkWriter
+    <button data-href="#Set-up-BulkWriter" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p><strong>BulkWriter</strong> is a tool designed to convert raw datasets into a format suitable for importing via the RESTful Import API. It offers two types of writers:</p>
+<ul>
+<li><strong>LocalBulkWriter</strong>: Reads the designated dataset and transforms it into an easy-to-use format.</li>
+<li><strong>RemoteBulkWriter</strong>: Performs the same task as the LocalBulkWriter but additionally transfers the converted data files to a specified remote object storage bucket.</li>
+</ul>
+<p><strong>RemoteBulkWriter</strong> differs from <strong>LocalBulkWriter</strong> in that <strong>RemoteBulkWriter</strong> transfers the converted data files to a target object storage bucket.</p>
+<h3 id="Set-up-LocalBulkWriter" class="common-anchor-header">Set up LocalBulkWriter</h3><p>A <strong>LocalBulkWriter</strong> appends rows from the source dataset and commits them to a local file of the specified format.</p>
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
 </div>
-
-```python
-from pymilvus.bulk_writer import LocalBulkWriter, BulkFileType
-# Use `from pymilvus import LocalBulkWriter, BulkFileType` 
-# when you use pymilvus earlier than 2.4.2 
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus.bulk_writer <span class="hljs-keyword">import</span> LocalBulkWriter, BulkFileType
+<span class="hljs-comment"># Use `from pymilvus import LocalBulkWriter, BulkFileType` </span>
+<span class="hljs-comment"># when you use pymilvus earlier than 2.4.2 </span>
 
 writer = LocalBulkWriter(
     schema=schema,
-    local_path='.',
-    segment_size=512 * 1024 * 1024, # Default value
+    local_path=<span class="hljs-string">&#x27;.&#x27;</span>,
+    segment_size=<span class="hljs-number">512</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>, <span class="hljs-comment"># Default value</span>
     file_type=BulkFileType.PARQUET
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.bulkwriter.LocalBulkWriter;
+<span class="hljs-keyword">import</span> io.milvus.bulkwriter.LocalBulkWriterParam;
+<span class="hljs-keyword">import</span> io.milvus.bulkwriter.common.clientenum.BulkFileType;
 
-```java
-import io.milvus.bulkwriter.LocalBulkWriter;
-import io.milvus.bulkwriter.LocalBulkWriterParam;
-import io.milvus.bulkwriter.common.clientenum.BulkFileType;
-
-LocalBulkWriterParam localBulkWriterParam = LocalBulkWriterParam.newBuilder()
+<span class="hljs-type">LocalBulkWriterParam</span> <span class="hljs-variable">localBulkWriterParam</span> <span class="hljs-operator">=</span> LocalBulkWriterParam.newBuilder()
     .withCollectionSchema(schema)
-    .withLocalPath(".")
-    .withChunkSize(512 * 1024 * 1024)
+    .withLocalPath(<span class="hljs-string">&quot;.&quot;</span>)
+    .withChunkSize(<span class="hljs-number">512</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>)
     .withFileType(BulkFileType.PARQUET)
     .build();
 
-LocalBulkWriter localBulkWriter = new LocalBulkWriter(localBulkWriterParam);
-```
-
+<span class="hljs-type">LocalBulkWriter</span> <span class="hljs-variable">localBulkWriter</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalBulkWriter</span>(localBulkWriterParam);
+<button class="copy-code-btn"></button></code></pre>
 <div class="language-python">
-
-When creating a **LocalBulkWriter**, you should:
-
-- Reference the created schema in `schema`.
-- Set `local_path` to the output directory.
-- Set `file_type` to the output file type.
-- If your dataset contains a large number of records, you are advised to segment your data by setting `segment_size` to a proper value.
-
-For details on parameter settings, refer to [LocalBulkWriter](https://milvus.io/api-reference/pymilvus/v2.4.x/DataImport/LocalBulkWriter/LocalBulkWriter.md) in the SDK reference.
-
+<p>When creating a <strong>LocalBulkWriter</strong>, you should:</p>
+<ul>
+<li>Reference the created schema in <code>schema</code>.</li>
+<li>Set <code>local_path</code> to the output directory.</li>
+<li>Set <code>file_type</code> to the output file type.</li>
+<li>If your dataset contains a large number of records, you are advised to segment your data by setting <code>segment_size</code> to a proper value.</li>
+</ul>
+<p>For details on parameter settings, refer to <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/DataImport/LocalBulkWriter/LocalBulkWriter.md">LocalBulkWriter</a> in the SDK reference.</p>
 </div>
-
 <div class="language-java">
-
-When creating a **LocalBulkWriter**, you should:
-
-- Reference the created schema in `CollectionSchema()`.
-- Set the output directory in `withLocalPath()`.
-- Set the output file type in `withFileType()`.
-- If your dataset contains a large number of records, you are advised to segment your data by setting `withChunkSize()` to a proper value.
-
-For details on parameter settings, refer to LocalBulkWriter in the SDK reference.
-
+<p>When creating a <strong>LocalBulkWriter</strong>, you should:</p>
+<ul>
+<li>Reference the created schema in <code>CollectionSchema()</code>.</li>
+<li>Set the output directory in <code>withLocalPath()</code>.</li>
+<li>Set the output file type in <code>withFileType()</code>.</li>
+<li>If your dataset contains a large number of records, you are advised to segment your data by setting <code>withChunkSize()</code> to a proper value.</li>
+</ul>
+<p>For details on parameter settings, refer to LocalBulkWriter in the SDK reference.</p>
 </div>
-
-### Set up RemoteBulkWriter
-
-Instead of committing appended data to a local file, a **RemoteBulkWriter** commits them to a remote bucket. Therefore, you should set up a **ConnectParam** object before creating a **RemoteBulkWriter**.
-
+<h3 id="Set-up-RemoteBulkWriter" class="common-anchor-header">Set up RemoteBulkWriter</h3><p>Instead of committing appended data to a local file, a <strong>RemoteBulkWriter</strong> commits them to a remote bucket. Therefore, you should set up a <strong>ConnectParam</strong> object before creating a <strong>RemoteBulkWriter</strong>.</p>
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus.bulk_writer <span class="hljs-keyword">import</span> RemoteBulkWriter
+<span class="hljs-comment"># Use `from pymilvus import RemoteBulkWriter` </span>
+<span class="hljs-comment"># when you use pymilvus earlier than 2.4.2 </span>
 
+<span class="hljs-comment"># Third-party constants</span>
+ACCESS_KEY=<span class="hljs-string">&quot;minioadmin&quot;</span>
+SECRET_KEY=<span class="hljs-string">&quot;minioadmin&quot;</span>
+BUCKET_NAME=<span class="hljs-string">&quot;milvus-bucket&quot;</span>
 
-```python
-from pymilvus.bulk_writer import RemoteBulkWriter
-# Use `from pymilvus import RemoteBulkWriter` 
-# when you use pymilvus earlier than 2.4.2 
-
-# Third-party constants
-ACCESS_KEY="minioadmin"
-SECRET_KEY="minioadmin"
-BUCKET_NAME="milvus-bucket"
-
-# Connections parameters to access the remote bucket
+<span class="hljs-comment"># Connections parameters to access the remote bucket</span>
 conn = RemoteBulkWriter.S3ConnectParam(
-    endpoint="localhost:9000", # the default MinIO service started along with Milvus
+    endpoint=<span class="hljs-string">&quot;localhost:9000&quot;</span>, <span class="hljs-comment"># the default MinIO service started along with Milvus</span>
     access_key=ACCESS_KEY,
     secret_key=SECRET_KEY,
     bucket_name=BUCKET_NAME,
-    secure=False
+    secure=<span class="hljs-literal">False</span>
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.bulkwriter.common.clientenum.BulkFileType;
+<span class="hljs-keyword">import</span> io.milvus.bulkwriter.connect.S3ConnectParam;
+<span class="hljs-keyword">import</span> io.milvus.bulkwriter.connect.StorageConnectParam;
 
-```java
-import io.milvus.bulkwriter.common.clientenum.BulkFileType;
-import io.milvus.bulkwriter.connect.S3ConnectParam;
-import io.milvus.bulkwriter.connect.StorageConnectParam;
+<span class="hljs-type">String</span> <span class="hljs-variable">ACCESS_KEY</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;minioadmin&quot;</span>;
+<span class="hljs-type">String</span> <span class="hljs-variable">SECRET_KEY</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;minioadmin&quot;</span>;
+<span class="hljs-type">String</span> <span class="hljs-variable">BUCKET_NAME</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;milvus-bucket&quot;</span>;
 
-String ACCESS_KEY = "minioadmin";
-String SECRET_KEY = "minioadmin";
-String BUCKET_NAME = "milvus-bucket";
-
-StorageConnectParam storageConnectParam = S3ConnectParam.newBuilder()
+<span class="hljs-type">StorageConnectParam</span> <span class="hljs-variable">storageConnectParam</span> <span class="hljs-operator">=</span> S3ConnectParam.newBuilder()
     .withEndpoint(MINIO_URI)
     .withAccessKey(ACCESS_KEY)
     .withSecretKey(SECRET_KEY)
     .withBucketName(BUCKET_NAME)
     .build();
-```
-
-Once the connection parameters are ready, you can reference it in the **RemoteBulkWriter** as follows:
-
+<button class="copy-code-btn"></button></code></pre>
+<p>Once the connection parameters are ready, you can reference it in the <strong>RemoteBulkWriter</strong> as follows:</p>
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
 </div>
-
-```python
-from pymilvus.bulk_writer import BulkFileType
-# Use `from pymilvus import BulkFileType` 
-# when you use pymilvus earlier than 2.4.2 
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus.bulk_writer <span class="hljs-keyword">import</span> BulkFileType
+<span class="hljs-comment"># Use `from pymilvus import BulkFileType` </span>
+<span class="hljs-comment"># when you use pymilvus earlier than 2.4.2 </span>
 
 writer = RemoteBulkWriter(
     schema=schema,
-    remote_path="/",
+    remote_path=<span class="hljs-string">&quot;/&quot;</span>,
     connect_param=conn,
     file_type=BulkFileType.PARQUET
 )
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.bulkwriter.RemoteBulkWriter;
+<span class="hljs-keyword">import</span> io.milvus.bulkwriter.RemoteBulkWriterParam;
 
-```java
-import io.milvus.bulkwriter.RemoteBulkWriter;
-import io.milvus.bulkwriter.RemoteBulkWriterParam;
-
-RemoteBulkWriterParam remoteBulkWriterParam = RemoteBulkWriterParam.newBuilder()
+<span class="hljs-type">RemoteBulkWriterParam</span> <span class="hljs-variable">remoteBulkWriterParam</span> <span class="hljs-operator">=</span> RemoteBulkWriterParam.newBuilder()
     .withCollectionSchema(schema)
     .withConnectParam(storageConnectParam)
-    .withChunkSize(512 * 1024 * 1024)
-    .withRemotePath("/")
+    .withChunkSize(<span class="hljs-number">512</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>)
+    .withRemotePath(<span class="hljs-string">&quot;/&quot;</span>)
     .withFileType(BulkFileType.PARQUET)
     .build();
 
-RemoteBulkWriter remoteBulkWriter = new RemoteBulkWriter(remoteBulkWriterParam);
-```
-
+<span class="hljs-type">RemoteBulkWriter</span> <span class="hljs-variable">remoteBulkWriter</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RemoteBulkWriter</span>(remoteBulkWriterParam);
+<button class="copy-code-btn"></button></code></pre>
 <div class="language-python">
-
-The parameters for creating a **RemoteBulkWriter** are barely the same as those for a **LocalBulkWriter**, except `connect_param`. For details on parameter settings, refer to [RemoteBulkWriter](https://milvus.io/api-reference/pymilvus/v2.4.x/DataImport/RemoteBulkWriter/RemoteBulkWriter.md) and [ConnectParam](https://milvus.io/api-reference/pymilvus/v2.4.x/DataImport/RemoteBulkWriter/S3ConnectParam.md) in the SDK reference.
-
+<p>The parameters for creating a <strong>RemoteBulkWriter</strong> are barely the same as those for a <strong>LocalBulkWriter</strong>, except <code>connect_param</code>. For details on parameter settings, refer to <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/DataImport/RemoteBulkWriter/RemoteBulkWriter.md">RemoteBulkWriter</a> and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/DataImport/RemoteBulkWriter/S3ConnectParam.md">ConnectParam</a> in the SDK reference.</p>
 </div>
-
 <div class="language-java">
-
-The parameters for creating a **RemoteBulkWriter** are barely the same as those for a **LocalBulkWriter**, except `StorageConnectParam`. For details on parameter settings, refer to RemoteBulkWriter and StorageConnectParam in the SDK reference.
-
+<p>The parameters for creating a <strong>RemoteBulkWriter</strong> are barely the same as those for a <strong>LocalBulkWriter</strong>, except <code>StorageConnectParam</code>. For details on parameter settings, refer to RemoteBulkWriter and StorageConnectParam in the SDK reference.</p>
 </div>
-
-## Start writing
-
-<div class="language-python">
-
-A **BulkWriter** has two methods: `append_row()` adds a row from a source dataset, and `commit()` commits added rows to a local file or a remote bucket.
-
+<h2 id="Start-writing" class="common-anchor-header">Start writing
+    <button data-href="#Start-writing" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><div class="language-python">
+<p>A <strong>BulkWriter</strong> has two methods: <code>append_row()</code> adds a row from a source dataset, and <code>commit()</code> commits added rows to a local file or a remote bucket.</p>
 </div>
-
 <div class="language-java">
-
-A **BulkWriter** has two methods: `appendRow()` adds a row from a source dataset, and `commit()` commits added rows to a local file or a remote bucket.
-
+<p>A <strong>BulkWriter</strong> has two methods: <code>appendRow()</code> adds a row from a source dataset, and <code>commit()</code> commits added rows to a local file or a remote bucket.</p>
 </div>
-
-For demonstration purposes, the following code appends randomly generated data.
-
+<p>For demonstration purposes, the following code appends randomly generated data.</p>
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> random
+<span class="hljs-keyword">import</span> <span class="hljs-type">string</span>
 
-```python
-import random
-import string
-
-def generate_random_str(length=5):
-    letters = string.ascii_uppercase
-    digits = string.digits
+def generate_random_str(length=<span class="hljs-number">5</span>):
+    letters = <span class="hljs-type">string</span>.ascii_uppercase
+    digits = <span class="hljs-type">string</span>.digits
     
-    return ''.join(random.choices(letters + digits, k=length))
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&#x27;</span>.join(random.choices(letters + digits, k=length))
 
-for i in range(10000):
+<span class="hljs-keyword">for</span> i in <span class="hljs-keyword">range</span>(<span class="hljs-number">10000</span>):
     writer.append_row({
-        "id": i, 
-        "vector": [random.uniform(-1, 1) for _ in range(768)],
-        "scalar_1": generate_random_str(random.randint(1, 20)),
-        "scalar_2": random.randint(0, 100)
+        <span class="hljs-string">&quot;id&quot;</span>: i, 
+        <span class="hljs-string">&quot;vector&quot;</span>: [random.uniform(<span class="hljs-number">-1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ in <span class="hljs-keyword">range</span>(<span class="hljs-number">768</span>)],
+        <span class="hljs-string">&quot;scalar_1&quot;</span>: generate_random_str(random.randint(<span class="hljs-number">1</span>, <span class="hljs-number">20</span>)),
+        <span class="hljs-string">&quot;scalar_2&quot;</span>: random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>)
     })
     
 writer.commit()
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> com.<span class="hljs-property">alibaba</span>.<span class="hljs-property">fastjson</span>.<span class="hljs-property">JSONObject</span>;
 
-```java
-import com.alibaba.fastjson.JSONObject;
+<span class="hljs-keyword">for</span> (int i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10000</span>; i++) {
+    <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span> json = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>();
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;id&quot;</span>, i);
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;vector&quot;</span>, <span class="hljs-title function_">get_random_vector</span>(<span class="hljs-number">768</span>));
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;scalar_1&quot;</span>, <span class="hljs-title function_">get_random_string</span>(<span class="hljs-number">20</span>));
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;scalar_2&quot;</span>, (long) (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">100</span>));
 
-for (int i = 0; i < 10000; i++) {
-    JSONObject json = new JSONObject();
-    json.put("id", i);
-    json.put("vector", get_random_vector(768));
-    json.put("scalar_1", get_random_string(20));
-    json.put("scalar_2", (long) (Math.random() * 100));
-
-    // localBulkWriter.appendRow(json);
-    remoteBulkWriter.appendRow(json);
+    <span class="hljs-comment">// localBulkWriter.appendRow(json);</span>
+    remoteBulkWriter.<span class="hljs-title function_">appendRow</span>(json);
 }
 
-// localBulkWriter.commit(false);
-remoteBulkWriter.commit(false);
-```
-
-Since the schema defined permits dynamic fields, you can also include non-schema-defined fields in the data to insert as follows.
-
+<span class="hljs-comment">// localBulkWriter.commit(false);</span>
+remoteBulkWriter.<span class="hljs-title function_">commit</span>(<span class="hljs-literal">false</span>);
+<button class="copy-code-btn"></button></code></pre>
+<p>Since the schema defined permits dynamic fields, you can also include non-schema-defined fields in the data to insert as follows.</p>
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">import</span> random
+<span class="hljs-keyword">import</span> string
 
-```python
-import random
-import string
-
-def generate_random_string(length=5):
+<span class="hljs-keyword">def</span> <span class="hljs-title function_">generate_random_string</span>(<span class="hljs-params">length=<span class="hljs-number">5</span></span>):
     letters = string.ascii_uppercase
     digits = string.digits
     
-    return ''.join(random.choices(letters + digits, k=length))
+    <span class="hljs-keyword">return</span> <span class="hljs-string">&#x27;&#x27;</span>.join(random.choices(letters + digits, k=length))
 
-for i in range(10000):
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">10000</span>):
     writer.append_row({
-        "id": i, 
-        "vector":[random.uniform(-1, 1) for _ in range(768)],
-        "scalar_1": generate_random_string(),
-        "scalar_2": random.randint(0, 100),
-        "dynamic_field_1": random.choice([True, False]),
-        "dynamic_field_2": random.randint(0, 100)
+        <span class="hljs-string">&quot;id&quot;</span>: i, 
+        <span class="hljs-string">&quot;vector&quot;</span>:[random.uniform(-<span class="hljs-number">1</span>, <span class="hljs-number">1</span>) <span class="hljs-keyword">for</span> _ <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">768</span>)],
+        <span class="hljs-string">&quot;scalar_1&quot;</span>: generate_random_string(),
+        <span class="hljs-string">&quot;scalar_2&quot;</span>: random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>),
+        <span class="hljs-string">&quot;dynamic_field_1&quot;</span>: random.choice([<span class="hljs-literal">True</span>, <span class="hljs-literal">False</span>]),
+        <span class="hljs-string">&quot;dynamic_field_2&quot;</span>: random.randint(<span class="hljs-number">0</span>, <span class="hljs-number">100</span>)
     })
     
 writer.commit()
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">for</span> (int i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10000</span>; i++) {
+    <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span> json = <span class="hljs-keyword">new</span> <span class="hljs-title class_">JSON</span><span class="hljs-built_in">Object</span>();
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;id&quot;</span>, i);
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;vector&quot;</span>, <span class="hljs-title function_">get_random_vector</span>(<span class="hljs-number">768</span>));
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;scalar_1&quot;</span>, <span class="hljs-title function_">get_random_string</span>(<span class="hljs-number">20</span>));
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;scalar_2&quot;</span>, (long) (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">100</span>));
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;dynamic_field_1&quot;</span>, <span class="hljs-title function_">get_random_boolean</span>());
+    json.<span class="hljs-title function_">put</span>(<span class="hljs-string">&quot;dynamic_field_2&quot;</span>, (long) (<span class="hljs-title class_">Math</span>.<span class="hljs-title function_">random</span>() * <span class="hljs-number">100</span>));
 
-```java
-for (int i = 0; i < 10000; i++) {
-    JSONObject json = new JSONObject();
-    json.put("id", i);
-    json.put("vector", get_random_vector(768));
-    json.put("scalar_1", get_random_string(20));
-    json.put("scalar_2", (long) (Math.random() * 100));
-    json.put("dynamic_field_1", get_random_boolean());
-    json.put("dynamic_field_2", (long) (Math.random() * 100));
-
-    // localBulkWriter.appendRow(json);
-    remoteBulkWriter.appendRow(json);
+    <span class="hljs-comment">// localBulkWriter.appendRow(json);</span>
+    remoteBulkWriter.<span class="hljs-title function_">appendRow</span>(json);
 }
 
-// localBulkWriter.commit(false);
-remoteBulkWriter.commit(false);
-```
-
-## Verify the results
-
-<div class="language-python">
-
-To check the results, you can get the actual output path by printing the `batch_files` property of the writer.
-
+<span class="hljs-comment">// localBulkWriter.commit(false);</span>
+remoteBulkWriter.<span class="hljs-title function_">commit</span>(<span class="hljs-literal">false</span>);
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Verify-the-results" class="common-anchor-header">Verify the results
+    <button data-href="#Verify-the-results" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><div class="language-python">
+<p>To check the results, you can get the actual output path by printing the <code>batch_files</code> property of the writer.</p>
 </div>
-
 <div class="language-java">
-
-To check the results, you can get the actual output path by printing the `getBatchFiles()` method of the writer.
-
+<p>To check the results, you can get the actual output path by printing the <code>getBatchFiles()</code> method of the writer.</p>
 </div>
-
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#java">Java</a>
 </div>
+<pre><code class="language-python"><span class="hljs-built_in">print</span>(writer.batch_files)
 
-```python
-print(writer.batch_files)
+<span class="hljs-comment"># [[&#x27;d4220a9e-45be-4ccb-8cb5-bf09304b9f23/1.parquet&#x27;],</span>
+<span class="hljs-comment">#  [&#x27;d4220a9e-45be-4ccb-8cb5-bf09304b9f23/2.parquet&#x27;]]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-comment">// localBulkWriter.getBatchFiles();</span>
+remoteBulkWriter.<span class="hljs-title function_">getBatchFiles</span>();
 
-# [['d4220a9e-45be-4ccb-8cb5-bf09304b9f23/1.parquet'],
-#  ['d4220a9e-45be-4ccb-8cb5-bf09304b9f23/2.parquet']]
-``` 
+<span class="hljs-comment">// </span>
 
-```java
-// localBulkWriter.getBatchFiles();
-remoteBulkWriter.getBatchFiles();
-
-// 
-
-// Close the BulkWriter
-try {
-    localBulkWriter.close();
-    remoteBulkWriter.close();            
-} catch (Exception e) {
-    // TODO: handle exception
-    e.printStackTrace();
+<span class="hljs-comment">// Close the BulkWriter</span>
+<span class="hljs-keyword">try</span> {
+    localBulkWriter.<span class="hljs-title function_">close</span>();
+    remoteBulkWriter.<span class="hljs-title function_">close</span>();            
+} <span class="hljs-keyword">catch</span> (<span class="hljs-title class_">Exception</span> e) {
+    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> handle exception</span>
+    e.<span class="hljs-title function_">printStackTrace</span>();
 }
-```
-
-**BulkWriter** generates a UUID, creates a sub-folder using the UUID in the provided output directory, and places all generated files in the sub-folder. [Click here](https://assets.zilliz.com/bulk_writer.zip) to download the prepared sample data.
-
-Possible folder structures are as follows:
-
-```bash
-# JSON
+<button class="copy-code-btn"></button></code></pre>
+<p><strong>BulkWriter</strong> generates a UUID, creates a sub-folder using the UUID in the provided output directory, and places all generated files in the sub-folder. <a href="https://assets.zilliz.com/bulk_writer.zip">Click here</a> to download the prepared sample data.</p>
+<p>Possible folder structures are as follows:</p>
+<pre><code class="language-bash"><span class="hljs-comment"># JSON</span>
 ├── folder
 │   └── 45ae1139-1d87-4aff-85f5-0039111f9e6b
-│       └── 1.json 
+│       └── <span class="hljs-number">1.j</span>son 
 
-# Parquet
+<span class="hljs-comment"># Parquet</span>
 ├── folder
 │   └── 45ae1139-1d87-4aff-85f5-0039111f9e6b
-│       └── 1.parquet 
-```
+│       └── <span class="hljs-number">1.</span>parquet 
+<button class="copy-code-btn"></button></code></pre>

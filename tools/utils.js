@@ -52,3 +52,24 @@ export async function translate(params) {
 	// Translation logic
 	return text;
 }
+
+export function separateYamlAndContent(markdown) {
+	const frontMatterRegex = /^---\s*([\s\S]*?)\s*---/;
+
+	const match = markdown.match(frontMatterRegex);
+
+	let frontMatter = "";
+	let body = "";
+
+	if (match) {
+		frontMatter = match[1].trim();
+		body = markdown.slice(match[0].length).trim();
+	} else {
+		body = markdown.trim();
+	}
+
+	return {
+		frontMatter,
+		body,
+	};
+}

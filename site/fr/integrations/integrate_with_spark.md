@@ -4,488 +4,517 @@ summary: This page discusses the Spark-Milvus connector.
 title: Spark-Milvus Connector User Guide
 ---
 
-# Spark-Milvus Connector User Guide
-
-The Spark-Milvus Connector (https://github.com/zilliztech/spark-milvus) provides seamless integration between Apache Spark and Milvus, combining the data processing and ML features of Apache Spark with the vector data storage and search capabilities of Milvus. This integration enables various interesting applications, including: 
-
-- Efficiently load vector data into Milvus in large batches,
-- Move data between Milvus and other storage systems or databases,
-- Analyzing the data in Milvus by leveraging Spark MLlib and other AI tools.
-
-## Quick start
-
-### Preparation
-
-The Spark-Milvus Connector supports Scala and Python programming languages. Users can use it with **Pyspark** or **Spark-shell**. To run this demo, set up a Spark environment containing Spark-Milvus Connector dependency in the following steps:
-
-1. Install Apache Spark (version >= 3.3.0)
-
-    You can install Apache Spark by referring to the [official documentation](https://spark.apache.org/docs/latest/).
-
-2. Download the **spark-milvus** jar file.
-
-    ```
-    wget https://github.com/zilliztech/spark-milvus/raw/1.0.0-SNAPSHOT/output/spark-milvus-1.0.0-SNAPSHOT.jar
-    ```
-
-3. Start the Spark runtime with **spark-milvus** jar as one of the dependencies.
-
-    To start the Spark runtime with the Spark-Milvus Connector, add the downloaded **spark-milvus** as the dependency to the command. 
-
-    - **pyspark**
-
-        ```
-        ./bin/pyspark --jars spark-milvus-1.0.0-SNAPSHOT.jar
-        ```
-
-    - **spark-shell**
-
-        ```
-        ./bin/spark-shell --jars spark-milvus-1.0.0-SNAPSHOT.jar
-        ```
-
-### Demo
-
-In this demo, we create a sample Spark DataFrame with vector data and write it to Milvus through the Spark-Milvus Connector. A collection will be created in Milvus automatically based on the schema and specified options. 
-
+<h1 id="Spark-Milvus-Connector-User-Guide" class="common-anchor-header">Spark-Milvus Connector User Guide
+    <button data-href="#Spark-Milvus-Connector-User-Guide" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>The Spark-Milvus Connector (https://github.com/zilliztech/spark-milvus) provides seamless integration between Apache Spark and Milvus, combining the data processing and ML features of Apache Spark with the vector data storage and search capabilities of Milvus. This integration enables various interesting applications, including:</p>
+<ul>
+<li>Efficiently load vector data into Milvus in large batches,</li>
+<li>Move data between Milvus and other storage systems or databases,</li>
+<li>Analyzing the data in Milvus by leveraging Spark MLlib and other AI tools.</li>
+</ul>
+<h2 id="Quick-start" class="common-anchor-header">Quick start
+    <button data-href="#Quick-start" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><h3 id="Preparation" class="common-anchor-header">Preparation</h3><p>The Spark-Milvus Connector supports Scala and Python programming languages. Users can use it with <strong>Pyspark</strong> or <strong>Spark-shell</strong>. To run this demo, set up a Spark environment containing Spark-Milvus Connector dependency in the following steps:</p>
+<ol>
+<li><p>Install Apache Spark (version &gt;= 3.3.0)</p>
+<p>You can install Apache Spark by referring to the <a href="https://spark.apache.org/docs/latest/">official documentation</a>.</p></li>
+<li><p>Download the <strong>spark-milvus</strong> jar file.</p>
+<pre><code>wget https://github.com/zilliztech/spark-milvus/raw/1.0.0-SNAPSHOT/output/spark-milvus-1.0.0-SNAPSHOT.jar
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>Start the Spark runtime with <strong>spark-milvus</strong> jar as one of the dependencies.</p>
+<p>To start the Spark runtime with the Spark-Milvus Connector, add the downloaded <strong>spark-milvus</strong> as the dependency to the command.</p>
+<ul>
+<li><p><strong>pyspark</strong></p>
+<pre><code>./<span class="hljs-built_in">bin</span>/pyspark --jars spark-milvus-<span class="hljs-number">1.0</span><span class="hljs-number">.0</span>-SNAPSHOT.jar
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p><strong>spark-shell</strong></p>
+<pre><code>./<span class="hljs-built_in">bin</span>/spark-shell --jars spark-milvus-<span class="hljs-number">1.0</span><span class="hljs-number">.0</span>-SNAPSHOT.jar
+<button class="copy-code-btn"></button></code></pre></li>
+</ul></li>
+</ol>
+<h3 id="Demo" class="common-anchor-header">Demo</h3><p>In this demo, we create a sample Spark DataFrame with vector data and write it to Milvus through the Spark-Milvus Connector. A collection will be created in Milvus automatically based on the schema and specified options.</p>
 <div class="multipleCode">
   <a href="#python">Python </a>
   <a href="#scala">Scala</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pyspark.sql <span class="hljs-keyword">import</span> SparkSession
 
-```python
-from pyspark.sql import SparkSession
-
-columns = ["id", "text", "vec"]
-data = [(1, "a", [1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0]),
-    (2, "b", [1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0]),
-    (3, "c", [1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0]),
-    (4, "d", [1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0])]
+columns = [<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;text&quot;</span>, <span class="hljs-string">&quot;vec&quot;</span>]
+data = [(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;a&quot;</span>, [<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>,<span class="hljs-number">6.0</span>,<span class="hljs-number">7.0</span>,<span class="hljs-number">8.0</span>]),
+    (<span class="hljs-number">2</span>, <span class="hljs-string">&quot;b&quot;</span>, [<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>,<span class="hljs-number">6.0</span>,<span class="hljs-number">7.0</span>,<span class="hljs-number">8.0</span>]),
+    (<span class="hljs-number">3</span>, <span class="hljs-string">&quot;c&quot;</span>, [<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>,<span class="hljs-number">6.0</span>,<span class="hljs-number">7.0</span>,<span class="hljs-number">8.0</span>]),
+    (<span class="hljs-number">4</span>, <span class="hljs-string">&quot;d&quot;</span>, [<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>,<span class="hljs-number">6.0</span>,<span class="hljs-number">7.0</span>,<span class="hljs-number">8.0</span>])]
 sample_df = spark.sparkContext.parallelize(data).toDF(columns)
 sample_df.write \
-    .mode("append") \
-    .option("milvus.host", "localhost") \
-    .option("milvus.port", "19530") \
-    .option("milvus.collection.name", "hello_spark_milvus") \
-    .option("milvus.collection.vectorField", "vec") \
-    .option("milvus.collection.vectorDim", "8") \
-    .option("milvus.collection.primaryKeyField", "id") \
-    .format("milvus") \
+    .mode(<span class="hljs-string">&quot;append&quot;</span>) \
+    .option(<span class="hljs-string">&quot;milvus.host&quot;</span>, <span class="hljs-string">&quot;localhost&quot;</span>) \
+    .option(<span class="hljs-string">&quot;milvus.port&quot;</span>, <span class="hljs-string">&quot;19530&quot;</span>) \
+    .option(<span class="hljs-string">&quot;milvus.collection.name&quot;</span>, <span class="hljs-string">&quot;hello_spark_milvus&quot;</span>) \
+    .option(<span class="hljs-string">&quot;milvus.collection.vectorField&quot;</span>, <span class="hljs-string">&quot;vec&quot;</span>) \
+    .option(<span class="hljs-string">&quot;milvus.collection.vectorDim&quot;</span>, <span class="hljs-string">&quot;8&quot;</span>) \
+    .option(<span class="hljs-string">&quot;milvus.collection.primaryKeyField&quot;</span>, <span class="hljs-string">&quot;id&quot;</span>) \
+    .<span class="hljs-built_in">format</span>(<span class="hljs-string">&quot;milvus&quot;</span>) \
     .save()
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-scala"><span class="hljs-keyword">import</span> org.apache.spark.sql.{SaveMode, SparkSession}
 
-```scala
-import org.apache.spark.sql.{SaveMode, SparkSession}
+object Hello <span class="hljs-keyword">extends</span> <span class="hljs-title class_">App</span> {
 
-object Hello extends App {
-
-  val spark = SparkSession.builder().master("local[*]")
-    .appName("HelloSparkMilvus")
+  <span class="hljs-type">val</span> <span class="hljs-variable">spark</span> <span class="hljs-operator">=</span> SparkSession.builder().master(<span class="hljs-string">&quot;local[*]&quot;</span>)
+    .appName(<span class="hljs-string">&quot;HelloSparkMilvus&quot;</span>)
     .getOrCreate()
 
-  import spark.implicits._
+  <span class="hljs-keyword">import</span> spark.implicits._
 
-  // Create DataFrame
-  val sampleDF = Seq(
-    (1, "a", Seq(1.0,2.0,3.0,4.0,5.0)),
-    (2, "b", Seq(1.0,2.0,3.0,4.0,5.0)),
-    (3, "c", Seq(1.0,2.0,3.0,4.0,5.0)),
-    (4, "d", Seq(1.0,2.0,3.0,4.0,5.0))
-  ).toDF("id", "text", "vec")
+  <span class="hljs-comment">// Create DataFrame</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">sampleDF</span> <span class="hljs-operator">=</span> Seq(
+    (<span class="hljs-number">1</span>, <span class="hljs-string">&quot;a&quot;</span>, Seq(<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>)),
+    (<span class="hljs-number">2</span>, <span class="hljs-string">&quot;b&quot;</span>, Seq(<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>)),
+    (<span class="hljs-number">3</span>, <span class="hljs-string">&quot;c&quot;</span>, Seq(<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>)),
+    (<span class="hljs-number">4</span>, <span class="hljs-string">&quot;d&quot;</span>, Seq(<span class="hljs-number">1.0</span>,<span class="hljs-number">2.0</span>,<span class="hljs-number">3.0</span>,<span class="hljs-number">4.0</span>,<span class="hljs-number">5.0</span>))
+  ).toDF(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;text&quot;</span>, <span class="hljs-string">&quot;vec&quot;</span>)
 
-  // set milvus options
-  val milvusOptions = Map(
-      "milvus.host" -> "localhost" -> uri,
-      "milvus.port" -> "19530",
-      "milvus.collection.name" -> "hello_spark_milvus",
-      "milvus.collection.vectorField" -> "vec",
-      "milvus.collection.vectorDim" -> "5",
-      "milvus.collection.primaryKeyField", "id"
+  <span class="hljs-comment">// set milvus options</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">milvusOptions</span> <span class="hljs-operator">=</span> Map(
+      <span class="hljs-string">&quot;milvus.host&quot;</span> -&gt; <span class="hljs-string">&quot;localhost&quot;</span> -&gt; uri,
+      <span class="hljs-string">&quot;milvus.port&quot;</span> -&gt; <span class="hljs-string">&quot;19530&quot;</span>,
+      <span class="hljs-string">&quot;milvus.collection.name&quot;</span> -&gt; <span class="hljs-string">&quot;hello_spark_milvus&quot;</span>,
+      <span class="hljs-string">&quot;milvus.collection.vectorField&quot;</span> -&gt; <span class="hljs-string">&quot;vec&quot;</span>,
+      <span class="hljs-string">&quot;milvus.collection.vectorDim&quot;</span> -&gt; <span class="hljs-string">&quot;5&quot;</span>,
+      <span class="hljs-string">&quot;milvus.collection.primaryKeyField&quot;</span>, <span class="hljs-string">&quot;id&quot;</span>
     )
     
-  sampleDF.write.format("milvus")
+  sampleDF.write.format(<span class="hljs-string">&quot;milvus&quot;</span>)
     .options(milvusOptions)
     .mode(SaveMode.Append)
     .save()
 }
-```
-
-After executing the above code, you can view the inserted data in Milvus using SDK or Attu (A Milvus Dashboard). You can find a collection named `hello_spark_milvus` created with 4 entities already inserted into it.
-
-## Features & concepts
-
-### Milvus options
-
-In the [Quick Start](#Quick-start) section, we have shown setting options during operations with Milvus. These options are abstracted as Milvus Options. They are used to create connections to Milvus and control other Milvus behaviors. Not all of the options are mandatory.
-
-| Option Key | Default Value | Description |
-| ---------- | ------------- | ----------- |
-| `milvus.host` | `localhost` | Milvus server host. See [Manage Milvus Connections](https://milvus.io/docs/manage_connection.md) for detail. |
-| `milvus.port` | `19530` | Milvus server port. See [Manage Milvus Connections](https://milvus.io/docs/manage_connection.md) for detail. |
-| `milvus.username` | `root` | Username for Milvus server. See [Manage Milvus Connections](https://milvus.io/docs/manage_connection.md) for detail. |
-| `milvus.password` | `Milvus` | Password for Milvus server. See [Manage Milvus Connections](https://milvus.io/docs/manage_connection.md) for detail. |
-| `milvus.uri` | `--` | Milvus server URI. See [Manage Milvus Connections](https://milvus.io/docs/manage_connection.md) for detail. |
-| `milvus.token` | `--` | Milvus server token. See [Manage Milvus Connections](https://milvus.io/docs/manage_connection.md) for detail. |
-| `milvus.database.name` | `default` | Name of the Milvus database to read or write. |
-| `milvus.collection.name` | `hello_milvus` | Name of the Milvus collection to read or write. |
-| `milvus.collection.primaryKeyField` | `None` | Name of the primary key field in the collection. Required if the collection does not exist. |
-| `milvus.collection.vectorField` | `None` | Name of the vector field in the collection. Required if the collection does not exist. |
-| `milvus.collection.vectorDim` | `None` | Dimension of the vector field in the collection. Required if the collection does not exist. |
-| `milvus.collection.autoID` | `false` | If the collection does not exist, this option specifies whether to automatically generate IDs for the entities. For more information, see [create_collection](https://milvus.io/docs/create_collection.md) |
-| `milvus.bucket` | `a-bucket` | Bucket name in the Milvus storage. This should be the same as `minio.bucketName` in [milvus.yaml](https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml). |
-| `milvus.rootpath` | `files` | Root path of the Milvus storage. This should be the same as `minio.rootpath` in [milvus.yaml](https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml). |
-| `milvus.fs` | `s3a://` | File system of the Milvus storage. The value `s3a://` applies to open-source Spark. Use `s3://` for Databricks. |
-| `milvus.storage.endpoint` | `localhost:9000` | Endpoint of the Milvus storage. This should be the same as `minio.address`:`minio.port` in [milvus.yaml](https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml). |
-| `milvus.storage.user` | `minioadmin` | User of the Milvus storage. This should be the same as `minio.accessKeyID` in [milvus.yaml](https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml). |
-| `milvus.storage.password` | `minioadmin` | Password of the Milvus storage. This should be the same as `minio.secretAccessKey` in [milvus.yaml](https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml). |
-| `milvus.storage.useSSL` | `false` | Whether to use SSL for the Milvus storage. This should be the same as `minio.useSSL` in [milvus.yaml](https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml). |
-
-## Milvus data format
-
-The Spark-Milvus Connector supports reading and writing data in the following Milvus data formats:
-
-- `milvus`: Milvus data format for seamless conversion from Spark DataFrame to Milvus entities.
-- `milvusbinlog`: Milvus data format for reading Milvus build-in binlog data.
-- `mjson`: Milvus JSON format for bulk-inserting data into Milvus.
-
-### milvus
-
-In [Quick start](#Quick-start), we use the **milvus** format to write sample data into a Milvus cluster. The **milvus** format is a new data format that supports seamlessly writing Spark DataFrame data into Milvus Collections. This is achieved by batch calls to the Insert API of Milvus SDK. If a collection doesn't exist in Milvus, a new collection will be created based on the schema of the Dataframe. However, the automatically created collection may not support all features of the collection schema. Therefore, it is recommended to create a collection via SDK first and then use spark-milvus for writing. For further information, please refer to [the demo](https://github.com/zilliztech/spark-milvus/blob/main/examples/src/main/scala/InsertDemo.scala).
-
-### milvusbinlog
-
-The new data format **milvusbinlog** is for reading Milvus built-in binlog data. Binlog is Milvus's internal data storage format based on parquet. Unfortunately, it can't be read by a regular parquet library, so we implemented this new data format to help Spark job read it.
-It is not recommended to use **milvusbinlog** directly unless you are familiar with the milvus internal storage details. We suggest using the [MilvusUtils](#MilvusUtils) function that will be introduced in the next section.
-
-```scalar
-val df = spark.read
-  .format("milvusbinlog")
+<button class="copy-code-btn"></button></code></pre>
+<p>After executing the above code, you can view the inserted data in Milvus using SDK or Attu (A Milvus Dashboard). You can find a collection named <code>hello_spark_milvus</code> created with 4 entities already inserted into it.</p>
+<h2 id="Features--concepts" class="common-anchor-header">Features &amp; concepts
+    <button data-href="#Features--concepts" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><h3 id="Milvus-options" class="common-anchor-header">Milvus options</h3><p>In the <a href="#Quick-start">Quick Start</a> section, we have shown setting options during operations with Milvus. These options are abstracted as Milvus Options. They are used to create connections to Milvus and control other Milvus behaviors. Not all of the options are mandatory.</p>
+<table>
+<thead>
+<tr><th>Option Key</th><th>Default Value</th><th>Description</th></tr>
+</thead>
+<tbody>
+<tr><td><code>milvus.host</code></td><td><code>localhost</code></td><td>Milvus server host. See <a href="https://milvus.io/docs/manage_connection.md">Manage Milvus Connections</a> for detail.</td></tr>
+<tr><td><code>milvus.port</code></td><td><code>19530</code></td><td>Milvus server port. See <a href="https://milvus.io/docs/manage_connection.md">Manage Milvus Connections</a> for detail.</td></tr>
+<tr><td><code>milvus.username</code></td><td><code>root</code></td><td>Username for Milvus server. See <a href="https://milvus.io/docs/manage_connection.md">Manage Milvus Connections</a> for detail.</td></tr>
+<tr><td><code>milvus.password</code></td><td><code>Milvus</code></td><td>Password for Milvus server. See <a href="https://milvus.io/docs/manage_connection.md">Manage Milvus Connections</a> for detail.</td></tr>
+<tr><td><code>milvus.uri</code></td><td><code>--</code></td><td>Milvus server URI. See <a href="https://milvus.io/docs/manage_connection.md">Manage Milvus Connections</a> for detail.</td></tr>
+<tr><td><code>milvus.token</code></td><td><code>--</code></td><td>Milvus server token. See <a href="https://milvus.io/docs/manage_connection.md">Manage Milvus Connections</a> for detail.</td></tr>
+<tr><td><code>milvus.database.name</code></td><td><code>default</code></td><td>Name of the Milvus database to read or write.</td></tr>
+<tr><td><code>milvus.collection.name</code></td><td><code>hello_milvus</code></td><td>Name of the Milvus collection to read or write.</td></tr>
+<tr><td><code>milvus.collection.primaryKeyField</code></td><td><code>None</code></td><td>Name of the primary key field in the collection. Required if the collection does not exist.</td></tr>
+<tr><td><code>milvus.collection.vectorField</code></td><td><code>None</code></td><td>Name of the vector field in the collection. Required if the collection does not exist.</td></tr>
+<tr><td><code>milvus.collection.vectorDim</code></td><td><code>None</code></td><td>Dimension of the vector field in the collection. Required if the collection does not exist.</td></tr>
+<tr><td><code>milvus.collection.autoID</code></td><td><code>false</code></td><td>If the collection does not exist, this option specifies whether to automatically generate IDs for the entities. For more information, see <a href="https://milvus.io/docs/create_collection.md">create_collection</a></td></tr>
+<tr><td><code>milvus.bucket</code></td><td><code>a-bucket</code></td><td>Bucket name in the Milvus storage. This should be the same as <code>minio.bucketName</code> in <a href="https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml">milvus.yaml</a>.</td></tr>
+<tr><td><code>milvus.rootpath</code></td><td><code>files</code></td><td>Root path of the Milvus storage. This should be the same as <code>minio.rootpath</code> in <a href="https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml">milvus.yaml</a>.</td></tr>
+<tr><td><code>milvus.fs</code></td><td><code>s3a://</code></td><td>File system of the Milvus storage. The value <code>s3a://</code> applies to open-source Spark. Use <code>s3://</code> for Databricks.</td></tr>
+<tr><td><code>milvus.storage.endpoint</code></td><td><code>localhost:9000</code></td><td>Endpoint of the Milvus storage. This should be the same as <code>minio.address</code>:<code>minio.port</code> in <a href="https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml">milvus.yaml</a>.</td></tr>
+<tr><td><code>milvus.storage.user</code></td><td><code>minioadmin</code></td><td>User of the Milvus storage. This should be the same as <code>minio.accessKeyID</code> in <a href="https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml">milvus.yaml</a>.</td></tr>
+<tr><td><code>milvus.storage.password</code></td><td><code>minioadmin</code></td><td>Password of the Milvus storage. This should be the same as <code>minio.secretAccessKey</code> in <a href="https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml">milvus.yaml</a>.</td></tr>
+<tr><td><code>milvus.storage.useSSL</code></td><td><code>false</code></td><td>Whether to use SSL for the Milvus storage. This should be the same as <code>minio.useSSL</code> in <a href="https://github.com/milvus-io/milvus/blob/master/configs/milvus.yaml">milvus.yaml</a>.</td></tr>
+</tbody>
+</table>
+<h2 id="Milvus-data-format" class="common-anchor-header">Milvus data format
+    <button data-href="#Milvus-data-format" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>The Spark-Milvus Connector supports reading and writing data in the following Milvus data formats:</p>
+<ul>
+<li><code>milvus</code>: Milvus data format for seamless conversion from Spark DataFrame to Milvus entities.</li>
+<li><code>milvusbinlog</code>: Milvus data format for reading Milvus build-in binlog data.</li>
+<li><code>mjson</code>: Milvus JSON format for bulk-inserting data into Milvus.</li>
+</ul>
+<h3 id="milvus" class="common-anchor-header">milvus</h3><p>In <a href="#Quick-start">Quick start</a>, we use the <strong>milvus</strong> format to write sample data into a Milvus cluster. The <strong>milvus</strong> format is a new data format that supports seamlessly writing Spark DataFrame data into Milvus Collections. This is achieved by batch calls to the Insert API of Milvus SDK. If a collection doesn’t exist in Milvus, a new collection will be created based on the schema of the Dataframe. However, the automatically created collection may not support all features of the collection schema. Therefore, it is recommended to create a collection via SDK first and then use spark-milvus for writing. For further information, please refer to <a href="https://github.com/zilliztech/spark-milvus/blob/main/examples/src/main/scala/InsertDemo.scala">the demo</a>.</p>
+<h3 id="milvusbinlog" class="common-anchor-header">milvusbinlog</h3><p>The new data format <strong>milvusbinlog</strong> is for reading Milvus built-in binlog data. Binlog is Milvus’s internal data storage format based on parquet. Unfortunately, it can’t be read by a regular parquet library, so we implemented this new data format to help Spark job read it.
+It is not recommended to use <strong>milvusbinlog</strong> directly unless you are familiar with the milvus internal storage details. We suggest using the <a href="#MilvusUtils">MilvusUtils</a> function that will be introduced in the next section.</p>
+<pre><code class="language-scalar">val df = spark.read
+  .<span class="hljs-built_in">format</span>(<span class="hljs-string">&quot;milvusbinlog&quot;</span>)
   .load(path)
-  .withColumnRenamed("val", "embedding")
-```
+  .withColumnRenamed(<span class="hljs-string">&quot;val&quot;</span>, <span class="hljs-string">&quot;embedding&quot;</span>)
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="mjson" class="common-anchor-header">mjson</h3><p>Milvus provides <a href="https://milvus.io/docs/bulk_insert.md">Bulkinsert</a> functionality for better writing performance when operating with large datasets. However, the JSON format used by Milvus is slightly different than Spark’s default JSON output format.
+To resolve this, we introduce <strong>mjson</strong> data format to generate data that meets Milvus requirements. Here is an example that shows the difference between JSON-lines and <strong>mjson</strong>:</p>
+<ul>
+<li><p>JSON-lines:</p>
+<pre><code class="language-json">{<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">101</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">13</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">1.1</span>, <span class="hljs-number">1.2</span>]}
+{<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">102</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">25</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">2.1</span>, <span class="hljs-number">2.2</span>]}
+{<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">103</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">7</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">3.1</span>, <span class="hljs-number">3.2</span>]}
+{<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">104</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">12</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">4.1</span>, <span class="hljs-number">4.2</span>]}
+{<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">105</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">34</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">5.1</span>, <span class="hljs-number">5.2</span>]}
+<button class="copy-code-btn"></button></code></pre></li>
+<li><p>mjson (Required for Milvus Bulkinsert):</p>
+<pre><code class="language-json">{
+    <span class="hljs-string">&quot;rows&quot;</span>:[
+        {<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">101</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">13</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">1.1</span>, <span class="hljs-number">1.2</span>]},
+        {<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">102</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">25</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">2.1</span>, <span class="hljs-number">2.2</span>]},
+        {<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">103</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">7</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">3.1</span>, <span class="hljs-number">3.2</span>]},
+        {<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">104</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">12</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">4.1</span>, <span class="hljs-number">4.2</span>]},
+        {<span class="hljs-string">&quot;book_id&quot;</span>: <span class="hljs-number">105</span>, <span class="hljs-string">&quot;word_count&quot;</span>: <span class="hljs-number">34</span>, <span class="hljs-string">&quot;book_intro&quot;</span>: [<span class="hljs-number">5.1</span>, <span class="hljs-number">5.2</span>]}
+    ]
+}
+<button class="copy-code-btn"></button></code></pre></li>
+</ul>
+<p>This will be improved in the future. We recommend using parquet format in spark-milvus intergration if your Milvus version is v2.3.7+ which supports bulkinsert with Parquet format. See <a href="https://github.com/zilliztech/spark-milvus/blob/main/examples/src/main/scala/BulkInsertDemo.scala">Demo</a> on Github.</p>
+<h2 id="MilvusUtils" class="common-anchor-header">MilvusUtils
+    <button data-href="#MilvusUtils" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>MilvusUtils contains several useful util functions. Currently it is only supported in Scala. More usage examples are in <a href="#Advanced-Usage">Advanced Usage</a> section.</p>
+<h3 id="MilvusUtilsreadMilvusCollection" class="common-anchor-header">MilvusUtils.readMilvusCollection</h3><p><strong>MilvusUtils.readMilvusCollection</strong> is a simple interface for loading a whole Milvus collection into a Spark Dataframe. It wraps various operations, including calling Milvus SDK, reading <strong>milvusbinlog</strong> and common union/join operations.</p>
+<pre><code class="language-scala"><span class="hljs-type">val</span> <span class="hljs-variable">collectionDF</span> <span class="hljs-operator">=</span> MilvusUtils.readMilvusCollection(spark, milvusOptions)
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="MilvusUtilsbulkInsertFromSpark" class="common-anchor-header">MilvusUtils.bulkInsertFromSpark</h3><p><strong>MilvusUtils.bulkInsertFromSpark</strong> provides a convenient way to import Spark output files into Milvus in a large batch. It wraps the <strong>Bullkinsert</strong> API of the Milvus SDK.</p>
+<pre><code class="language-scala">df.write.<span class="hljs-built_in">format</span>(<span class="hljs-string">&quot;parquet&quot;</span>).save(outputPath)
+MilvusUtils.bulkInsertFromSpark(spark, milvusOptions, outputPath, <span class="hljs-string">&quot;parquet&quot;</span>)
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Advanced-Usage" class="common-anchor-header">Advanced Usage
+    <button data-href="#Advanced-Usage" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>In this section, you will find advanced usage examples of the Spark-Milvus Connector for data analysis and migration. For more demos, see <a href="https://github.com/zilliztech/spark-milvus/tree/main/examples/src/main/scala">examples</a>.</p>
+<h3 id="MySQL---embedding---Milvus" class="common-anchor-header">MySQL -&gt; embedding -&gt; Milvus</h3><p>In this demo, we will</p>
+<ol>
+<li>Read data from MySQL through the Spark-MySQL Connector,</li>
+<li>Generate embedding (using Word2Vec as an example), and</li>
+<li>Write embedded data into Milvus.</li>
+</ol>
+<p>To enable the Spark-MySQL Connector, you need to add the following dependency to your Spark environment:</p>
+<pre><code>spark-shell --jars spark-milvus-1.0.0-SNAPSHOT.jar,mysql-connector-j-x.x.x.jar
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-scala"><span class="hljs-keyword">import</span> org.apache.spark.ml.feature.{Tokenizer, Word2Vec}
+<span class="hljs-keyword">import</span> org.apache.spark.sql.functions.udf
+<span class="hljs-keyword">import</span> org.apache.spark.sql.{SaveMode, SparkSession}
+<span class="hljs-keyword">import</span> zilliztech.spark.milvus.MilvusOptions._
 
-### mjson
+<span class="hljs-keyword">import</span> org.apache.spark.ml.linalg.Vector
 
-Milvus provides [Bulkinsert](https://milvus.io/docs/bulk_insert.md) functionality for better writing performance when operating with large datasets. However, the JSON format used by Milvus is slightly different than Spark's default JSON output format.
-To resolve this, we introduce **mjson** data format to generate data that meets Milvus requirements. Here is an example that shows the difference between JSON-lines and **mjson**:
+object Mysql2MilvusDemo  <span class="hljs-keyword">extends</span> <span class="hljs-title class_">App</span> {
 
-- JSON-lines:
-
-    ```json
-    {"book_id": 101, "word_count": 13, "book_intro": [1.1, 1.2]}
-    {"book_id": 102, "word_count": 25, "book_intro": [2.1, 2.2]}
-    {"book_id": 103, "word_count": 7, "book_intro": [3.1, 3.2]}
-    {"book_id": 104, "word_count": 12, "book_intro": [4.1, 4.2]}
-    {"book_id": 105, "word_count": 34, "book_intro": [5.1, 5.2]}
-    ```
-
-- mjson (Required for Milvus Bulkinsert):
-
-    ```json
-    {
-        "rows":[
-            {"book_id": 101, "word_count": 13, "book_intro": [1.1, 1.2]},
-            {"book_id": 102, "word_count": 25, "book_intro": [2.1, 2.2]},
-            {"book_id": 103, "word_count": 7, "book_intro": [3.1, 3.2]},
-            {"book_id": 104, "word_count": 12, "book_intro": [4.1, 4.2]},
-            {"book_id": 105, "word_count": 34, "book_intro": [5.1, 5.2]}
-        ]
-    }
-    ```
-
-This will be improved in the future. We recommend using parquet format in spark-milvus intergration if your Milvus version is v2.3.7+ which supports bulkinsert with Parquet format. See [Demo](https://github.com/zilliztech/spark-milvus/blob/main/examples/src/main/scala/BulkInsertDemo.scala) on Github.
-
-## MilvusUtils
-
-MilvusUtils contains several useful util functions. Currently it is only supported in Scala. More usage examples are in [Advanced Usage](#Advanced-Usage) section.
-
-### MilvusUtils.readMilvusCollection
-
-**MilvusUtils.readMilvusCollection** is a simple interface for loading a whole Milvus collection into a Spark Dataframe. It wraps various operations, including calling Milvus SDK, reading **milvusbinlog** and common union/join operations.
-
-```scala
-val collectionDF = MilvusUtils.readMilvusCollection(spark, milvusOptions)
-```
-
-### MilvusUtils.bulkInsertFromSpark
-
-**MilvusUtils.bulkInsertFromSpark** provides a convenient way to import Spark output files into Milvus in a large batch. It wraps the **Bullkinsert** API of the Milvus SDK.
-
-```scala
-df.write.format("parquet").save(outputPath)
-MilvusUtils.bulkInsertFromSpark(spark, milvusOptions, outputPath, "parquet")
-```
-
-## Advanced Usage
-
-In this section, you will find advanced usage examples of the Spark-Milvus Connector for data analysis and migration. For more demos, see [examples](https://github.com/zilliztech/spark-milvus/tree/main/examples/src/main/scala).
-
-### MySQL -> embedding -> Milvus
-
-In this demo, we will
-
-1. Read data from MySQL through the Spark-MySQL Connector,
-2. Generate embedding (using Word2Vec as an example), and
-3. Write embedded data into Milvus.
-
-To enable the Spark-MySQL Connector, you need to add the following dependency to your Spark environment:
-
-```
-spark-shell --jars spark-milvus-1.0.0-SNAPSHOT.jar,mysql-connector-j-x.x.x.jar
-```
-
-```scala
-import org.apache.spark.ml.feature.{Tokenizer, Word2Vec}
-import org.apache.spark.sql.functions.udf
-import org.apache.spark.sql.{SaveMode, SparkSession}
-import zilliztech.spark.milvus.MilvusOptions._
-
-import org.apache.spark.ml.linalg.Vector
-
-object Mysql2MilvusDemo  extends App {
-
-  val spark = SparkSession.builder().master("local[*]")
-    .appName("Mysql2MilvusDemo")
+  <span class="hljs-type">val</span> <span class="hljs-variable">spark</span> <span class="hljs-operator">=</span> SparkSession.builder().master(<span class="hljs-string">&quot;local[*]&quot;</span>)
+    .appName(<span class="hljs-string">&quot;Mysql2MilvusDemo&quot;</span>)
     .getOrCreate()
 
-  import spark.implicits._
+  <span class="hljs-keyword">import</span> spark.implicits._
 
-  // Create DataFrame
-  val sampleDF = Seq(
-    (1, "Milvus was created in 2019 with a singular goal: store, index, and manage massive embedding vectors generated by deep neural networks and other machine learning (ML) models."),
-    (2, "As a database specifically designed to handle queries over input vectors, it is capable of indexing vectors on a trillion scale. "),
-    (3, "Unlike existing relational databases which mainly deal with structured data following a pre-defined pattern, Milvus is designed from the bottom-up to handle embedding vectors converted from unstructured data."),
-    (4, "As the Internet grew and evolved, unstructured data became more and more common, including emails, papers, IoT sensor data, Facebook photos, protein structures, and much more.")
-  ).toDF("id", "text")
+  <span class="hljs-comment">// Create DataFrame</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">sampleDF</span> <span class="hljs-operator">=</span> Seq(
+    (<span class="hljs-number">1</span>, <span class="hljs-string">&quot;Milvus was created in 2019 with a singular goal: store, index, and manage massive embedding vectors generated by deep neural networks and other machine learning (ML) models.&quot;</span>),
+    (<span class="hljs-number">2</span>, <span class="hljs-string">&quot;As a database specifically designed to handle queries over input vectors, it is capable of indexing vectors on a trillion scale. &quot;</span>),
+    (<span class="hljs-number">3</span>, <span class="hljs-string">&quot;Unlike existing relational databases which mainly deal with structured data following a pre-defined pattern, Milvus is designed from the bottom-up to handle embedding vectors converted from unstructured data.&quot;</span>),
+    (<span class="hljs-number">4</span>, <span class="hljs-string">&quot;As the Internet grew and evolved, unstructured data became more and more common, including emails, papers, IoT sensor data, Facebook photos, protein structures, and much more.&quot;</span>)
+  ).toDF(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;text&quot;</span>)
 
-  // Write to MySQL Table
+  <span class="hljs-comment">// Write to MySQL Table</span>
   sampleDF.write
     .mode(SaveMode.Append)
-    .format("jdbc")
-    .option("driver","com.mysql.cj.jdbc.Driver")
-    .option("url", "jdbc:mysql://localhost:3306/test")
-    .option("dbtable", "demo")
-    .option("user", "root")
-    .option("password", "123456")
+    .format(<span class="hljs-string">&quot;jdbc&quot;</span>)
+    .option(<span class="hljs-string">&quot;driver&quot;</span>,<span class="hljs-string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>)
+    .option(<span class="hljs-string">&quot;url&quot;</span>, <span class="hljs-string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>)
+    .option(<span class="hljs-string">&quot;dbtable&quot;</span>, <span class="hljs-string">&quot;demo&quot;</span>)
+    .option(<span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>)
+    .option(<span class="hljs-string">&quot;password&quot;</span>, <span class="hljs-string">&quot;123456&quot;</span>)
     .save()
 
-  // Read from MySQL Table
-  val dfMysql = spark.read
-    .format("jdbc")
-    .option("driver","com.mysql.cj.jdbc.Driver")
-    .option("url", "jdbc:mysql://localhost:3306/test")
-    .option("dbtable", "demo")
-    .option("user", "root")
-    .option("password", "123456")
+  <span class="hljs-comment">// Read from MySQL Table</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">dfMysql</span> <span class="hljs-operator">=</span> spark.read
+    .format(<span class="hljs-string">&quot;jdbc&quot;</span>)
+    .option(<span class="hljs-string">&quot;driver&quot;</span>,<span class="hljs-string">&quot;com.mysql.cj.jdbc.Driver&quot;</span>)
+    .option(<span class="hljs-string">&quot;url&quot;</span>, <span class="hljs-string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>)
+    .option(<span class="hljs-string">&quot;dbtable&quot;</span>, <span class="hljs-string">&quot;demo&quot;</span>)
+    .option(<span class="hljs-string">&quot;user&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>)
+    .option(<span class="hljs-string">&quot;password&quot;</span>, <span class="hljs-string">&quot;123456&quot;</span>)
     .load()
 
-  val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("tokens")
-  val tokenizedDf = tokenizer.transform(dfMysql)
+  <span class="hljs-type">val</span> <span class="hljs-variable">tokenizer</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Tokenizer</span>().setInputCol(<span class="hljs-string">&quot;text&quot;</span>).setOutputCol(<span class="hljs-string">&quot;tokens&quot;</span>)
+  <span class="hljs-type">val</span> <span class="hljs-variable">tokenizedDf</span> <span class="hljs-operator">=</span> tokenizer.transform(dfMysql)
 
-  // Learn a mapping from words to Vectors.
-  val word2Vec = new Word2Vec()
-    .setInputCol("tokens")
-    .setOutputCol("vectors")
-    .setVectorSize(128)
-    .setMinCount(0)
-  val model = word2Vec.fit(tokenizedDf)
+  <span class="hljs-comment">// Learn a mapping from words to Vectors.</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">word2Vec</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Word2Vec</span>()
+    .setInputCol(<span class="hljs-string">&quot;tokens&quot;</span>)
+    .setOutputCol(<span class="hljs-string">&quot;vectors&quot;</span>)
+    .setVectorSize(<span class="hljs-number">128</span>)
+    .setMinCount(<span class="hljs-number">0</span>)
+  <span class="hljs-type">val</span> <span class="hljs-variable">model</span> <span class="hljs-operator">=</span> word2Vec.fit(tokenizedDf)
 
-  val result = model.transform(tokenizedDf)
+  <span class="hljs-type">val</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> model.transform(tokenizedDf)
 
-  val vectorToArrayUDF = udf((v: Vector) => v.toArray)
-  // Apply the UDF to the DataFrame
-  val resultDF = result.withColumn("embedding", vectorToArrayUDF($"vectors"))
-  val milvusDf = resultDF.drop("tokens").drop("vectors")
+  <span class="hljs-type">val</span> <span class="hljs-variable">vectorToArrayUDF</span> <span class="hljs-operator">=</span> udf((v: Vector) =&gt; v.toArray)
+  <span class="hljs-comment">// Apply the UDF to the DataFrame</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">resultDF</span> <span class="hljs-operator">=</span> result.withColumn(<span class="hljs-string">&quot;embedding&quot;</span>, vectorToArrayUDF($<span class="hljs-string">&quot;vectors&quot;</span>))
+  <span class="hljs-type">val</span> <span class="hljs-variable">milvusDf</span> <span class="hljs-operator">=</span> resultDF.drop(<span class="hljs-string">&quot;tokens&quot;</span>).drop(<span class="hljs-string">&quot;vectors&quot;</span>)
 
-  milvusDf.write.format("milvus")
-    .option(MILVUS_HOST, "localhost")
-    .option(MILVUS_PORT, "19530")
-    .option(MILVUS_COLLECTION_NAME, "text_embedding")
-    .option(MILVUS_COLLECTION_VECTOR_FIELD, "embedding")
-    .option(MILVUS_COLLECTION_VECTOR_DIM, "128")
-    .option(MILVUS_COLLECTION_PRIMARY_KEY, "id")
+  milvusDf.write.format(<span class="hljs-string">&quot;milvus&quot;</span>)
+    .option(MILVUS_HOST, <span class="hljs-string">&quot;localhost&quot;</span>)
+    .option(MILVUS_PORT, <span class="hljs-string">&quot;19530&quot;</span>)
+    .option(MILVUS_COLLECTION_NAME, <span class="hljs-string">&quot;text_embedding&quot;</span>)
+    .option(MILVUS_COLLECTION_VECTOR_FIELD, <span class="hljs-string">&quot;embedding&quot;</span>)
+    .option(MILVUS_COLLECTION_VECTOR_DIM, <span class="hljs-string">&quot;128&quot;</span>)
+    .option(MILVUS_COLLECTION_PRIMARY_KEY, <span class="hljs-string">&quot;id&quot;</span>)
     .mode(SaveMode.Append)
     .save()
 }
-```
-
-### Milvus -> Transform -> Milvus
-
-In this demo, we will
-
-1. Read data from a Milvus collection,
-2. Apply a transformation (using PCA as an example), and
-3. Write the transformed data into another Milvus via the Bulkinsert API.
-
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Milvus---Transform---Milvus" class="common-anchor-header">Milvus -&gt; Transform -&gt; Milvus</h3><p>In this demo, we will</p>
+<ol>
+<li>Read data from a Milvus collection,</li>
+<li>Apply a transformation (using PCA as an example), and</li>
+<li>Write the transformed data into another Milvus via the Bulkinsert API.</li>
+</ol>
 <div class="alert notes">
-
-The PCA model is a tranformation model that reduces the dimensionality of embedding vectors, which is a common operation in machine learning.
-You can add any other processing operations, such as filtering, joining, or normalizing, to the transformation step.
-
+<p>The PCA model is a tranformation model that reduces the dimensionality of embedding vectors, which is a common operation in machine learning.
+You can add any other processing operations, such as filtering, joining, or normalizing, to the transformation step.</p>
 </div>
+<pre><code class="language-scala"><span class="hljs-keyword">import</span> org.apache.spark.ml.feature.PCA
+<span class="hljs-keyword">import</span> org.apache.spark.ml.linalg.{Vector, Vectors}
+<span class="hljs-keyword">import</span> org.apache.spark.SparkConf
+<span class="hljs-keyword">import</span> org.apache.spark.sql.SparkSession
+<span class="hljs-keyword">import</span> org.apache.spark.sql.functions.udf
+<span class="hljs-keyword">import</span> org.apache.spark.sql.util.CaseInsensitiveStringMap
+<span class="hljs-keyword">import</span> zilliztech.spark.milvus.{MilvusOptions, MilvusUtils}
 
-```scala
-import org.apache.spark.ml.feature.PCA
-import org.apache.spark.ml.linalg.{Vector, Vectors}
-import org.apache.spark.SparkConf
-import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.udf
-import org.apache.spark.sql.util.CaseInsensitiveStringMap
-import zilliztech.spark.milvus.{MilvusOptions, MilvusUtils}
+<span class="hljs-keyword">import</span> scala.collection.JavaConverters._
 
-import scala.collection.JavaConverters._
+object TransformDemo <span class="hljs-keyword">extends</span> <span class="hljs-title class_">App</span> {
+  <span class="hljs-type">val</span> <span class="hljs-variable">sparkConf</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SparkConf</span>().setMaster(<span class="hljs-string">&quot;local&quot;</span>)
+  <span class="hljs-type">val</span> <span class="hljs-variable">spark</span> <span class="hljs-operator">=</span> SparkSession.builder().config(sparkConf).getOrCreate()
 
-object TransformDemo extends App {
-  val sparkConf = new SparkConf().setMaster("local")
-  val spark = SparkSession.builder().config(sparkConf).getOrCreate()
+  <span class="hljs-keyword">import</span> spark.implicits._
 
-  import spark.implicits._
+  <span class="hljs-type">val</span> <span class="hljs-variable">host</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;localhost&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">port</span> <span class="hljs-operator">=</span> <span class="hljs-number">19530</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;root&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;Milvus&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">fs</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;s3a://&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">bucketName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;a-bucket&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">rootPath</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;files&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">minioAK</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;minioadmin&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">minioSK</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;minioadmin&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">minioEndpoint</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;localhost:9000&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">collectionName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;hello_spark_milvus1&quot;</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">targetCollectionName</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;hello_spark_milvus2&quot;</span>
 
-  val host = "localhost"
-  val port = 19530
-  val user = "root"
-  val password = "Milvus"
-  val fs = "s3a://"
-  val bucketName = "a-bucket"
-  val rootPath = "files"
-  val minioAK = "minioadmin"
-  val minioSK = "minioadmin"
-  val minioEndpoint = "localhost:9000"
-  val collectionName = "hello_spark_milvus1"
-  val targetCollectionName = "hello_spark_milvus2"
-
-  val properties = Map(
-    MilvusOptions.MILVUS_HOST -> host,
-    MilvusOptions.MILVUS_PORT -> port.toString,
-    MilvusOptions.MILVUS_COLLECTION_NAME -> collectionName,
-    MilvusOptions.MILVUS_BUCKET -> bucketName,
-    MilvusOptions.MILVUS_ROOTPATH -> rootPath,
-    MilvusOptions.MILVUS_FS -> fs,
-    MilvusOptions.MILVUS_STORAGE_ENDPOINT -> minioEndpoint,
-    MilvusOptions.MILVUS_STORAGE_USER -> minioAK,
-    MilvusOptions.MILVUS_STORAGE_PASSWORD -> minioSK,
+  <span class="hljs-type">val</span> <span class="hljs-variable">properties</span> <span class="hljs-operator">=</span> Map(
+    MilvusOptions.MILVUS_HOST -&gt; host,
+    MilvusOptions.MILVUS_PORT -&gt; port.toString,
+    MilvusOptions.MILVUS_COLLECTION_NAME -&gt; collectionName,
+    MilvusOptions.MILVUS_BUCKET -&gt; bucketName,
+    MilvusOptions.MILVUS_ROOTPATH -&gt; rootPath,
+    MilvusOptions.MILVUS_FS -&gt; fs,
+    MilvusOptions.MILVUS_STORAGE_ENDPOINT -&gt; minioEndpoint,
+    MilvusOptions.MILVUS_STORAGE_USER -&gt; minioAK,
+    MilvusOptions.MILVUS_STORAGE_PASSWORD -&gt; minioSK,
   )
 
-  // 1, configurations
-  val milvusOptions = new MilvusOptions(new CaseInsensitiveStringMap(properties.asJava))
+  <span class="hljs-comment">// 1, configurations</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">milvusOptions</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusOptions</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CaseInsensitiveStringMap</span>(properties.asJava))
 
-  // 2, batch read milvus collection data to dataframe
-  //  Schema: dim of `embeddings` is 8
-  // +-+------------+------------+------------------+
-  // | | field name | field type | other attributes |
-  // +-+------------+------------+------------------+
-  // |1|    "pk"    |    Int64   |  is_primary=True |
-  // | |            |            |   auto_id=False  |
-  // +-+------------+------------+------------------+
-  // |2|  "random"  |    Double  |                  |
-  // +-+------------+------------+------------------+
-  // |3|"embeddings"| FloatVector|     dim=8        |
-  // +-+------------+------------+------------------+
-  val arrayToVectorUDF = udf((arr: Seq[Double]) => Vectors.dense(arr.toArray[Double]))
-  val collectionDF = MilvusUtils.readMilvusCollection(spark, milvusOptions)
-    .withColumn("embeddings_vec", arrayToVectorUDF($"embeddings"))
-    .drop("embeddings")
+  <span class="hljs-comment">// 2, batch read milvus collection data to dataframe</span>
+  <span class="hljs-comment">//  Schema: dim of `embeddings` is 8</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// | | field name | field type | other attributes |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// |1|    &quot;pk&quot;    |    Int64   |  is_primary=True |</span>
+  <span class="hljs-comment">// | |            |            |   auto_id=False  |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// |2|  &quot;random&quot;  |    Double  |                  |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// |3|&quot;embeddings&quot;| FloatVector|     dim=8        |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">arrayToVectorUDF</span> <span class="hljs-operator">=</span> udf((arr: Seq[Double]) =&gt; Vectors.dense(arr.toArray[Double]))
+  <span class="hljs-type">val</span> <span class="hljs-variable">collectionDF</span> <span class="hljs-operator">=</span> MilvusUtils.readMilvusCollection(spark, milvusOptions)
+    .withColumn(<span class="hljs-string">&quot;embeddings_vec&quot;</span>, arrayToVectorUDF($<span class="hljs-string">&quot;embeddings&quot;</span>))
+    .drop(<span class="hljs-string">&quot;embeddings&quot;</span>)
   
-  // 3. Use PCA to reduce dim of vector
-  val dim = 4
-  val pca = new PCA()
-    .setInputCol("embeddings_vec")
-    .setOutputCol("pca_vec")
+  <span class="hljs-comment">// 3. Use PCA to reduce dim of vector</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">dim</span> <span class="hljs-operator">=</span> <span class="hljs-number">4</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">pca</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">PCA</span>()
+    .setInputCol(<span class="hljs-string">&quot;embeddings_vec&quot;</span>)
+    .setOutputCol(<span class="hljs-string">&quot;pca_vec&quot;</span>)
     .setK(dim)
     .fit(collectionDF)
-  val vectorToArrayUDF = udf((v: Vector) => v.toArray)
-  // embeddings dim number reduce to 4
-  // +-+------------+------------+------------------+
-  // | | field name | field type | other attributes |
-  // +-+------------+------------+------------------+
-  // |1|    "pk"    |    Int64   |  is_primary=True |
-  // | |            |            |   auto_id=False  |
-  // +-+------------+------------+------------------+
-  // |2|  "random"  |    Double  |                  |
-  // +-+------------+------------+------------------+
-  // |3|"embeddings"| FloatVector|     dim=4        |
-  // +-+------------+------------+------------------+
-  val pcaDf = pca.transform(collectionDF)
-    .withColumn("embeddings", vectorToArrayUDF($"pca_vec"))
-    .select("pk", "random", "embeddings")
+  <span class="hljs-type">val</span> <span class="hljs-variable">vectorToArrayUDF</span> <span class="hljs-operator">=</span> udf((v: Vector) =&gt; v.toArray)
+  <span class="hljs-comment">// embeddings dim number reduce to 4</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// | | field name | field type | other attributes |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// |1|    &quot;pk&quot;    |    Int64   |  is_primary=True |</span>
+  <span class="hljs-comment">// | |            |            |   auto_id=False  |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// |2|  &quot;random&quot;  |    Double  |                  |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-comment">// |3|&quot;embeddings&quot;| FloatVector|     dim=4        |</span>
+  <span class="hljs-comment">// +-+------------+------------+------------------+</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">pcaDf</span> <span class="hljs-operator">=</span> pca.transform(collectionDF)
+    .withColumn(<span class="hljs-string">&quot;embeddings&quot;</span>, vectorToArrayUDF($<span class="hljs-string">&quot;pca_vec&quot;</span>))
+    .select(<span class="hljs-string">&quot;pk&quot;</span>, <span class="hljs-string">&quot;random&quot;</span>, <span class="hljs-string">&quot;embeddings&quot;</span>)
 
-  // 4. Write PCAed data to S3
-  val outputPath = "s3a://a-bucket/result"
+  <span class="hljs-comment">// 4. Write PCAed data to S3</span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">outputPath</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;s3a://a-bucket/result&quot;</span>
   pcaDf.write
-    .mode("overwrite")
-    .format("parquet")
+    .mode(<span class="hljs-string">&quot;overwrite&quot;</span>)
+    .format(<span class="hljs-string">&quot;parquet&quot;</span>)
     .save(outputPath)
 
-  // 5. Config MilvusOptions of target table  
-  val targetProperties = Map(
-    MilvusOptions.MILVUS_HOST -> host,
-    MilvusOptions.MILVUS_PORT -> port.toString,
-    MilvusOptions.MILVUS_COLLECTION_NAME -> targetCollectionName,
-    MilvusOptions.MILVUS_BUCKET -> bucketName,
-    MilvusOptions.MILVUS_ROOTPATH -> rootPath,
-    MilvusOptions.MILVUS_FS -> fs,
-    MilvusOptions.MILVUS_STORAGE_ENDPOINT -> minioEndpoint,
-    MilvusOptions.MILVUS_STORAGE_USER -> minioAK,
-    MilvusOptions.MILVUS_STORAGE_PASSWORD -> minioSK,
+  <span class="hljs-comment">// 5. Config MilvusOptions of target table  </span>
+  <span class="hljs-type">val</span> <span class="hljs-variable">targetProperties</span> <span class="hljs-operator">=</span> Map(
+    MilvusOptions.MILVUS_HOST -&gt; host,
+    MilvusOptions.MILVUS_PORT -&gt; port.toString,
+    MilvusOptions.MILVUS_COLLECTION_NAME -&gt; targetCollectionName,
+    MilvusOptions.MILVUS_BUCKET -&gt; bucketName,
+    MilvusOptions.MILVUS_ROOTPATH -&gt; rootPath,
+    MilvusOptions.MILVUS_FS -&gt; fs,
+    MilvusOptions.MILVUS_STORAGE_ENDPOINT -&gt; minioEndpoint,
+    MilvusOptions.MILVUS_STORAGE_USER -&gt; minioAK,
+    MilvusOptions.MILVUS_STORAGE_PASSWORD -&gt; minioSK,
   )
-  val targetMilvusOptions = new MilvusOptions(new CaseInsensitiveStringMap(targetProperties.asJava))
+  <span class="hljs-type">val</span> <span class="hljs-variable">targetMilvusOptions</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusOptions</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CaseInsensitiveStringMap</span>(targetProperties.asJava))
   
-  // 6. Bulkinsert Spark output files into milvus
-  MilvusUtils.bulkInsertFromSpark(spark, targetMilvusOptions, outputPath, "parquet")
+  <span class="hljs-comment">// 6. Bulkinsert Spark output files into milvus</span>
+  MilvusUtils.bulkInsertFromSpark(spark, targetMilvusOptions, outputPath, <span class="hljs-string">&quot;parquet&quot;</span>)
 }
-```
-
-### Databricks -> Zilliz Cloud
-
-If you are using Zilliz Cloud (the managed Milvus service), you can leverage its convenient Data Import API. Zilliz Cloud provides comprehensive tools and documentation to help you efficiently move your data from various data sources, including Spark and Databricks. Simply set up an S3 bucket as an intermediary and open its access to your Zilliz Cloud account. The Zilliz Cloud's Data Import API will automatically load the full batch of data from the S3 bucket to your Zilliz Cloud cluster.
-
-**Preparations**
-
-1. Load the Spark runtime by adding a jar file to your Databricks Cluster. 
-
-    You can install a library in different ways. This screenshot shows uploading a jar from local to the cluster. For more information, see [Cluster Libraries](https://docs.databricks.com/en/libraries/cluster-libraries.html) in the Databricks documentation.
-
-    ![Install Databricks Library](../../../assets/install-databricks-library.png)
-
-2. Create an S3 bucket and configure it as an external storage location for you Databricks cluster. 
-
-    Bulkinsert required data to be stored in a temporary bucket so that Zilliz Cloud can import the data in a batch. You can create an S3 bucket and configure it as an external location of databricks. Please refer to [External locations](https://docs.databricks.com/en/sql/language-manual/sql-ref-external-locations.html) for details.
-
-3. Secure you Databricks credentials.
-
-    For more details, refer to the instructions on the blog [Securely Managing Credentials in Databricks](https://www.databricks.com/blog/2018/06/04/securely-managing-credentials-in-databricks.html).
-
-**Demo**
-
-Here's a code snippet showcasing the batch data migration process. Similar to the above Milvus example, you just need to replace the credential and S3 bucket address.
-
-```scala
-// Write the data in batch into the Milvus bucket storage.
-val outputPath = "s3://my-temp-bucket/result"
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Databricks---Zilliz-Cloud" class="common-anchor-header">Databricks -&gt; Zilliz Cloud</h3><p>If you are using Zilliz Cloud (the managed Milvus service), you can leverage its convenient Data Import API. Zilliz Cloud provides comprehensive tools and documentation to help you efficiently move your data from various data sources, including Spark and Databricks. Simply set up an S3 bucket as an intermediary and open its access to your Zilliz Cloud account. The Zilliz Cloud’s Data Import API will automatically load the full batch of data from the S3 bucket to your Zilliz Cloud cluster.</p>
+<p><strong>Preparations</strong></p>
+<ol>
+<li><p>Load the Spark runtime by adding a jar file to your Databricks Cluster.</p>
+<p>You can install a library in different ways. This screenshot shows uploading a jar from local to the cluster. For more information, see <a href="https://docs.databricks.com/en/libraries/cluster-libraries.html">Cluster Libraries</a> in the Databricks documentation.</p>
+<p>
+  <span class="img-wrapper">
+    <img src="/docs/v2.4.x/assets/install-databricks-library.png" alt="Install Databricks Library" class="doc-image" id="install-databricks-library" />
+    <span>Install Databricks Library</span>
+  </span>
+</p></li>
+<li><p>Create an S3 bucket and configure it as an external storage location for you Databricks cluster.</p>
+<p>Bulkinsert required data to be stored in a temporary bucket so that Zilliz Cloud can import the data in a batch. You can create an S3 bucket and configure it as an external location of databricks. Please refer to <a href="https://docs.databricks.com/en/sql/language-manual/sql-ref-external-locations.html">External locations</a> for details.</p></li>
+<li><p>Secure you Databricks credentials.</p>
+<p>For more details, refer to the instructions on the blog <a href="https://www.databricks.com/blog/2018/06/04/securely-managing-credentials-in-databricks.html">Securely Managing Credentials in Databricks</a>.</p></li>
+</ol>
+<p><strong>Demo</strong></p>
+<p>Here’s a code snippet showcasing the batch data migration process. Similar to the above Milvus example, you just need to replace the credential and S3 bucket address.</p>
+<pre><code class="language-scala"><span class="hljs-comment">// Write the data in batch into the Milvus bucket storage.</span>
+<span class="hljs-type">val</span> <span class="hljs-variable">outputPath</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;s3://my-temp-bucket/result&quot;</span>
 df.write
-  .mode("overwrite")
-  .format("mjson")
+  .mode(<span class="hljs-string">&quot;overwrite&quot;</span>)
+  .format(<span class="hljs-string">&quot;mjson&quot;</span>)
   .save(outputPath)
-// Specify Milvus options.
-val targetProperties = Map(
-  MilvusOptions.MILVUS_URI -> zilliz_uri,
-  MilvusOptions.MILVUS_TOKEN -> zilliz_token,
-  MilvusOptions.MILVUS_COLLECTION_NAME -> targetCollectionName,
-  MilvusOptions.MILVUS_BUCKET -> bucketName,
-  MilvusOptions.MILVUS_ROOTPATH -> rootPath,
-  MilvusOptions.MILVUS_FS -> fs,
-  MilvusOptions.MILVUS_STORAGE_ENDPOINT -> minioEndpoint,
-  MilvusOptions.MILVUS_STORAGE_USER -> minioAK,
-  MilvusOptions.MILVUS_STORAGE_PASSWORD -> minioSK,
+<span class="hljs-comment">// Specify Milvus options.</span>
+<span class="hljs-type">val</span> <span class="hljs-variable">targetProperties</span> <span class="hljs-operator">=</span> Map(
+  MilvusOptions.MILVUS_URI -&gt; zilliz_uri,
+  MilvusOptions.MILVUS_TOKEN -&gt; zilliz_token,
+  MilvusOptions.MILVUS_COLLECTION_NAME -&gt; targetCollectionName,
+  MilvusOptions.MILVUS_BUCKET -&gt; bucketName,
+  MilvusOptions.MILVUS_ROOTPATH -&gt; rootPath,
+  MilvusOptions.MILVUS_FS -&gt; fs,
+  MilvusOptions.MILVUS_STORAGE_ENDPOINT -&gt; minioEndpoint,
+  MilvusOptions.MILVUS_STORAGE_USER -&gt; minioAK,
+  MilvusOptions.MILVUS_STORAGE_PASSWORD -&gt; minioSK,
 )
-val targetMilvusOptions = new MilvusOptions(new CaseInsensitiveStringMap(targetProperties.asJava))
+<span class="hljs-type">val</span> <span class="hljs-variable">targetMilvusOptions</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusOptions</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">CaseInsensitiveStringMap</span>(targetProperties.asJava))
   
-// Bulk insert Spark output files into Milvus
-MilvusUtils.bulkInsertFromSpark(spark, targetMilvusOptions, outputPath, "mjson")
-```
-
-## Hands-on
-
-To help you quickly get started with the Spark-Milvus Connector, we have prepared a notebook that walks you through both the streaming and batch data transfer processes, with Milvus and Zilliz Cloud.
-
-- [Spark-Milvus Connector Hands-on](https://zilliz.com/databricks_zilliz_demos)
+<span class="hljs-comment">// Bulk insert Spark output files into Milvus</span>
+MilvusUtils.bulkInsertFromSpark(spark, targetMilvusOptions, outputPath, <span class="hljs-string">&quot;mjson&quot;</span>)
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Hands-on" class="common-anchor-header">Hands-on
+    <button data-href="#Hands-on" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To help you quickly get started with the Spark-Milvus Connector, we have prepared a notebook that walks you through both the streaming and batch data transfer processes, with Milvus and Zilliz Cloud.</p>
+<ul>
+<li><a href="https://zilliz.com/databricks_zilliz_demos">Spark-Milvus Connector Hands-on</a></li>
+</ul>

@@ -3,1036 +3,973 @@ id: manage-partitions.md
 title: Manage Partitions
 ---
 
-# Manage Partitions
-
-This guide walks you through how to create and manage partitions in a collection. 
-
-## Overview
-
-A partition in Milvus represents a sub-division of a collection. This functionality allows the physical storage of a collection to be divided into multiple parts, contributing to improved query performance by narrowing down the focus to a smaller subset of data rather than the entire collection.
-
-Upon the creation of a collection, at least a default partition named ___default__ is automatically created. You can create a maximum of 1,024 partitions within a collection.
-
+<h1 id="Manage-Partitions" class="common-anchor-header">Manage Partitions
+    <button data-href="#Manage-Partitions" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This guide walks you through how to create and manage partitions in a collection.</p>
+<h2 id="Overview" class="common-anchor-header">Overview
+    <button data-href="#Overview" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>A partition in Milvus represents a sub-division of a collection. This functionality allows the physical storage of a collection to be divided into multiple parts, contributing to improved query performance by narrowing down the focus to a smaller subset of data rather than the entire collection.</p>
+<p>Upon the creation of a collection, at least a default partition named _<strong>default</strong> is automatically created. You can create a maximum of 1,024 partitions within a collection.</p>
 <div class="admonition note">
-
 <p><b>notes</b></p>
-
 <p>Milvus  introduces a feature called <strong>Partition Key</strong>, leveraging the underlying partitions to store entities based on the hashed values of a specific field. This feature facilitates the implementation of multi-tenancy, enhancing search performance. For details, read <a href="https://milvus.io/docs/use-partition-key.md">Use Partition Key</a>.</p>
 <p>If the <strong>Partition Key</strong> feature is on in a collection, Milvus takes care of managing all the partitions, relieving you of this responsibility.</p>
-
 </div>
-
-## Preparations
-
-The code snippet below repurposes the existing code to establish a connection to Milvus and create a collection in a quick-setup mode, indicating that the collection is loaded upon creation.
-
+<h2 id="Preparations" class="common-anchor-header">Preparations
+    <button data-href="#Preparations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>The code snippet below repurposes the existing code to establish a connection to Milvus and create a collection in a quick-setup mode, indicating that the collection is loaded upon creation.</p>
 <div class="language-python">
-
-For preparations, use [`MilvusClient`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md) to connect to Milvus and [`create_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md) to create a collection in a quick-setup mode.
-
+<p>For preparations, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Client/MilvusClient.md"><code>MilvusClient</code></a> to connect to Milvus and <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Collections/create_collection.md"><code>create_collection()</code></a> to create a collection in a quick-setup mode.</p>
 </div>
-
 <div class="language-java">
-
-For preparations, use [`MilvusClientV2`](https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md) to connect to Milvus and [`createCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md) to create a collection in a quick-setup mode.
-
+<p>For preparations, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Client/MilvusClientV2.md"><code>MilvusClientV2</code></a> to connect to Milvus and <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Collections/createCollection.md"><code>createCollection()</code></a> to create a collection in a quick-setup mode.</p>
 </div>
-
 <div class="language-javascript">
-
-For preparations, use [`MilvusClient`](https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md) to connect to Milvus and [`createCollection()`](https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md) to create a collection in a quick-setup mode.
-
+<p>For preparations, use <a href="https://milvus.io/api-reference/node/v2.4.x/Client/MilvusClient.md"><code>MilvusClient</code></a> to connect to Milvus and <a href="https://milvus.io/api-reference/node/v2.4.x/Collections/createCollection.md"><code>createCollection()</code></a> to create a collection in a quick-setup mode.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
+<pre><code class="language-python"><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> MilvusClient, DataType
 
-```python
-from pymilvus import MilvusClient, DataType
-
-# 1. Set up a Milvus client
+<span class="hljs-comment"># 1. Set up a Milvus client</span>
 client = MilvusClient(
-    uri="http://localhost:19530"
+    uri=<span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 )
 
-# 2. Create a collection
+<span class="hljs-comment"># 2. Create a collection</span>
 client.create_collection(
-    collection_name="quick_setup",
-    dimension=5,
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    dimension=<span class="hljs-number">5</span>,
 )
 
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.client.ConnectConfig;
+<span class="hljs-keyword">import</span> io.milvus.v2.client.MilvusClientV2;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.CreateCollectionReq;
 
-```java
-import io.milvus.v2.client.ConnectConfig;
-import io.milvus.v2.client.MilvusClientV2;
-import io.milvus.v2.service.collection.request.CreateCollectionReq;
+<span class="hljs-type">String</span> <span class="hljs-variable">CLUSTER_ENDPOINT</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;http://localhost:19530&quot;</span>;
 
-String CLUSTER_ENDPOINT = "http://localhost:19530";
-
-// 1. Connect to Milvus server
-ConnectConfig connectConfig = ConnectConfig.builder()
+<span class="hljs-comment">// 1. Connect to Milvus server</span>
+<span class="hljs-type">ConnectConfig</span> <span class="hljs-variable">connectConfig</span> <span class="hljs-operator">=</span> ConnectConfig.builder()
     .uri(CLUSTER_ENDPOINT)
     .build();
 
-MilvusClientV2 client = new MilvusClientV2(connectConfig);
+<span class="hljs-type">MilvusClientV2</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClientV2</span>(connectConfig);
 
-// 2. Create a collection in quick setup mode
-CreateCollectionReq quickSetupReq = CreateCollectionReq.builder()
-    .collectionName("quick_setup")
-    .dimension(5)
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-type">CreateCollectionReq</span> <span class="hljs-variable">quickSetupReq</span> <span class="hljs-operator">=</span> CreateCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .dimension(<span class="hljs-number">5</span>)
     .build();
 
 client.createCollection(quickSetupReq);
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> address = <span class="hljs-string">&quot;http://localhost:19530&quot;</span>
 
-```javascript
-const address = "http://localhost:19530"
+<span class="hljs-comment">// 1. Set up a Milvus Client</span>
+client = <span class="hljs-keyword">new</span> <span class="hljs-title class_">MilvusClient</span>({address});
 
-// 1. Set up a Milvus Client
-client = new MilvusClient({address});
-
-// 2. Create a collection in quick setup mode
-await client.createCollection({
-    collection_name: "quick_setup",
-    dimension: 5,
+<span class="hljs-comment">// 2. Create a collection in quick setup mode</span>
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">dimension</span>: <span class="hljs-number">5</span>,
 });  
-```
-
+<button class="copy-code-btn"></button></code></pre>
 <div class="admonition note">
-
 <p><b>notes</b></p>
-
 <p>In the above code snippet, the index of the collection has been created along with the collection, indicating that the collection is loaded upon creation.</p>
-
 </div>
-
-## List Partitions
-
-Once a collection is ready, you can list its partitions.
-
+<h2 id="List-Partitions" class="common-anchor-header">List Partitions
+    <button data-href="#List-Partitions" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Once a collection is ready, you can list its partitions.</p>
 <div class="language-python">
-
-To list partitions, use [`list_partitions()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/list_partitions.md).
-
+<p>To list partitions, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/list_partitions.md"><code>list_partitions()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To list partitions, use [`listPartitions()`](https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/listPartitions.md).  
-
+<p>To list partitions, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/listPartitions.md"><code>listPartitions()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To list partitions, use [`listPartitions()`](https://milvus.io/api-reference/node/v2.4.x/Partitions/listPartitions.md).
-
+<p>To list partitions, use <a href="https://milvus.io/api-reference/node/v2.4.x/Partitions/listPartitions.md"><code>listPartitions()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
+<pre><code class="language-python"><span class="hljs-comment"># 3. List partitions</span>
+res = client.list_partitions(collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>)
+<span class="hljs-built_in">print</span>(res)
 
-```python
-# 3. List partitions
-res = client.list_partitions(collection_name="quick_setup")
-print(res)
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [&quot;_default&quot;]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.<span class="hljs-property">milvus</span>.<span class="hljs-property">v2</span>.<span class="hljs-property">service</span>.<span class="hljs-property">partition</span>.<span class="hljs-property">request</span>.<span class="hljs-property">ListPartitionsReq</span>;
 
-# Output
-#
-# ["_default"]
-```
+<span class="hljs-comment">// 3. List all partitions in the collection</span>
+<span class="hljs-title class_">ListPartitionsReq</span> listPartitionsReq = <span class="hljs-title class_">ListPartitionsReq</span>.<span class="hljs-title function_">builder</span>()
+    .<span class="hljs-title function_">collectionName</span>(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .<span class="hljs-title function_">build</span>();
 
-```java
-import io.milvus.v2.service.partition.request.ListPartitionsReq;
+<span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">String</span>&gt; partitionNames = client.<span class="hljs-title function_">listPartitions</span>(listPartitionsReq);
 
-// 3. List all partitions in the collection
-ListPartitionsReq listPartitionsReq = ListPartitionsReq.builder()
-    .collectionName("quick_setup")
-    .build();
+<span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(partitionNames);
 
-List<String> partitionNames = client.listPartitions(listPartitionsReq);
-
-System.out.println(partitionNames);
-
-// Output:
-// ["_default"]
-```
-
-```javascript
-// 3. List partitions
-res = await client.listPartitions({
-    collection_name: "quick_setup"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [&quot;_default&quot;]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 3. List partitions</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">listPartitions</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res.partition_names)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">partition_names</span>)
 
-// Output
-// 
-// [ '_default' ]
-// 
-```
-
-The output of the above code snippet includes the names of the partitions within the specified collection.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ &#x27;_default&#x27; ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<p>The output of the above code snippet includes the names of the partitions within the specified collection.</p>
 <div class="admonition note">
-
 <p><b>notes</b></p>
-
 <p>If you have set a field as the partition key in a collection, Milvus creates at least <strong>64</strong> partitions along with the collection. When listing the partitions, the results may differ from the output of the above code snippets.</p>
 <p>For details, refer to <a href="https://milvus.io/docs/use-partition-key.md">Use Partition Key</a>.</p>
-
 </div>
-
-## Create Partitions
-
-You can add more partitions to the collection. A collection can have up to 1,024 partitions.
-
+<h2 id="Create-Partitions" class="common-anchor-header">Create Partitions
+    <button data-href="#Create-Partitions" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>You can add more partitions to the collection. A collection can have up to 1,024 partitions.</p>
 <div class="language-python">
-
-To create partitions, use [`create_partition()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/create_partition.md).
-
+<p>To create partitions, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/create_partition.md"><code>create_partition()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To create partitions, use [`createPartition()`](https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/createPartition.md).
-
+<p>To create partitions, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/createPartition.md"><code>createPartition()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To create partitions, use [`createPartition()`](https://milvus.io/api-reference/node/v2.4.x/Partitions/createPartition.md).
-
+<p>To create partitions, use <a href="https://milvus.io/api-reference/node/v2.4.x/Partitions/createPartition.md"><code>createPartition()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 4. Create more partitions
+<pre><code class="language-python"><span class="hljs-comment"># 4. Create more partitions</span>
 client.create_partition(
-    collection_name="quick_setup",
-    partition_name="partitionA"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionA&quot;</span>
 )
 
 client.create_partition(
-    collection_name="quick_setup",
-    partition_name="partitionB"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionB&quot;</span>
 )
 
-res = client.list_partitions(collection_name="quick_setup")
-print(res)
+res = client.list_partitions(collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# ["_default", "partitionA", "partitionB"]
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [&quot;_default&quot;, &quot;partitionA&quot;, &quot;partitionB&quot;]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.partition.request.CreatePartitionReq;
 
-```java
-import io.milvus.v2.service.partition.request.CreatePartitionReq;
-
-// 4. Create more partitions
-CreatePartitionReq createPartitionReq = CreatePartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionA")
+<span class="hljs-comment">// 4. Create more partitions</span>
+<span class="hljs-type">CreatePartitionReq</span> <span class="hljs-variable">createPartitionReq</span> <span class="hljs-operator">=</span> CreatePartitionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionA&quot;</span>)
     .build();
 
 client.createPartition(createPartitionReq);
 
 createPartitionReq = CreatePartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionB")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionB&quot;</span>)
     .build();
 
 client.createPartition(createPartitionReq);
 
 listPartitionsReq = ListPartitionsReq.builder()
-    .collectionName("quick_setup")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .build();
 
 partitionNames = client.listPartitions(listPartitionsReq);
 
 System.out.println(partitionNames);
 
-// Output:
-// [
-//     "_default",
-//     "partitionA",
-//     "partitionB"
-// ]
-```
-
-```javascript
-// 4. Create more partitions
-await client.createPartition({
-    collection_name: "quick_setup",
-    partition_name: "partitionA"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//     &quot;_default&quot;,</span>
+<span class="hljs-comment">//     &quot;partitionA&quot;,</span>
+<span class="hljs-comment">//     &quot;partitionB&quot;</span>
+<span class="hljs-comment">// ]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 4. Create more partitions</span>
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionA&quot;</span>
 })
 
-await client.createPartition({
-    collection_name: "quick_setup",
-    partition_name: "partitionB"
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">createPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionB&quot;</span>
 })
 
-res = await client.listPartitions({
-    collection_name: "quick_setup"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">listPartitions</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res.partition_names)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">partition_names</span>)
 
-// Output
-// 
-// [ '_default', 'partitionA', 'partitionB' ]
-// 
-```
-
-The code snippet above creates a partition in a collection and lists the partitions of the collection.
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// [ &#x27;_default&#x27;, &#x27;partitionA&#x27;, &#x27;partitionB&#x27; ]</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<p>The code snippet above creates a partition in a collection and lists the partitions of the collection.</p>
 <div class="admonition note">
-
 <p><b>notes</b></p>
-
 <p>If you have set a field as the partition key in a collection, Milvus takes care of managing the partitions in the collection. Therefore, you may encounter prompted errors when attempting to create partitions.</p>
 <p>For details, refer to <a href="https://milvus.io/docs/use-partition-key.md">Use Partition Key</a>.</p>
-
 </div>
-
-## Check for a Specific Partition
-
-You can also check the existence of a specific partition.
-
+<h2 id="Check-for-a-Specific-Partition" class="common-anchor-header">Check for a Specific Partition
+    <button data-href="#Check-for-a-Specific-Partition" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>You can also check the existence of a specific partition.</p>
 <div class="language-python">
-
-To check for a specific partition, use [`has_partition()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/has_partition.md).
-
+<p>To check for a specific partition, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/has_partition.md"><code>has_partition()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To check for a specific partition, use [`hasPartition()`](https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/hasPartition.md).
-
+<p>To check for a specific partition, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/hasPartition.md"><code>hasPartition()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To check for a specific partition, use [`hasPartition()`](https://milvus.io/api-reference/node/v2.4.x/Partitions/hasPartition.md).
-
+<p>To check for a specific partition, use <a href="https://milvus.io/api-reference/node/v2.4.x/Partitions/hasPartition.md"><code>hasPartition()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 5. Check whether a partition exists
+<pre><code class="language-python"><span class="hljs-comment"># 5. Check whether a partition exists</span>
 res = client.has_partition(
-    collection_name="quick_setup",
-    partition_name="partitionA"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionA&quot;</span>
 )
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# True
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># True</span>
 
 res = client.has_partition(
-    collection_name="quick_setup",
-    partition_name="partitionC"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionC&quot;</span>
 )
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# False
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># False</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.partition.request.HasPartitionReq;
 
-```java
-import io.milvus.v2.service.partition.request.HasPartitionReq;
-
-// 5. Check whether a partition exists
-HasPartitionReq hasPartitionReq = HasPartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionA")
+<span class="hljs-comment">// 5. Check whether a partition exists</span>
+<span class="hljs-type">HasPartitionReq</span> <span class="hljs-variable">hasPartitionReq</span> <span class="hljs-operator">=</span> HasPartitionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionA&quot;</span>)
     .build();
 
-boolean exists = client.hasPartition(hasPartitionReq);
+<span class="hljs-type">boolean</span> <span class="hljs-variable">exists</span> <span class="hljs-operator">=</span> client.hasPartition(hasPartitionReq);
 
 System.out.println(exists);
 
-// Output:
-// true
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
 
 hasPartitionReq = HasPartitionReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionC")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionC&quot;</span>)
     .build();
 
 exists = client.hasPartition(hasPartitionReq);
 
 System.out.println(exists);
 
-// Output:
-// false
-```
-
-```javascript
-// 5. Check whether a partition exists
-res = await client.hasPartition({
-    collection_name: "quick_setup",
-    partition_name: "partitionA"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// false</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 5. Check whether a partition exists</span>
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">hasPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionA&quot;</span>
 })
 
-console.log(res.value)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">value</span>)
 
-// Output
-// 
-// true
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// true</span>
+<span class="hljs-comment">// </span>
 
-res = await client.hasPartition({
-    collection_name: "quick_setup",
-    partition_name: "partitionC"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">hasPartition</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionC&quot;</span>
 })
 
-console.log(res.value)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">value</span>)
 
-// Output
-// 
-// false
-// 
-```
-
-The code snippet above checks whether the collection has a partition named `partitionA` and `partitionC`.
-
-## Load & Release Partitions
-
-You can load and release specific partitions to make them available or unavailable for searches and queries. 
-
-### Get Load Status
-
-<div class="language-python">
-
-To check the load status of a collection and its partitions, use [`get_load_state()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/get_load_state.md).
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// false</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<p>The code snippet above checks whether the collection has a partition named <code>partitionA</code> and <code>partitionC</code>.</p>
+<h2 id="Load--Release-Partitions" class="common-anchor-header">Load &amp; Release Partitions
+    <button data-href="#Load--Release-Partitions" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>You can load and release specific partitions to make them available or unavailable for searches and queries.</p>
+<h3 id="Get-Load-Status" class="common-anchor-header">Get Load Status</h3><div class="language-python">
+<p>To check the load status of a collection and its partitions, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/get_load_state.md"><code>get_load_state()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To check the load status of a collection and its partitions, use [`getLoadState()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/getLoadState.md).
-
+<p>To check the load status of a collection and its partitions, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/getLoadState.md"><code>getLoadState()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To check the load status of a collection and its partitions, use [`getLoadState()`](https://milvus.io/api-reference/node/v2.4.x/Management/getLoadState.md).
-
+<p>To check the load status of a collection and its partitions, use <a href="https://milvus.io/api-reference/node/v2.4.x/Management/getLoadState.md"><code>getLoadState()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
+<pre><code class="language-python"><span class="hljs-comment"># Release the collection</span>
+client.release_collection(collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>)
 
-```python
-# Release the collection
-client.release_collection(collection_name="quick_setup")
+<span class="hljs-comment"># Check the load status</span>
+res = client.get_load_state(collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>)
+<span class="hljs-built_in">print</span>(res)
 
-# Check the load status
-res = client.get_load_state(collection_name="quick_setup")
-print(res)
-
-# Output
-#
-# {
-#     "state": "<LoadState: Loaded>"
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
 
 res = client.get_load_state(
-    collection_name="quick_setup", 
-    partition_name="partitionA"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>, 
+    partition_name=<span class="hljs-string">&quot;partitionA&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "state": "<LoadState: Loaded>"
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
 
 res = client.get_load_state(
-    collection_name="quick_setup", 
-    partition_name="partitionB"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>, 
+    partition_name=<span class="hljs-string">&quot;partitionB&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "state": "<LoadState: NotLoad>"
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: NotLoad&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
 
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.GetLoadStateReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.collection.request.ReleaseCollectionReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.partition.request.LoadPartitionsReq;
+<span class="hljs-keyword">import</span> io.milvus.v2.service.partition.request.ReleasePartitionsReq;
 
-```java
-import io.milvus.v2.service.collection.request.GetLoadStateReq;
-import io.milvus.v2.service.collection.request.ReleaseCollectionReq;
-import io.milvus.v2.service.partition.request.LoadPartitionsReq;
-import io.milvus.v2.service.partition.request.ReleasePartitionsReq;
-
-// 6. Load a partition independantly
-// 6.1 Release the collection
-ReleaseCollectionReq releaseCollectionReq = ReleaseCollectionReq.builder()
-    .collectionName("quick_setup")
+<span class="hljs-comment">// 6. Load a partition independantly</span>
+<span class="hljs-comment">// 6.1 Release the collection</span>
+<span class="hljs-type">ReleaseCollectionReq</span> <span class="hljs-variable">releaseCollectionReq</span> <span class="hljs-operator">=</span> ReleaseCollectionReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .build();
 
 client.releaseCollection(releaseCollectionReq);
 
-// 6.2 Load partitionA
-LoadPartitionsReq loadPartitionsReq = LoadPartitionsReq.builder()
-    .collectionName("quick_setup")
-    .partitionNames(List.of("partitionA"))
+<span class="hljs-comment">// 6.2 Load partitionA</span>
+<span class="hljs-type">LoadPartitionsReq</span> <span class="hljs-variable">loadPartitionsReq</span> <span class="hljs-operator">=</span> LoadPartitionsReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionNames(List.of(<span class="hljs-string">&quot;partitionA&quot;</span>))
     .build();
 
 client.loadPartitions(loadPartitionsReq);
 
-Thread.sleep(3000);
+Thread.sleep(<span class="hljs-number">3000</span>);
 
-// 6.3 Check the load status of the collection and its partitions
-GetLoadStateReq getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
+<span class="hljs-comment">// 6.3 Check the load status of the collection and its partitions</span>
+<span class="hljs-type">GetLoadStateReq</span> <span class="hljs-variable">getLoadStateReq</span> <span class="hljs-operator">=</span> GetLoadStateReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .build();
 
-boolean state = client.getLoadState(getLoadStateReq);
+<span class="hljs-type">boolean</span> <span class="hljs-variable">state</span> <span class="hljs-operator">=</span> client.getLoadState(getLoadStateReq);
 
 System.out.println(state);
 
-// Output:
-// true
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
 
 getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionA")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionA&quot;</span>)
     .build();
 
 state = client.getLoadState(getLoadStateReq);
 
 System.out.println(state);
 
-// Output:
-// true
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
 
 getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionB")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionB&quot;</span>)
     .build();
 
 state = client.getLoadState(getLoadStateReq);
 
 System.out.println(state);
 
-// Output:
-// false
-```
-
-```javascript
-// 6. Load a partition indenpendantly
-await client.releaseCollection({
-    collection_name: "quick_setup"
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// false</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 6. Load a partition indenpendantly</span>
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">releaseCollection</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-res = await client.getLoadState({
-    collection_name: "quick_setup"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateNotLoad
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateNotLoad</span>
+<span class="hljs-comment">// </span>
 
-await client.loadPartitions({
-    collection_name: "quick_setup",
-    partition_names: ["partitionA"]
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">loadPartitions</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;partitionA&quot;</span>]
 })
 
-await sleep(3000)
+<span class="hljs-keyword">await</span> <span class="hljs-title function_">sleep</span>(<span class="hljs-number">3000</span>)
 
-res = await client.getLoadState({
-    collection_name: "quick_setup"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateLoaded
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">// </span>
 
-res = await client.getLoadState({
-    collection_name: "quick_setup",
-    partition_name: "partitionA"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionA&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateLoaded
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">// </span>
 
-res = await client.getLoadState({
-    collection_name: "quick_setup",
-    partition_name: "partitionB"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionB&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateLoaded
-// 
-```
-
-Possible load status may be either of the following
-
-- __Loaded__
-
-    A collection is marked as `Loaded` if at least one of its partitions has been loaded.
-
-- __NotLoad__
-
-    A collection is marked as `NotLoad` if none of its partitions has been loaded.
-
-- __Loading__
-
-    A collection is marked as Loading if at least one of its partitions is in the loading process.
-
-
-### Load Partitions
-
-<div class="language-python">
-
-To load all partitions of a collection, you can just call [`load_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/load_collection.md). To load specific partitions of a collection, use [`load_partitions()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/load_partitions.md).
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<p>Possible load status may be either of the following</p>
+<ul>
+<li><p><strong>Loaded</strong></p>
+<p>A collection is marked as <code>Loaded</code> if at least one of its partitions has been loaded.</p></li>
+<li><p><strong>NotLoad</strong></p>
+<p>A collection is marked as <code>NotLoad</code> if none of its partitions has been loaded.</p></li>
+<li><p><strong>Loading</strong></p>
+<p>A collection is marked as Loading if at least one of its partitions is in the loading process.</p></li>
+</ul>
+<h3 id="Load-Partitions" class="common-anchor-header">Load Partitions</h3><div class="language-python">
+<p>To load all partitions of a collection, you can just call <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/load_collection.md"><code>load_collection()</code></a>. To load specific partitions of a collection, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/load_partitions.md"><code>load_partitions()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To load all partitions of a collection, you can just call [`loadCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/loadCollection.md). To load specific partitions of a collection, use [`loadPartitions()`](https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/loadPartitions.md).
-
+<p>To load all partitions of a collection, you can just call <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/loadCollection.md"><code>loadCollection()</code></a>. To load specific partitions of a collection, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/loadPartitions.md"><code>loadPartitions()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To load all partitions of a collection, you can just call [`loadCollection()`](https://milvus.io/api-reference/node/v2.4.x/Management/loadCollection.md). To load specific partitions of a collection, use [`loadPartitions()`](https://milvus.io/api-reference/node/v2.4.x/Partitions/loadPartitions.md).
-
+<p>To load all partitions of a collection, you can just call <a href="https://milvus.io/api-reference/node/v2.4.x/Management/loadCollection.md"><code>loadCollection()</code></a>. To load specific partitions of a collection, use <a href="https://milvus.io/api-reference/node/v2.4.x/Partitions/loadPartitions.md"><code>loadPartitions()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-client.load_partitions(
-    collection_name="quick_setup",
-    partition_names=["partitionA"]
+<pre><code class="language-python">client.load_partitions(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_names=[<span class="hljs-string">&quot;partitionA&quot;</span>]
 )
 
-res = client.get_load_state(collection_name="quick_setup")
-print(res)
+res = client.get_load_state(collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "state": "<LoadState: Loaded>"
-# }
-```
-
-```java
-LoadPartitionsReq loadPartitionsReq = LoadPartitionsReq.builder()
-    .collectionName("quick_setup")
-    .partitionNames(List.of("partitionA"))
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-type">LoadPartitionsReq</span> <span class="hljs-variable">loadPartitionsReq</span> <span class="hljs-operator">=</span> LoadPartitionsReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionNames(List.of(<span class="hljs-string">&quot;partitionA&quot;</span>))
     .build();
 
 client.loadPartitions(loadPartitionsReq);
 
 getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionA")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionA&quot;</span>)
     .build();
 
 state = client.getLoadState(getLoadStateReq);
 
 System.out.println(state);
 
-// Output:
-// true
-```
-
-```javascript
-await client.loadPartitions({
-    collection_name: "quick_setup",
-    partition_names: ["partitionA"]
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-keyword">await</span> client.<span class="hljs-title function_">loadPartitions</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;partitionA&quot;</span>]
 })
 
-res = await client.getLoadState({
-    collection_name: "quick_setup",
-    partition_name: "partitionA"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionA&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateLoaded
-//
-```
-
-To load multiple partitions at a time, do as follows:
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">//</span>
+<button class="copy-code-btn"></button></code></pre>
+<p>To load multiple partitions at a time, do as follows:</p>
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-client.load_partitions(
-    collection_name="quick_setup",
-    partition_names=["partitionA", "partitionB"]
+<pre><code class="language-python">client.load_partitions(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_names=[<span class="hljs-string">&quot;partitionA&quot;</span>, <span class="hljs-string">&quot;partitionB&quot;</span>]
 )
 
 res = client.get_load_status(
-    collection_name="quick_setup",
-    partition_name="partitionA"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionA&quot;</span>
 )
 
-# Output
-#
-# {
-#     "state": "<LoadState: Loaded>"
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
 
 res = client.get_load_status(
-    collection_name="quick_setup",
-    partition_name="partitionB"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionB&quot;</span>
 )
 
-# Output
-#
-# {
-#     "state": "<LoadState: Loaded>"
-# }
-```
-
-```java
-LoadPartitionsReq loadPartitionsReq = LoadPartitionsReq.builder()
-    .collectionName("quick_setup")
-    .partitionNames(List.of("partitionA", "partitionB"))
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: Loaded&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java">LoadPartitionsReq loadPartitionsReq = LoadPartitionsReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionNames(List.of(<span class="hljs-string">&quot;partitionA&quot;</span>, <span class="hljs-string">&quot;partitionB&quot;</span>))
     .build();
 
 client.loadPartitions(loadPartitionsReq);
 
 getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionA")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionA&quot;</span>)
     .build();
 
 state = client.getLoadState(getLoadStateReq);
 
-System.out.println(state);
+System.out.<span class="hljs-built_in">println</span>(state);
 
-// Output:
-// true
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
 
 getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionB")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionB&quot;</span>)
     .build();
 
 state = client.getLoadState(getLoadStateReq);
 
-System.out.println(state);
+System.out.<span class="hljs-built_in">println</span>(state);
 
-// Output:
-// true
-```
-
-```javascript
-await client.loadPartitions({
-    collection_name: "quick_setup",
-    partition_names: ["partitionA", "partitionB"]
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// true</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-keyword">await</span> client.<span class="hljs-title function_">loadPartitions</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;partitionA&quot;</span>, <span class="hljs-string">&quot;partitionB&quot;</span>]
 })
 
-res = await client.getLoadState({
-    collection_name: "quick_setup",
-    partition_name: "partitionA"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionA&quot;</span>
 })
 
-console.log(res)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res)
 
-// Output
-// 
-// LoadStateLoaded
-// 
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">// </span>
 
-res = await client.getLoadState({
-    collection_name: "quick_setup",
-    partition_name: "partitionB"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_name</span>: <span class="hljs-string">&quot;partitionB&quot;</span>
 })
 
-console.log(res)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res)
 
-// Output
-// 
-// LoadStateLoaded
-// 
-```
-
-### Release Partitions
-
-<div class="language-python">
-
-To release all partitions of a collection, you can just call [`release_collection()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/release_collection.md). To release specific partitions of a collection, use [`release_partitions()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/release_partitions.md).
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateLoaded</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<h3 id="Release-Partitions" class="common-anchor-header">Release Partitions</h3><div class="language-python">
+<p>To release all partitions of a collection, you can just call <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Management/release_collection.md"><code>release_collection()</code></a>. To release specific partitions of a collection, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/release_partitions.md"><code>release_partitions()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To release all partitions of a collection, you can just call [`releaseCollection()`](https://milvus.io/api-reference/java/v2.4.x/v2/Management/releaseCollection.md). To release specific partitions of a collection, use [`releasePartitions()`](https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/releasePartitions.md).
-
+<p>To release all partitions of a collection, you can just call <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Management/releaseCollection.md"><code>releaseCollection()</code></a>. To release specific partitions of a collection, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/releasePartitions.md"><code>releasePartitions()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To release all partitions of a collection, you can just call [`releaseCollection()`](https://milvus.io/api-reference/node/v2.4.x/Management/releaseCollection.md). To release specific partitions of a collection, use [`releasePartitions()`](https://milvus.io/api-reference/node/v2.4.x/Partitions/releasePartitions.md).
-
+<p>To release all partitions of a collection, you can just call <a href="https://milvus.io/api-reference/node/v2.4.x/Management/releaseCollection.md"><code>releaseCollection()</code></a>. To release specific partitions of a collection, use <a href="https://milvus.io/api-reference/node/v2.4.x/Partitions/releasePartitions.md"><code>releasePartitions()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 7. Release a partition
+<pre><code class="language-python"><span class="hljs-comment"># 7. Release a partition</span>
 client.release_partitions(
-    collection_name="quick_setup",
-    partition_names=["partitionA"]
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_names=[<span class="hljs-string">&quot;partitionA&quot;</span>]
 )
 
 res = client.get_load_state(
-    collection_name="quick_setup", 
-    partition_name="partitionA"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>, 
+    partition_name=<span class="hljs-string">&quot;partitionA&quot;</span>
 )
 
-print(res)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# {
-#     "state": "<LoadState: NotLoad>"
-# }
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: NotLoad&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
 
-```
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.partition.request.ReleasePartitionsReq;
 
-```java
-import io.milvus.v2.service.partition.request.ReleasePartitionsReq;
-
-// 7. Release a partition
-ReleasePartitionsReq releasePartitionsReq = ReleasePartitionsReq.builder()
-    .collectionName("quick_setup")
-    .partitionNames(List.of("partitionA"))
+<span class="hljs-comment">// 7. Release a partition</span>
+<span class="hljs-type">ReleasePartitionsReq</span> <span class="hljs-variable">releasePartitionsReq</span> <span class="hljs-operator">=</span> ReleasePartitionsReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionNames(List.of(<span class="hljs-string">&quot;partitionA&quot;</span>))
     .build();
 
 client.releasePartitions(releasePartitionsReq);
 
 getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
-    .partitionName("partitionA")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionName(<span class="hljs-string">&quot;partitionA&quot;</span>)
     .build();
 
 state = client.getLoadState(getLoadStateReq);
 
 System.out.println(state);
 
-// Output:
-// false
-```
-
-```javascript
-// 7. Release a partition
-await client.releasePartitions({
-    collection_name: "quick_setup",
-    partition_names: ["partitionA"]
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// false</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript"><span class="hljs-comment">// 7. Release a partition</span>
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">releasePartitions</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;partitionA&quot;</span>]
 })
 
-res = await client.getLoadState({
-    collection_name: "quick_setup"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res.state)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res.<span class="hljs-property">state</span>)
 
-// Output
-// 
-// LoadStateNotLoad
-// 
-```
-
-To release multiple partitions at a time, do as follows:
-
-```python
-client.release_partitions(
-    collection_name="quick_setup",
-    partition_names=["_default", "partitionA", "partitionB"]
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// LoadStateNotLoad</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
+<p>To release multiple partitions at a time, do as follows:</p>
+<pre><code class="language-python">client.release_partitions(
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_names=[<span class="hljs-string">&quot;_default&quot;</span>, <span class="hljs-string">&quot;partitionA&quot;</span>, <span class="hljs-string">&quot;partitionB&quot;</span>]
 )
 
 res = client.get_load_status(
-    collection_name="quick_setup",
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
 )
 
-# Output
-#
-# {
-#     "state": "<LoadState: NotLoad>"
-# }
-```
-
-## Drop Partitions
-
-Once you release a partition, you can drop it if it is no longer needed.
-
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># {</span>
+<span class="hljs-comment">#     &quot;state&quot;: &quot;&lt;LoadState: NotLoad&gt;&quot;</span>
+<span class="hljs-comment"># }</span>
+<button class="copy-code-btn"></button></code></pre>
+<h2 id="Drop-Partitions" class="common-anchor-header">Drop Partitions
+    <button data-href="#Drop-Partitions" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>Once you release a partition, you can drop it if it is no longer needed.</p>
 <div class="language-python">
-
-To drop a partition, use [`drop_partition()`](https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/drop_partition.md).
-
+<p>To drop a partition, use <a href="https://milvus.io/api-reference/pymilvus/v2.4.x/MilvusClient/Partitions/drop_partition.md"><code>drop_partition()</code></a>.</p>
 </div>
-
 <div class="language-java">
-
-To drop a partition, use [`dropPartition()`](https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/dropPartition.md).
-
+<p>To drop a partition, use <a href="https://milvus.io/api-reference/java/v2.4.x/v2/Partitions/dropPartition.md"><code>dropPartition()</code></a>.</p>
 </div>
-
 <div class="language-javascript">
-
-To drop a partition, use [`dropPartition()`](https://milvus.io/api-reference/node/v2.4.x/Partitions/dropPartition.md).
-
+<p>To drop a partition, use <a href="https://milvus.io/api-reference/node/v2.4.x/Partitions/dropPartition.md"><code>dropPartition()</code></a>.</p>
 </div>
-
 <div class="multipleCode">
     <a href="#python">Python </a>
     <a href="#java">Java</a>
     <a href="#javascript">Node.js</a>
 </div>
-
-```python
-# 8. Drop a partition
+<pre><code class="language-python"><span class="hljs-comment"># 8. Drop a partition</span>
 client.drop_partition(
-    collection_name="quick_setup",
-    partition_name="partitionB"
+    collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>,
+    partition_name=<span class="hljs-string">&quot;partitionB&quot;</span>
 )
 
-res = client.list_partitions(collection_name="quick_setup")
-print(res)
+res = client.list_partitions(collection_name=<span class="hljs-string">&quot;quick_setup&quot;</span>)
+<span class="hljs-built_in">print</span>(res)
 
-# Output
-#
-# ["_default", "partitionA"]
-```
+<span class="hljs-comment"># Output</span>
+<span class="hljs-comment">#</span>
+<span class="hljs-comment"># [&quot;_default&quot;, &quot;partitionA&quot;]</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-java"><span class="hljs-keyword">import</span> io.milvus.v2.service.partition.request.ReleasePartitionsReq;
 
-```java
-import io.milvus.v2.service.partition.request.ReleasePartitionsReq;
-
-ReleasePartitionsReq releasePartitionsReq = ReleasePartitionsReq.builder()
-    .collectionName("quick_setup")
-    .partitionNames(List.of("_default", "partitionA", "partitionB"))
+<span class="hljs-type">ReleasePartitionsReq</span> <span class="hljs-variable">releasePartitionsReq</span> <span class="hljs-operator">=</span> ReleasePartitionsReq.builder()
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
+    .partitionNames(List.of(<span class="hljs-string">&quot;_default&quot;</span>, <span class="hljs-string">&quot;partitionA&quot;</span>, <span class="hljs-string">&quot;partitionB&quot;</span>))
     .build();
 
 client.releasePartitions(releasePartitionsReq);
 
 getLoadStateReq = GetLoadStateReq.builder()
-    .collectionName("quick_setup")
+    .collectionName(<span class="hljs-string">&quot;quick_setup&quot;</span>)
     .build();
 
 state = client.getLoadState(getLoadStateReq);
 
 System.out.println(state);
 
-// Output:
-// false
-```
-
-```javascript
-
-await client.releasePartitions({
-    collection_name: "quick_setup",
-    partition_names: ["_default", "partitionA", "partitionB"]
+<span class="hljs-comment">// Output:</span>
+<span class="hljs-comment">// false</span>
+<button class="copy-code-btn"></button></code></pre>
+<pre><code class="language-javascript">
+<span class="hljs-keyword">await</span> client.<span class="hljs-title function_">releasePartitions</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>,
+    <span class="hljs-attr">partition_names</span>: [<span class="hljs-string">&quot;_default&quot;</span>, <span class="hljs-string">&quot;partitionA&quot;</span>, <span class="hljs-string">&quot;partitionB&quot;</span>]
 })
 
-res = await client.getLoadState({
-    collection_name: "quick_setup"
+res = <span class="hljs-keyword">await</span> client.<span class="hljs-title function_">getLoadState</span>({
+    <span class="hljs-attr">collection_name</span>: <span class="hljs-string">&quot;quick_setup&quot;</span>
 })
 
-console.log(res)
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(res)
 
-// Output
-// 
-// {
-//   status: {
-//     error_code: 'Success',
-//     reason: '',
-//     code: 0,
-//     retriable: false,
-//     detail: ''
-//   },
-//   state: 'LoadStateNotLoad'
-// }
-// 
-```
-
+<span class="hljs-comment">// Output</span>
+<span class="hljs-comment">// </span>
+<span class="hljs-comment">// {</span>
+<span class="hljs-comment">//   status: {</span>
+<span class="hljs-comment">//     error_code: &#x27;Success&#x27;,</span>
+<span class="hljs-comment">//     reason: &#x27;&#x27;,</span>
+<span class="hljs-comment">//     code: 0,</span>
+<span class="hljs-comment">//     retriable: false,</span>
+<span class="hljs-comment">//     detail: &#x27;&#x27;</span>
+<span class="hljs-comment">//   },</span>
+<span class="hljs-comment">//   state: &#x27;LoadStateNotLoad&#x27;</span>
+<span class="hljs-comment">// }</span>
+<span class="hljs-comment">// </span>
+<button class="copy-code-btn"></button></code></pre>
 <div class="admonition note">
-
 <p><b>notes</b></p>
-
 <p>Before dropping a partition, you need to release it from memory.</p>
-
 </div>
-
-## FAQ
-
-- __How much data can be stored in a partition?__
-
-    It is recommended to store less than 1B of data in a partition.
-
-- __What is the maximum number of partitions that can be created?__
-
-    By default, Milvus allows a maximum of 4,096 partitions to be created. You can adjust the maximum number of partitions by configuring `rootCoord.maxPartitionNum`. For details, refer to [System Configurations](https://milvus.io/docs/configure_rootcoord.md#rootCoordmaxPartitionNum).
-
-- __How can I differentiate between partitions and partition keys?__
-
-    Partitions are physical storage units, whereas partition keys are logical concepts that automatically assign data to specific partitions based on a designated column.
-
-    For instance, in Milvus, if you have a collection with a partition key defined as the `color` field, the system automatically assigns data to partitions based on the hashed values of the `color` field for each entity. This automated process relieves the user of the responsibility to manually specify the partition when inserting or searching data.
-
-    On the other hand, when manually creating partitions, you need to assign data to each partition based on the criteria of the partition key. If you have a collection with a `color` field, you would manually assign entities with a `color` value of `red` to `partition A`, and entities with a `color` value of `blue` to `partition B`. This manual management requires more effort.
-
-    In summary, both partitions and partition keys are utilized to optimize data computation and enhance query efficiency. It is essential to recognize that enabling a partition key means surrendering control over the manual management of partition data insertion and loading, as these processes are fully automated and handled by Milvus.
+<h2 id="FAQ" class="common-anchor-header">FAQ
+    <button data-href="#FAQ" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li><p><strong>How much data can be stored in a partition?</strong></p>
+<p>It is recommended to store less than 1B of data in a partition.</p></li>
+<li><p><strong>What is the maximum number of partitions that can be created?</strong></p>
+<p>By default, Milvus allows a maximum of 4,096 partitions to be created. You can adjust the maximum number of partitions by configuring <code>rootCoord.maxPartitionNum</code>. For details, refer to <a href="https://milvus.io/docs/configure_rootcoord.md#rootCoordmaxPartitionNum">System Configurations</a>.</p></li>
+<li><p><strong>How can I differentiate between partitions and partition keys?</strong></p>
+<p>Partitions are physical storage units, whereas partition keys are logical concepts that automatically assign data to specific partitions based on a designated column.</p>
+<p>For instance, in Milvus, if you have a collection with a partition key defined as the <code>color</code> field, the system automatically assigns data to partitions based on the hashed values of the <code>color</code> field for each entity. This automated process relieves the user of the responsibility to manually specify the partition when inserting or searching data.</p>
+<p>On the other hand, when manually creating partitions, you need to assign data to each partition based on the criteria of the partition key. If you have a collection with a <code>color</code> field, you would manually assign entities with a <code>color</code> value of <code>red</code> to <code>partition A</code>, and entities with a <code>color</code> value of <code>blue</code> to <code>partition B</code>. This manual management requires more effort.</p>
+<p>In summary, both partitions and partition keys are utilized to optimize data computation and enhance query efficiency. It is essential to recognize that enabling a partition key means surrendering control over the manual management of partition data insertion and loading, as these processes are fully automated and handled by Milvus.</p></li>
+</ul>

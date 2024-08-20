@@ -6,13 +6,40 @@ summary: Learn how to tune consistency level in Milvus.
 deprecate: true
 ---
 
-# Tune consistency
-
-Milvus supports setting consistency level while creating a collection, conducting a vector query, and conducting a vector search (only on PyMilvus currently). Milvus supports four levels of consistency: `Strong`, `Eventual`, `Bounded`, and `Session`. By default, a collection created without specifying the consistency level is set with `Bounded` consistency level. This topic describes how to tune consistency.
-
-## Configure parameter
-By default, the consistency level is set as `Bounded`, under which Milvus reads a less updated data view (usually several seconds earlier) when a search or query request comes. You can set the consistency level by configuring the parameter `consistency_level` while creating a collection and conducting a search or query. See [Guarantee Timestamp in Search Requests](https://github.com/milvus-io/milvus/blob/master/docs/developer_guides/how-guarantee-ts-works.md) for the mechanism behind.
-
+<h1 id="Tune-consistency" class="common-anchor-header">Tune consistency
+    <button data-href="#Tune-consistency" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>Milvus supports setting consistency level while creating a collection, conducting a vector query, and conducting a vector search (only on PyMilvus currently). Milvus supports four levels of consistency: <code>Strong</code>, <code>Eventual</code>, <code>Bounded</code>, and <code>Session</code>. By default, a collection created without specifying the consistency level is set with <code>Bounded</code> consistency level. This topic describes how to tune consistency.</p>
+<h2 id="Configure-parameter" class="common-anchor-header">Configure parameter
+    <button data-href="#Configure-parameter" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>By default, the consistency level is set as <code>Bounded</code>, under which Milvus reads a less updated data view (usually several seconds earlier) when a search or query request comes. You can set the consistency level by configuring the parameter <code>consistency_level</code> while creating a collection and conducting a search or query. See <a href="https://github.com/milvus-io/milvus/blob/master/docs/developer_guides/how-guarantee-ts-works.md">Guarantee Timestamp in Search Requests</a> for the mechanism behind.</p>
 <table class="language-python">
         <thead>
         <tr>
@@ -36,46 +63,38 @@ By default, the consistency level is set as `Bounded`, under which Milvus reads 
         </tr>
     </tbody>
 </table>
-
-#### Example
-
-The following examples set the consistency level as `Strong`, meaning Milvus will read the most updated data view at the exact time point when a search or query request comes. The consistency level set in the search or query requests overwrites the one set while creating the collection.  Without specifying the consistency level during a search or query, Milvus adopts the original consistency level of the collection.
-
-- **Create a collection**
-
-```
-from pymilvus import Collection
-collection = Collection(
+<h4 id="Example" class="common-anchor-header">Example</h4><p>The following examples set the consistency level as <code>Strong</code>, meaning Milvus will read the most updated data view at the exact time point when a search or query request comes. The consistency level set in the search or query requests overwrites the one set while creating the collection.  Without specifying the consistency level during a search or query, Milvus adopts the original consistency level of the collection.</p>
+<ul>
+<li><strong>Create a collection</strong></li>
+</ul>
+<pre><code><span class="hljs-keyword">from</span> pymilvus <span class="hljs-keyword">import</span> <span class="hljs-title class_">Collection</span>
+collection = <span class="hljs-title class_">Collection</span>(
     name=collection_name, 
     schema=schema, 
-    using='default', 
-    shards_num=2,
-    consistency_level="Strong"
+    using=<span class="hljs-string">&#x27;default&#x27;</span>, 
+    shards_num=<span class="hljs-number">2</span>,
+    consistency_level=<span class="hljs-string">&quot;Strong&quot;</span>
     )
-```
-
-- **Conduct a vector search**
-
-```
-result = hello_milvus.search(
+<button class="copy-code-btn"></button></code></pre>
+<ul>
+<li><strong>Conduct a vector search</strong></li>
+</ul>
+<pre><code>result = hello_milvus.search(
         vectors_to_search,
-        "embeddings",
+        <span class="hljs-string">&quot;embeddings&quot;</span>,
         search_params,
-        limit=3,
-        output_fields=["random"],
-        # search will scan all entities inserted into Milvus.
-        consistency_level="Strong",
+        limit=<span class="hljs-number">3</span>,
+        output_fields=[<span class="hljs-string">&quot;random&quot;</span>],
+        <span class="hljs-comment"># search will scan all entities inserted into Milvus.</span>
+        consistency_level=<span class="hljs-string">&quot;Strong&quot;</span>,
         )
-```
-
-- **Conduct a vector query**    
-
-```
-res = collection.query(
-  expr = "book_id in [2,4,6,8]", 
-  output_fields = ["book_id", "book_intro"],
-  consistency_level="Strong"
+<button class="copy-code-btn"></button></code></pre>
+<ul>
+<li><strong>Conduct a vector query</strong></li>
+</ul>
+<pre><code>res = collection.query(
+  <span class="hljs-built_in">expr</span> = <span class="hljs-string">&quot;book_id in [2,4,6,8]&quot;</span>, 
+  output_fields = [<span class="hljs-string">&quot;book_id&quot;</span>, <span class="hljs-string">&quot;book_intro&quot;</span>],
+  consistency_level=<span class="hljs-string">&quot;Strong&quot;</span>
 )
-```
-
-
+<button class="copy-code-btn"></button></code></pre>

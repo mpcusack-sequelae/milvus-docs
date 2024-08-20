@@ -5,51 +5,126 @@ summary: Disk index mechanism in Milvus.
 title: On-disk Index
 ---
 
-# On-disk Index
-
-This article introduces an on-disk indexing algorithm named DiskANN. Based on Vamana graphs, DiskANN powers efficient searches within large datasets.
-
-To improve query performance, you can [specify an index type](index-vector-fields.md) for each vector field. 
-
+<h1 id="On-disk-Index" class="common-anchor-header">On-disk Index
+    <button data-href="#On-disk-Index" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This article introduces an on-disk indexing algorithm named DiskANN. Based on Vamana graphs, DiskANN powers efficient searches within large datasets.</p>
+<p>To improve query performance, you can <a href="/docs/index-vector-fields.md">specify an index type</a> for each vector field.</p>
 <div class="alert note"> 
 Currently, a vector field only supports one index type. Milvus automatically deletes the old index when switching the index type.
 </div>
-
-## Prerequisites
-
-To use DiskANN, note that
-- DiskANN is enabled by default. If you prefer in-memory index over on-disk index, you are advised to disable this feature for a better performance.
-  - To disable it, you can change `queryNode.enableDisk` to `false` in your milvus configuration file.
-  - To enable it again, you can set `queryNode.enableDisk` to `true`.
-- The Milvus instance runs on Ubuntu 18.04.6 or a later release.
-- The Milvus data path should be mounted to an NVMe SSD for full performance:
-  - For a Milvus Standalone instance, the data path should be **/var/lib/milvus/data** in the container where the instance runs.
-  - For a Milvus Cluster instance, the data path should be **/var/lib/milvus/data** in the containers where the QueryNodes and IndexNodes run.
-
-## Limits
-
-To use DiskANN, ensure that you
-- Use only float vectors with at least 1 dimensions in your data.
-- Use only Euclidean Distance (L2) or Inner Product (IP) to measure the distance between vectors.
-
-## Index and search settings
-
- - Index building parameters
-
-   When building a DiskANN index, use `DISKANN` as the index type. No index parameters are necessary.
-
-- Search parameters
-
-  | Parameter     | Description                         | Range                                           | Default Value     |
-  | ------------- | ----------------------------------- | ----------------------------------------------- |-------------------|
-  | `search_list` | Size of the candidate list, a larger size offers a higher recall rate with degraded performance. | [topk, int32_max] | 16 |
-
-## DiskANN-related Milvus configurations
-
-DiskANN is tunable. You can modify DiskANN-related parameters in `${MILVUS_ROOT_PATH}/configs/milvus.yaml` to improve its performance.
-
-```YAML
-...
+<h2 id="Prerequisites" class="common-anchor-header">Prerequisites
+    <button data-href="#Prerequisites" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To use DiskANN, note that</p>
+<ul>
+<li>DiskANN is enabled by default. If you prefer in-memory index over on-disk index, you are advised to disable this feature for a better performance.
+<ul>
+<li>To disable it, you can change <code>queryNode.enableDisk</code> to <code>false</code> in your milvus configuration file.</li>
+<li>To enable it again, you can set <code>queryNode.enableDisk</code> to <code>true</code>.</li>
+</ul></li>
+<li>The Milvus instance runs on Ubuntu 18.04.6 or a later release.</li>
+<li>The Milvus data path should be mounted to an NVMe SSD for full performance:
+<ul>
+<li>For a Milvus Standalone instance, the data path should be <strong>/var/lib/milvus/data</strong> in the container where the instance runs.</li>
+<li>For a Milvus Cluster instance, the data path should be <strong>/var/lib/milvus/data</strong> in the containers where the QueryNodes and IndexNodes run.</li>
+</ul></li>
+</ul>
+<h2 id="Limits" class="common-anchor-header">Limits
+    <button data-href="#Limits" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>To use DiskANN, ensure that you</p>
+<ul>
+<li>Use only float vectors with at least 1 dimensions in your data.</li>
+<li>Use only Euclidean Distance (L2) or Inner Product (IP) to measure the distance between vectors.</li>
+</ul>
+<h2 id="Index-and-search-settings" class="common-anchor-header">Index and search settings
+    <button data-href="#Index-and-search-settings" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li><p>Index building parameters</p>
+<p>When building a DiskANN index, use <code>DISKANN</code> as the index type. No index parameters are necessary.</p></li>
+<li><p>Search parameters</p>
+<table>
+<thead>
+<tr><th>Parameter</th><th>Description</th><th>Range</th><th>Default Value</th></tr>
+</thead>
+<tbody>
+<tr><td><code>search_list</code></td><td>Size of the candidate list, a larger size offers a higher recall rate with degraded performance.</td><td>[topk, int32_max]</td><td>16</td></tr>
+</tbody>
+</table>
+</li>
+</ul>
+<h2 id="DiskANN-related-Milvus-configurations" class="common-anchor-header">DiskANN-related Milvus configurations
+    <button data-href="#DiskANN-related-Milvus-configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><p>DiskANN is tunable. You can modify DiskANN-related parameters in <code>${MILVUS_ROOT_PATH}/configs/milvus.yaml</code> to improve its performance.</p>
+<pre><code class="language-YAML">...
 DiskIndex:
   MaxDegree: 56
   SearchListSize: 100
@@ -57,22 +132,38 @@ DiskIndex:
   SearchCacheBudgetGBRatio: 0.125
   BeamWidthRatio: 4.0
 ...
-```
-
-| Parameter | Description | Value Range | Default Value |
-| --- | --- | --- | --- |
-| `MaxDegree` | Maximum degree of the Vamana graph. <br/> A larger value offers a higher recall rate but increases the size of and time to build the index. | [1, 512] | 56 | 
-| `SearchListSize` | Size of the candidate list. <br/> A larger value increases the time spent on building the index but offers a higher recall rate. <br/> Set it to a value smaller than `MaxDegree` unless you need to reduce the index-building time. | [1, int32_max] | 100 |
-| `PQCodeBugetGBRatio` | Size limit on the PQ code. <br/> A larger value offers a higher recall rate but increases memory usage. | (0.0, 0.25] | 0.125 |
-| `SearchCacheBudgetGBRatio` | Ratio of cached node numbers to raw data. <br/> A larger value improves index-building performance with increased memory usage. | [0.0, 0.3) | 0.10 |
-| `BeamWidthRatio` | Ratio between the maximum number of IO requests per search iteration and CPU number. | [1, max(128 / CPU number, 16)] | 4.0 |
-
-## Troubleshooting
-
-- How to deal with the `io_setup() failed; returned -11, errno=11:Resource temporarily unavailable` error?
-
-  The Linux kernel provides the Asynchronous non-blocking I/O (AIO) feature that allows a process to initiate multiple I/O operations simultaneously without having to wait for any of them to complete. This helps boost performance for applications that can overlap processing and I/O.
-
-  The performance can be tuned using the `/proc/sys/fs/aio-max-nr` virtual file in the proc file system. The `aio-max-nr` parameter determines the maximum number of allowable concurrent requests.
-
-  The `aio-max-nr` defaults to `65535`, you can set it up to `10485760`.
+<button class="copy-code-btn"></button></code></pre>
+<table>
+<thead>
+<tr><th>Parameter</th><th>Description</th><th>Value Range</th><th>Default Value</th></tr>
+</thead>
+<tbody>
+<tr><td><code>MaxDegree</code></td><td>Maximum degree of the Vamana graph. <br/> A larger value offers a higher recall rate but increases the size of and time to build the index.</td><td>[1, 512]</td><td>56</td></tr>
+<tr><td><code>SearchListSize</code></td><td>Size of the candidate list. <br/> A larger value increases the time spent on building the index but offers a higher recall rate. <br/> Set it to a value smaller than <code>MaxDegree</code> unless you need to reduce the index-building time.</td><td>[1, int32_max]</td><td>100</td></tr>
+<tr><td><code>PQCodeBugetGBRatio</code></td><td>Size limit on the PQ code. <br/> A larger value offers a higher recall rate but increases memory usage.</td><td>(0.0, 0.25]</td><td>0.125</td></tr>
+<tr><td><code>SearchCacheBudgetGBRatio</code></td><td>Ratio of cached node numbers to raw data. <br/> A larger value improves index-building performance with increased memory usage.</td><td>[0.0, 0.3)</td><td>0.10</td></tr>
+<tr><td><code>BeamWidthRatio</code></td><td>Ratio between the maximum number of IO requests per search iteration and CPU number.</td><td>[1, max(128 / CPU number, 16)]</td><td>4.0</td></tr>
+</tbody>
+</table>
+<h2 id="Troubleshooting" class="common-anchor-header">Troubleshooting
+    <button data-href="#Troubleshooting" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><ul>
+<li><p>How to deal with the <code>io_setup() failed; returned -11, errno=11:Resource temporarily unavailable</code> error?</p>
+<p>The Linux kernel provides the Asynchronous non-blocking I/O (AIO) feature that allows a process to initiate multiple I/O operations simultaneously without having to wait for any of them to complete. This helps boost performance for applications that can overlap processing and I/O.</p>
+<p>The performance can be tuned using the <code>/proc/sys/fs/aio-max-nr</code> virtual file in the proc file system. The <code>aio-max-nr</code> parameter determines the maximum number of allowable concurrent requests.</p>
+<p>The <code>aio-max-nr</code> defaults to <code>65535</code>, you can set it up to <code>10485760</code>.</p></li>
+</ul>

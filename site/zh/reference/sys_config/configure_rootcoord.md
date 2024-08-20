@@ -6,18 +6,42 @@ summary: Learn how to configure root coordinator of Milvus.
 title: Root Coordinator-related Configurations
 ---
 
-# Root Coordinator-related Configurations
-
-This topic introduces the root coordinator-related configurations of Milvus.
-
-Root coordinator (root coord) handles data definition language (DDL) and data control language (DCL) requests, manages TSO (timestamp Oracle), and publishes time tick messages.
-
-Under this section, you can configure root coord address, index building threshold, etc.
-
-
-## `rootCoord.address`
-
-<table id="rootCoord.address">
+<h1 id="Root-Coordinator-related-Configurations" class="common-anchor-header">Root Coordinator-related Configurations
+    <button data-href="#Root-Coordinator-related-Configurations" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h1><p>This topic introduces the root coordinator-related configurations of Milvus.</p>
+<p>Root coordinator (root coord) handles data definition language (DDL) and data control language (DCL) requests, manages TSO (timestamp Oracle), and publishes time tick messages.</p>
+<p>Under this section, you can configure root coord address, index building threshold, etc.</p>
+<h2 id="rootCoordaddress" class="common-anchor-header"><code>rootCoord.address</code>
+    <button data-href="#rootCoordaddress" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.address">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -34,11 +58,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.port`
-
-<table id="rootCoord.port">
+<h2 id="rootCoordport" class="common-anchor-header"><code>rootCoord.port</code>
+    <button data-href="#rootCoordport" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.port">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -52,11 +88,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.grpc.serverMaxRecvSize`
-
-<table id="rootCoord.grpc.serverMaxRecvSize">
+<h2 id="rootCoordgrpcserverMaxRecvSize" class="common-anchor-header"><code>rootCoord.grpc.serverMaxRecvSize</code>
+    <button data-href="#rootCoordgrpcserverMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.grpc.serverMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -73,11 +121,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.grpc.serverMaxSendSize`
-
-<table id="rootCoord.grpc.serverMaxSendSize">
+<h2 id="rootCoordgrpcserverMaxSendSize" class="common-anchor-header"><code>rootCoord.grpc.serverMaxSendSize</code>
+    <button data-href="#rootCoordgrpcserverMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.grpc.serverMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -94,11 +154,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.grpc.clientMaxRecvSize`
-
-<table id="rootCoord.grpc.clientMaxRecvSize">
+<h2 id="rootCoordgrpcclientMaxRecvSize" class="common-anchor-header"><code>rootCoord.grpc.clientMaxRecvSize</code>
+    <button data-href="#rootCoordgrpcclientMaxRecvSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.grpc.clientMaxRecvSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -115,10 +187,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-## `rootCoord.grpc.clientMaxSendSize`
-
-<table id="rootCoord.grpc.clientMaxSendSize">
+<h2 id="rootCoordgrpcclientMaxSendSize" class="common-anchor-header"><code>rootCoord.grpc.clientMaxSendSize</code>
+    <button data-href="#rootCoordgrpcclientMaxSendSize" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.grpc.clientMaxSendSize">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -135,11 +220,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.activeStandby.enabled`
-
-<table id="rootCoord.dmlChannelNum">
+<h2 id="rootCoordactiveStandbyenabled" class="common-anchor-header"><code>rootCoord.activeStandby.enabled</code>
+    <button data-href="#rootCoordactiveStandbyenabled" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.dmlChannelNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -155,10 +252,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-## `rootCoord.replicas`
-
-<table id="rootCoord.dmlChannelNum">
+<h2 id="rootCoordreplicas" class="common-anchor-header"><code>rootCoord.replicas</code>
+    <button data-href="#rootCoordreplicas" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.dmlChannelNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -174,10 +284,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-## `rootCoord.dmlChannelNum`
-
-<table id="rootCoord.dmlChannelNum">
+<h2 id="rootCoorddmlChannelNum" class="common-anchor-header"><code>rootCoord.dmlChannelNum</code>
+    <button data-href="#rootCoorddmlChannelNum" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.dmlChannelNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -193,11 +316,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.maxPartitionNum`
-
-<table id="rootCoord.maxPartitionNum">
+<h2 id="rootCoordmaxPartitionNum" class="common-anchor-header"><code>rootCoord.maxPartitionNum</code>
+    <button data-href="#rootCoordmaxPartitionNum" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.maxPartitionNum">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -215,11 +350,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.minSegmentSizeToEnableIndex`
-
-<table id="rootCoord.minSegmentSizeToEnableIndex">
+<h2 id="rootCoordminSegmentSizeToEnableIndex" class="common-anchor-header"><code>rootCoord.minSegmentSizeToEnableIndex</code>
+    <button data-href="#rootCoordminSegmentSizeToEnableIndex" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.minSegmentSizeToEnableIndex">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -236,11 +383,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-
-## `rootCoord.importTaskExpiration`
-
-<table id="rootCoord.importTaskExpiration">
+<h2 id="rootCoordimportTaskExpiration" class="common-anchor-header"><code>rootCoord.importTaskExpiration</code>
+    <button data-href="#rootCoordimportTaskExpiration" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.importTaskExpiration">
   <thead>
     <tr>
       <th class="width80">Description</th>
@@ -258,10 +417,23 @@ Under this section, you can configure root coord address, index building thresho
     </tr>
   </tbody>
 </table>
-
-## `rootCoord.importTaskRetention`
-
-<table id="rootCoord.importTaskRetention">
+<h2 id="rootCoordimportTaskRetention" class="common-anchor-header"><code>rootCoord.importTaskRetention</code>
+    <button data-href="#rootCoordimportTaskRetention" class="anchor-icon">
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        height="20"
+        version="1.1"
+        viewBox="0 0 16 16"
+        width="16"
+      >
+        <path
+          fill="#0092E4"
+          fill-rule="evenodd"
+          d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"
+        ></path>
+      </svg>
+    </button></h2><table id="rootCoord.importTaskRetention">
   <thead>
     <tr>
       <th class="width80">Description</th>
